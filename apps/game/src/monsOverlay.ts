@@ -25,6 +25,8 @@ export interface MonsOverlayHost {
   atFusionAltar(): boolean;
   canOpen(): boolean;
   onRosterChanged(): void;
+  /** Registry lookup by id (for lineage names on the detail panel). */
+  entryById?(id: string): MonsRegistryEntry | undefined;
   /** Fired when the player enters fuse-pick mode at the altar (altar hum cue). */
   onFuseMode(): void;
   /** Fired when the overlay closes, so the scene can play a deferred beat (the
@@ -265,6 +267,11 @@ export class MonsOverlay {
     return entry ? monDisplayName(entry) : "???";
   }
 
+  private nameOfRegistryId(id: string): string {
+    const entry = this.host.entryById?.(id);
+    return entry ? monDisplayName(entry) : id;
+  }
+
   private render(): void {
     if (!this.open) {
       return;
@@ -296,11 +303,46 @@ export class MonsOverlay {
       const wiggle = index === this.wiggleRow
         ? `animation:monWiggle .42s ease-in-out;`
         : "";
-      return `<div style="padding:2px 8px;transform-origin:left center;${wiggle}${index === this.cursor ? "background:#2c2c5e;" : ""}">` +
-        `${cursor}${marks} ${escapeHtml(name)} <span style="opacity:.75">Lv${mon.level} ${escapeHtml(race)} ${tier} bond ${mon.bond}</span></div>`;
+      // Portrait (battle-260) + race icon: plain <img> in the DOM overlay, so no
+      // engine work; pixelated scaling keeps the EB look.
+      const portrait = entry
+        ? `<img src="/generated/${escapeHtml(entry.sprites.battle)}" alt="" style="width:26px;height:26px;object-fit:contain;image-rendering:pixelated;flex:0 0 auto"/>`
+        : `<span style="width:26px;flex:0 0 auto"></span>`;
+      const raceIcon = raceIconTag(race);
+      return `<div style="display:flex;align-items:center;gap:7px;padding:2px 8px;transform-origin:left center;${wiggle}${index === this.cursor ? "background:#2c2c5e;" : ""}">` +
+        `<span style="white-space:pre">${cursor}${marks}</span>${portrait}` +
+        `<span>${escapeHtml(name)} <span style="opacity:.75">Lv${mon.level} ${raceIcon}${escapeHtml(race)} ${tier} bond ${mon.bond}</span></span></div>`;
     }).join("");
     // The wiggle is a one-shot: consume it so arrow-key re-renders don't replay it.
     this.wiggleRow = -1;
+    // Detail panel for the cursor mon (list mode only; fusion modes keep their
+    // own lower panels): stats, moves with PP, personality, lineage.
+    let detail = "";
+    if (mode.kind === "list" && roster.length > 0) {
+      const mon = roster[Math.min(this.cursor, roster.length - 1)];
+      const entry = mon ? this.host.entryFor(mon) : undefined;
+      const abilities = this.host.abilities();
+      if (mon && entry) {
+        const stats = monStatsAtLevel(entry, mon.level);
+        const moves = abilities
+          ? monKnownAbilities(entry, abilities, mon.level, mon.inherited)
+            .map((id) => {
+              const ability = abilities.abilities[id];
+              return ability ? `${escapeHtml(ability.name)} <span style="opacity:.6">${ability.ppCost}pp</span>` : escapeHtml(id);
+            }).join(" &middot; ")
+          : "";
+        const parentA = mon.lineage ? this.nameOfRegistryId(mon.lineage.parents[0]) : undefined;
+        const parentB = mon.lineage ? this.nameOfRegistryId(mon.lineage.parents[1]) : undefined;
+        detail = `<div style="margin-top:8px;border-top:1px solid #555;padding-top:6px;display:flex;gap:10px;align-items:flex-start">` +
+          `<img src="/generated/${escapeHtml(entry.sprites.battle)}" alt="" style="width:52px;height:52px;object-fit:contain;image-rendering:pixelated;flex:0 0 auto"/>` +
+          `<div style="font-size:12.5px;line-height:1.45">` +
+          `<div>HP ${stats.maxHp} &middot; OFF ${stats.offense} &middot; DEF ${stats.defense} &middot; SPD ${stats.speed}</div>` +
+          `<div style="opacity:.85">${escapeHtml(entry.personality ?? "?")} &middot; ${escapeHtml(entry.element)}</div>` +
+          (moves ? `<div style="opacity:.85">${moves}</div>` : "") +
+          (parentA && parentB ? `<div style="opacity:.7">Fused from ${escapeHtml(parentA)} + ${escapeHtml(parentB)}</div>` : "") +
+          `</div></div>`;
+      }
+    }
     let body = "";
     if (mode.kind === "fuse-preview") {
       const preview = mode.preview;
@@ -354,10 +396,26 @@ export class MonsOverlay {
       `<div style="min-width:380px;max-width:560px;max-height:80vh;overflow:auto;background:#0d0d1a;border:3px solid #f2efe6;border-radius:2px;padding:10px 12px;font-size:14px;line-height:1.5">` +
       `<div style="margin-bottom:6px;opacity:.9">${header}</div>` +
       (roster.length === 0 ? `<div style="opacity:.8">No mons yet. Wild ones roam past the farm. Rough one up, then talk.</div>` : rows) +
+      detail +
       body +
       (this.notice ? `<div style="margin-top:6px;color:#ffd27a">${escapeHtml(this.notice)}</div>` : "") +
       `</div>`;
   }
+}
+
+const RACE_ICON_NAMES = new Set([
+  "drainer", "angel", "demon", "mystic", "trickster",
+  "fielder", "spirit", "zombie", "vampire", "ancient"
+]);
+
+/** A 12px race glyph (assets/swagbound/mons-ui); empty for unknown races. */
+function raceIconTag(race: string): string {
+  const key = race.toLowerCase();
+  if (!RACE_ICON_NAMES.has(key)) {
+    return "";
+  }
+  return `<img src="/assets/swagbound/mons-ui/race-${key}.png" alt="" ` +
+    `style="width:12px;height:12px;image-rendering:pixelated;vertical-align:-1px;margin-right:2px"/>`;
 }
 
 function escapeHtml(value: string): string {

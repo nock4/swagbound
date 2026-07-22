@@ -1467,6 +1467,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       },
       onFuseMode: () => this.playMonsAltarHum(),
       onClose: () => this.resolvePendingFusionReaction(),
+      entryById: (id) => this.data_.mons ? monById(this.data_.mons.registry, id) : undefined,
       abilities: () => this.data_.mons?.abilities,
       atFusionAltar: () => {
         const dx = this.playerState.x - MONS_FARM_ANCHOR.x;
