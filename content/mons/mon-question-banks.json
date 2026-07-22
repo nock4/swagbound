@@ -8,6 +8,7 @@
     "{name} is watching the water. You watch it too. Nobody keeps score.",
     "{name} leans against your leg, very slightly, like a fence that likes you."
    ],
+   "catchLine": "{name} gets up when it is ready. It walks beside you like the two of you agreed on this hours ago.",
    "questions": [
     {
      "prompt": "A storm is coming over the hill. What's the move?",
@@ -90,6 +91,7 @@
     "{name} pretends it didn't hear the compliment. Say it again.",
     "{name} walks a small circle so you can appreciate every side."
    ],
+   "catchLine": "{name} gives the field one last bow. Then it falls in beside you, as if you both just made a very good entrance.",
    "questions": [
     {
      "prompt": "Be honest. When I did the bow earlier, how did it look?",
@@ -172,6 +174,7 @@
     "{name} shows you a rock it likes. It is a normal rock. It's great.",
     "{name} hums something with no tune and total confidence."
    ],
+   "catchLine": "{name} cheers for both of you. It has already found the road home and three good sticks for the trip.",
    "questions": [
     {
      "prompt": "It's raining! What's good about that?",
@@ -254,6 +257,7 @@
     "{name} nods at you. That's the whole interaction. It was enough.",
     "{name} leans on the fence like the fence asked it to."
    ],
+   "catchLine": "{name} gives you a small nod and starts walking. Apparently you were going the same way.",
    "questions": [
     {
      "prompt": "You just saw something amazing. What's your reaction?",
@@ -336,6 +340,7 @@
     "{name} tucks itself into a rounder shape. For you. It's a gift.",
     "{name} falls over showing you its belly and has zero regrets."
    ],
+   "catchLine": "{name} climbs onto your shoe and settles in. The shoe belongs to both of you now.",
    "questions": [
     {
      "prompt": "Do you ever talk to bugs? Little ones? Be honest.",
@@ -418,6 +423,7 @@
     "{name} pats the ground next to it. That's the plan. The whole plan.",
     "{name} found a sunny patch and would like you to acknowledge the find."
    ],
+   "catchLine": "{name} gets up, stretches, and comes along. No big speech. The road looks pretty good from here.",
    "questions": [
     {
      "prompt": "What's the plan for today?",
@@ -500,6 +506,7 @@
     "{name} bows over its food bowl, thanks the heavens, and guards the bowl.",
     "{name} forgives you for yesterday. It has not forgotten yesterday."
    ],
+   "catchLine": "{name} blesses you, the field, and one passing bug. Then it comes along before anybody can object.",
    "questions": [
     {
      "prompt": "Before eating a really good pie, what do you do first?",
@@ -582,6 +589,7 @@
     "{name} fetched you a stick, a rock, a leaf, and part of a fence.",
     "{name} did a lap while you blinked. It wants you to know that."
    ],
+   "catchLine": "{name} says yes by running all the way to the farm and back. Twice. It is waiting for you to catch up.",
    "questions": [
     {
      "prompt": "Race to that tree?! Ready go! Wait, what's your answer?!",
@@ -664,6 +672,7 @@
     "{name} saved half its dinner in case somebody hungry came by. You came by.",
     "{name} pats YOU twice. There. You needed that."
    ],
+   "catchLine": "{name} checks your scrapes first. Then it puts one paw in your hand, in case you needed the help too.",
    "questions": [
     {
      "prompt": "A beetle is stuck on its back. You're late for something. What do you do?",
@@ -746,6 +755,7 @@
     "{name} found a four-leaf clover and buried it. You can't be too careful.",
     "{name} sneezed twice. Two is fine. Three would have meant something."
    ],
+   "catchLine": "{name} circles you once for luck and once because once felt unlucky. Then it comes along.",
    "questions": [
     {
      "prompt": "You find a coin on the ground, tails up. What do you do?",
@@ -828,6 +838,7 @@
     "{name} bit the brush, but gently, which is basically affection.",
     "{name} pretends it doesn't like this. Its tail says otherwise."
    ],
+   "catchLine": "{name} bares its teeth at you one last time, then takes your side. It will deny this was sweet.",
    "questions": [
     {
      "prompt": "Give it to me straight. How do I smell?",
@@ -910,6 +921,7 @@
     "{name} watched you refill the food bowl. It'll get to it.",
     "{name} shrugged at a butterfly today. The butterfly moved on. So did {name}."
    ],
+   "catchLine": "{name} shrugs and follows. It was going to leave this field eventually. You seem as good an eventually as any.",
    "questions": [
     {
      "prompt": "So what's your big pitch? Why should I come with you?",
@@ -992,6 +1004,7 @@
     "{name} shows you where it hid the spoons. Not all of them. A taste.",
     "{name} is being suspiciously good right now. Check your pockets."
    ],
+   "catchLine": "{name} slips something into your pocket and trots off beside you. It was your pocket, so technically nothing changed.",
    "questions": [
     {
      "prompt": "Hypothetically. A pie is cooling on a windowsill. Nobody's around. Well?",
@@ -1074,6 +1087,7 @@
     "{name} groomed itself, then the fence, then started eyeing your shoes.",
     "{name} sorted its pebbles by size. Then by color. Then by loyalty."
    ],
+   "catchLine": "{name} pats its old spot flat, brushes off your sleeve, and joins you. Somebody has to keep this trip presentable.",
    "questions": [
     {
      "prompt": "You finish a snack. There's a wrapper. The bin is far. What happens?",
@@ -1156,6 +1170,7 @@
     "{name} stood guard over your bag while you were gone. Nothing got past.",
     "{name} bows before dinner, to the dinner, out of respect."
    ],
+   "catchLine": "{name} bows to you, then to the road. It takes the place beside you like a post it means to hold.",
    "questions": [
     {
      "prompt": "You promised to meet a friend, but something way more fun comes up. What now?",
@@ -1238,6 +1253,7 @@
     "{name} left a berry near your foot and fled. It counts.",
     "{name} is pretending to be asleep. Its ears are listening very hard."
    ],
+   "catchLine": "{name} waits until you turn around, then comes close enough for its shadow to touch yours. Keep walking.",
    "questions": [
     {
      "prompt": "If we're walking and we see a big loud crowd up ahead, what do we do?",
@@ -1320,6 +1336,7 @@
     "{name} sipped the warm water you left. Slowly. All of it.",
     "{name} says it's fine today. It's maybe sixty percent fine. Progress."
    ],
+   "catchLine": "{name} coughs, waves away your concern, and comes with you. It packs the warm leaves. You pack the snacks.",
    "questions": [
     {
      "prompt": "I sound worse than I feel. Probably. What's your reaction?",
@@ -1402,6 +1419,7 @@
     "{name} moved from the sunny spot to the other sunny spot. Big day.",
     "{name} dreamed about napping. It woke up ready for a nap."
    ],
+   "catchLine": "{name} yawns, takes two steps after you, and falls asleep on your foot. The answer appears to be yes.",
    "questions": [
     {
      "prompt": "What's the correct number of naps in one day?",
@@ -1484,6 +1502,7 @@
     "{name} is holding a spoon it found. It has plans. Don't ask. Or do.",
     "{name} hums one note to the fence. Today, the fence hummed back. Big day."
    ],
+   "catchLine": "{name} asks the empty air if it should go. The empty air says nothing. Apparently that means yes.",
    "questions": [
     {
      "prompt": "The moon has been following me for years. What should I do about it?",
@@ -1566,6 +1585,7 @@
     "{name} made you a mud pie. You don't have to eat it. You have to keep it.",
     "{name} hums while you pet it, so you have something to listen to."
    ],
+   "catchLine": "{name} puts its best berry in your hand and takes the other one for the road. It saved that one for this.",
    "questions": [
     {
      "prompt": "I picked this berry for you. It's a little squished. Do you still want it?",
@@ -1648,6 +1668,7 @@
     "{name} accepts the pet and, in return, says nothing. A fair trade.",
     "{name} knows exactly three things. It won't say which three."
    ],
+   "catchLine": "{name} studies you, the road, and one nearby chicken. Then it follows. The chicken declines to comment.",
    "questions": [
     {
      "prompt": "What does the wind carry?",

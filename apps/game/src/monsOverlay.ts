@@ -15,7 +15,9 @@ export interface MonsOverlayHost {
   entryFor(mon: OwnedMon): MonsRegistryEntry | undefined;
   activeIndex(): number | undefined;
   setActive(index: number | undefined): boolean;
-  pet(index: number): number | undefined;
+  /** Pet the mon at index. Returns its new bond plus a personality-flavored line
+   *  (name already substituted), or undefined if the index is empty. */
+  pet(index: number): { bond: number; line: string } | undefined;
   release(index: number): boolean;
   previewFusion(a: number, b: number): FusionPreview | undefined;
   fuse(a: number, b: number, picks: string[]): OwnedMon | undefined;
@@ -23,6 +25,11 @@ export interface MonsOverlayHost {
   atFusionAltar(): boolean;
   canOpen(): boolean;
   onRosterChanged(): void;
+  /** Fired when the player enters fuse-pick mode at the altar (altar hum cue). */
+  onFuseMode(): void;
+  /** Fired when the overlay closes, so the scene can play a deferred beat (the
+   *  Fusion Altar reaction, which is only visible once the DOM overlay is gone). */
+  onClose(): void;
 }
 
 export function isMonsOverlayKey(code: string): boolean {
@@ -41,6 +48,10 @@ export class MonsOverlay {
   private mode: OverlayMode = { kind: "list" };
   private panel: HTMLElement | undefined;
   private notice = "";
+  // Which roster row just got petted (for a one-shot wiggle) and a nonce so the
+  // CSS animation re-triggers on every pet even when the same row repeats.
+  private wiggleRow = -1;
+  private wiggleNonce = 0;
 
   private readonly keyHandler = (event: KeyboardEvent): void => {
     if (!this.open) {
@@ -82,9 +93,13 @@ export class MonsOverlay {
   }
 
   close(): void {
+    const wasOpen = this.open;
     this.open = false;
     this.panel?.remove();
     this.panel = undefined;
+    if (wasOpen) {
+      this.host.onClose();
+    }
   }
 
   destroy(): void {
@@ -133,9 +148,11 @@ export class MonsOverlay {
     }
     if (mode.kind === "list") {
       if (code === "KeyP") {
-        const bond = this.host.pet(this.cursor);
-        if (bond !== undefined) {
-          this.notice = `${this.nameAt(this.cursor)} leans in. Bond ${bond}.`;
+        const result = this.host.pet(this.cursor);
+        if (result) {
+          this.notice = result.line;
+          this.wiggleRow = this.cursor;
+          this.wiggleNonce += 1;
           this.host.onRosterChanged();
         }
         this.render();
@@ -154,6 +171,7 @@ export class MonsOverlay {
         } else {
           this.mode = { kind: "fuse-pick" };
           this.notice = "";
+          this.host.onFuseMode();
         }
         this.render();
         return;
@@ -275,9 +293,14 @@ export class MonsOverlay {
         mode.kind === "fuse-pick" && mode.first === index ? "A" : " "
       ].join("");
       const cursor = index === this.cursor ? "▶" : " ";
-      return `<div style="padding:2px 8px;${index === this.cursor ? "background:#2c2c5e;" : ""}">` +
+      const wiggle = index === this.wiggleRow
+        ? `animation:monWiggle .42s ease-in-out;`
+        : "";
+      return `<div style="padding:2px 8px;transform-origin:left center;${wiggle}${index === this.cursor ? "background:#2c2c5e;" : ""}">` +
         `${cursor}${marks} ${escapeHtml(name)} <span style="opacity:.75">Lv${mon.level} ${escapeHtml(race)} ${tier} bond ${mon.bond}</span></div>`;
     }).join("");
+    // The wiggle is a one-shot: consume it so arrow-key re-renders don't replay it.
+    this.wiggleRow = -1;
     let body = "";
     if (mode.kind === "fuse-preview") {
       const preview = mode.preview;
@@ -327,6 +350,7 @@ export class MonsOverlay {
         ? "FUSION: pick two (Z picks, X backs out)"
         : "FUSION PREVIEW";
     this.panel.innerHTML =
+      `<style>@keyframes monWiggle{0%{transform:rotate(0)}25%{transform:rotate(-4deg)}55%{transform:rotate(4deg)}80%{transform:rotate(-2deg)}100%{transform:rotate(0)}}</style>` +
       `<div style="min-width:380px;max-width:560px;max-height:80vh;overflow:auto;background:#0d0d1a;border:3px solid #f2efe6;border-radius:2px;padding:10px 12px;font-size:14px;line-height:1.5">` +
       `<div style="margin-bottom:6px;opacity:.9">${header}</div>` +
       (roster.length === 0 ? `<div style="opacity:.8">No mons yet. Wild ones roam past the farm. Rough one up, then talk.</div>` : rows) +

@@ -30,7 +30,13 @@
       "FARMHAND: Pet them when you visit. They keep count. Not in a ledger way. In a dog way.",
       "FARMHAND: The ones that stay here toughen up slow. Watching the road, eating regular. It adds up. Slower than fighting, but nobody gets hit.",
       "FARMHAND: Letting one go is forever, mind. They don't circle back. They're not lost. They're just elsewhere. Big difference. Took me years.",
-      "FARMHAND: The strong ones ask harder questions. Stands to reason. More to lose by picking the wrong company."
+      "FARMHAND: The strong ones ask harder questions. Stands to reason. More to lose by picking the wrong company.",
+      "FARMHAND: Wild ones won't talk while they still feel strong. Get them below half, then ask. Pride has a halfway mark, apparently.",
+      "FARMHAND: A companion that knows you well can smooth over one bad answer from a wild mon with the same sort of heart. Friends do that. Once.",
+      "FARMHAND: A fused mon can carry two old tricks. Choose carefully. The altar does not have a return counter.",
+      "FARMHAND: Fuse two of the same race and the new one usually comes out a step stronger. Families are odd around that altar.",
+      "FARMHAND: You can bring home two of the same mon. They don't mind. People are the ones who get strange about matching names.",
+      "FARMHAND: If your companion gets knocked flat, it comes back here. Hurt pride, mostly. Put out food and don't make a speech."
     ],
     "release": [
       "FARMHAND: Letting this one go? ...Alright. Stand still a second and let it look at you. They like to be sure it's on purpose.",
@@ -63,5 +69,25 @@
   "momPhone": [
     "MOM: A mon? Well. Does it eat people food? Set out a bowl anyway. Everybody likes a bowl with their name on it.",
     "MOM: Tell it hello from me. And honey, wash your hands after the petting. Not before. After. Love you. Don't run out of clean socks."
-  ]
+  ],
+  "fusionCeremony": [
+    "The two mons stand close enough to touch. When the light clears, one new mon is there. It scratches an ear exactly the old way.",
+    "The altar hums. Two shadows go in and one comes out. It knows a trick nobody taught it, and looks surprised to know.",
+    "For a second, both mons look back. Then there is only the new one, standing with one old paw turned slightly inward.",
+    "The light takes two familiar shapes apart. What steps down is a stranger, except for the way it waits for you.",
+    "The altar glows like an oven left open. When it shuts, one new mon is sitting there with somebody else's patient feet.",
+    "Nobody claps. The new mon steps down and tries an old trick. It does it a little wrong. Somehow that makes the room quieter."
+  ],
+  "celebrations": {
+    "firstCatch": [
+      "The first mon reaches the farm on its own feet. Nobody signs anything. It picks a place by the fence and waits for you.",
+      "You know its name now. It knows the sound of your steps. That is the whole record.",
+      "There is one more friend in the world than there was this morning. The world does not announce it."
+    ],
+    "firstFusion": [
+      "The first new mon steps off the altar. Behind it, two empty places stay empty.",
+      "It tilts its head in a way you know. Not the same. Not gone all the way, either.",
+      "Bosch holds out a hand. The mon sniffs it, then stands close. Something ended. Something else decided to stay."
+    ]
+  }
 }

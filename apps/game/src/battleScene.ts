@@ -224,6 +224,7 @@ import {
   type BattleSfx,
   type BattleSfxCue
 } from "./audio/battleSfx";
+import { createMonsSfx, type MonsSfx } from "./audio/monsSfx";
 import { createMusic, musicBossCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
@@ -703,6 +704,7 @@ export class BattleScene extends Phaser.Scene {
   private backgroundAnimation?: AnimatedBattleBackgroundHandle;
   private backgroundDebug: BattleBackgroundDebug = staticBattleBackgroundDebug();
   private battleSfx_: BattleSfx = createBattleSfx();
+  private monsSfx_: MonsSfx = createMonsSfx();
   private music_: Music = createMusic();
   // A resolved cue string: "battle" | "victory" | "boss:<groupId>" (falls back to
   // the generic `boss` cue when a group has no dedicated boss track).
@@ -843,6 +845,7 @@ export class BattleScene extends Phaser.Scene {
     this.backgroundAnimation = undefined;
     this.backgroundDebug = staticBattleBackgroundDebug();
     this.battleSfx_ = data.battleSfx ?? createBattleSfx();
+    this.monsSfx_ = createMonsSfx({ muted: musicDisabledBySearch(globalThis.location?.search) });
     this.music_ = data.music ?? getSharedMusic(this.registry, data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
@@ -1014,9 +1017,20 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** Play a mons SFX cue (negotiation / catch), resuming the context first. */
+  private playMonsSfx(cue: (sfx: MonsSfx) => void): void {
+    try {
+      this.monsSfx_.resume();
+      cue(this.monsSfx_);
+    } catch {
+      // Audio is best-effort.
+    }
+  }
+
   private registerBattleSfxResume(): void {
     const resume = () => {
       this.battleSfx_.resume();
+      this.monsSfx_.resume();
       this.music_.resume();
     };
     this.input.once("pointerdown", resume);
@@ -5516,6 +5530,13 @@ export class BattleScene extends Phaser.Scene {
     this.playBattleSfxCue("menuConfirm");
     const wasRight = monCatch.selectionIndex === question.correctIndex;
     const next = answerNegotiation(negotiation, monCatch.selectionIndex);
+    // Read cue: a bright rising blip that climbs with each right answer, a soft
+    // deflate on a miss. The mon is telling you how it's going.
+    if (wasRight) {
+      this.playMonsSfx((sfx) => sfx.negotiationRight(next.correct));
+    } else {
+      this.playMonsSfx((sfx) => sfx.negotiationWrong());
+    }
     monCatch.negotiation = next;
     monCatch.selectionIndex = 0;
     this.commandIndex_ = 0;
@@ -5545,7 +5566,9 @@ export class BattleScene extends Phaser.Scene {
     }
     monCatch.attempted = true;
     this.playBattleMusicCue("victory");
-    this.playBattleSfxCue("victory");
+    // A dedicated catch jingle (the emotional peak) instead of the generic
+    // victory sting; the victory music loop still carries the win underneath.
+    this.playMonsSfx((sfx) => sfx.catchSuccess());
     this.startFlashOverlay(
       BATTLE_FX_VICTORY_FLASH_COLOR,
       BATTLE_FX_VICTORY_FLASH_ALPHA,

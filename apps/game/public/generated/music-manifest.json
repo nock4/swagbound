@@ -315,6 +315,18 @@
    }
   },
   {
+   "id": "mons-farm",
+   "label": "The Mons Farm (the lot with no paperwork)",
+   "file": "audio/jammers/122__benoit-pioulard-sean-curtis-patrick__eaglescliffe.mp3",
+   "loop": true,
+   "gain": 0.4,
+   "match": {
+    "sectorIds": [
+     1771
+    ]
+   }
+  },
+  {
    "id": "postwick",
    "label": "Postwick (the Venue)",
    "file": "audio/jammers/100__euglossine__dance-district-dna.mp3",

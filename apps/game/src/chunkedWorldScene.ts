@@ -33,6 +33,19 @@ const WILD_MON_ROAM_CHANCE = 0.12;
 // not per-frame (the roll only runs when this hits 0). ~6s keeps them rare.
 const WILD_MON_ROAM_COOLDOWN_MS = 6000;
 const MAX_BATTLE_MEMBERS = 4;
+// The Postwick farm's idle prop NPCs (see content/added-npcs.json): the Fusion
+// Altar and the training dummy get a touch of life in syncNpc.
+const MONS_FARM_ALTAR_NPC_ID = 910302;
+const MONS_FARM_DUMMY_NPC_ID = 910303;
+
+/** A stable per-enemy phase (0..2PI) so a cluster of wild mons bobs out of sync. */
+function wildMonBobPhase(key: string): number {
+  let hash = 0;
+  for (let index = 0; index < key.length; index += 1) {
+    hash = (hash * 31 + key.charCodeAt(index)) >>> 0;
+  }
+  return (hash % 628) / 100;
+}
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -340,6 +353,7 @@ import {
 } from "./mapTransition";
 import { createTransitionSfx, TEXT_BLIP_TUNING, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
 import { createOpeningSfx, type OpeningSfx } from "./audio/openingSfx";
+import { createMonsSfx, type MonsSfx } from "./audio/monsSfx";
 import { createMusic, musicAreaCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
@@ -886,7 +900,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private monsState_?: MonsState;
   private consumedCapturedMon_ = false;
   private wildMonRoamCooldownMs = 0;
+  // Set when a fusion commits in the O overlay; consumed on overlay close so the
+  // altar reaction plays once the DOM overlay is out of the way.
+  private pendingFusionReaction_: { firstEver: boolean; before: number } | undefined;
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
+  private monsSfx_: MonsSfx = createMonsSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
   private readonly menuSfx: BattleSfx = createBattleSfx();
   private menuSfxCalls: MenuSfxCue[] = [];
@@ -1019,6 +1037,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.music = getSharedMusic(this.registry, data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
+    this.monsSfx_ = createMonsSfx({ muted: musicDisabledBySearch(globalThis.location?.search) });
     // Dev music-auditioner bridge: lets the Track Lab panel mute this scene's
     // music while a candidate track auditions, and read where the player is.
     publishAuditionTarget({
@@ -1346,7 +1365,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
         return ok;
       },
-      pet: (index) => this.monsRuntime()?.pet(index),
+      pet: (index) => this.petMon(index),
       release: (index) => {
         const ok = this.monsRuntime()?.release(index) ?? false;
         if (ok) {
@@ -1356,13 +1375,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
       },
       previewFusion: (a, b) => this.monsRuntime()?.previewFusion(a, b),
       fuse: (a, b, picks) => {
+        const before = this.monsRuntime()?.count() ?? 0;
         const fused = this.monsRuntime()?.fuse(a, b, picks);
         if (fused) {
+          const firstEver = !this.gameFlags.has("mons:first-fusion");
           this.gameFlags.set("mons:first-fusion");
           this.persistMonRoster();
+          // The visible altar reaction is deferred to overlay close (the DOM
+          // overlay covers the world while the player is still fusing).
+          this.pendingFusionReaction_ = { firstEver, before };
         }
         return fused;
       },
+      onFuseMode: () => this.playMonsAltarHum(),
+      onClose: () => this.resolvePendingFusionReaction(),
       abilities: () => this.data_.mons?.abilities,
       atFusionAltar: () => {
         const dx = this.playerState.x - MONS_FARM_ANCHOR.x;
@@ -3357,7 +3383,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
       npc.state.player.facing,
       npc.data.npcId
     ));
+    this.applyFarmPropIdle(npc, actor);
     actor.setVisible(this.npcInsideActiveRoom(npc) && this.cutsceneActorVisible(npc.data.npcId));
+  }
+
+  /** Give the farm's idle props a little life: the Fusion Altar hums with a slow
+   *  sway, and the training dummy takes a periodic knock as if a resting mon is
+   *  working it. Computed from the clock so nothing leaks tween state (angle is
+   *  never reset by syncNpc, so it's safe to drive here). */
+  private applyFarmPropIdle(npc: NpcRuntime, actor: { setAngle?: (deg: number) => unknown }): void {
+    if (typeof actor.setAngle !== "function") {
+      return;
+    }
+    if (npc.data.npcId === MONS_FARM_ALTAR_NPC_ID) {
+      actor.setAngle(Math.sin(this.time.now / 620) * 1.2);
+    } else if (npc.data.npcId === MONS_FARM_DUMMY_NPC_ID) {
+      // A ~0.45s knock every ~3.8s, still the rest of the time.
+      const phase = this.time.now % 3800;
+      actor.setAngle(phase < 450 ? Math.sin((phase / 450) * Math.PI * 3) * 6 : 0);
+    }
   }
 
   private applyNpcRoomVisibility(): void {
@@ -9050,6 +9094,154 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  /** Pet the roster mon at index: bumps bond, plays a chirp, and returns a
+   *  personality-flavored line (name substituted) for the overlay to show. */
+  private petMon(index: number): { bond: number; line: string } | undefined {
+    const mons = this.monsRuntime();
+    const bond = mons?.pet(index);
+    if (bond === undefined) {
+      return undefined;
+    }
+    this.playMonsSfx((sfx) => sfx.petChirp());
+    const mon = mons?.list()[index];
+    const entry = mon ? mons?.entryFor(mon) : undefined;
+    const name = entry ? monDisplayName(entry) : "It";
+    const bank = entry?.personality
+      ? this.data_.mons?.questionBanks.banks[entry.personality]
+      : undefined;
+    const lines = bank?.petLines ?? [];
+    const line = lines.length > 0
+      ? lines[Math.abs(bond) % lines.length].replace(/\{name\}/g, name)
+      : `${name} leans in.`;
+    return { bond, line };
+  }
+
+  /** Altar hum cue when the player enters fuse-pick mode at the altar. */
+  private playMonsAltarHum(): void {
+    this.playMonsSfx((sfx) => sfx.altarHum());
+  }
+
+  /** The catch-return banner line: the mon's personality catch line (name
+   *  substituted), falling back to a plain "waiting at the farm" note. */
+  private monCatchNoticeLine(entry: MonsRegistryEntry | undefined, displayName: string): string {
+    const bank = entry?.personality ? this.data_.mons?.questionBanks.banks[entry.personality] : undefined;
+    if (bank?.catchLine) {
+      return bank.catchLine.replace(/\{name\}/g, displayName);
+    }
+    return `${displayName} is waiting at the farm.`;
+  }
+
+  /** A little celebratory flourish on a successful catch: the mon's overworld
+   *  sprite hops in and bounces up to Bosch, then fades. Only runs when the
+   *  texture is already resident (it is, right out of the catch battle); a miss
+   *  is silent so this never blocks or errors. */
+  private playMonHopAfter(entry: MonsRegistryEntry): void {
+    const skin: SpriteOverrideSheet = {
+      image: `generated/${entry.sprites.overworld}`,
+      frameWidth: 96,
+      frameHeight: 96,
+      animations: { down: [0], left: [0], right: [0], up: [0] },
+      displayHeight: 26,
+      originX: 0.5,
+      originY: 1
+    };
+    const textureKey = spriteOverrideEnemyOverworldSheetKey(900001, skin.image);
+    if (!this.textures.exists(textureKey)) {
+      return;
+    }
+    const facing = this.playerState.facing;
+    const behind = { x: facing === "left" ? 42 : facing === "right" ? -42 : 20, y: 34 };
+    const startX = this.playerState.x + behind.x;
+    const startY = this.playerState.y + behind.y;
+    const endX = this.playerState.x + (facing === "left" ? 16 : -16);
+    const endY = this.playerState.y + 2;
+    const sprite = this.spawnOverworldEnemyActor(startX, startY, undefined, textureKey, skin, 0);
+    if (!(sprite instanceof Phaser.GameObjects.Sprite || sprite instanceof Phaser.GameObjects.Image)) {
+      sprite?.destroy?.();
+      return;
+    }
+    this.setActorSortDepth(sprite);
+    const target = sprite as Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
+    // Two concurrent tweens: glide X to Bosch, bounce Y in a couple of hops.
+    this.tweens.add({ targets: target, x: endX, duration: 620, ease: "Sine.easeInOut" });
+    this.tweens.add({
+      targets: target,
+      y: endY - 12,
+      duration: 155,
+      ease: "Sine.easeOut",
+      yoyo: true,
+      repeat: 1,
+      onComplete: () => {
+        this.tweens.add({
+          targets: target,
+          alpha: 0,
+          duration: 200,
+          delay: 120,
+          onComplete: () => target.destroy()
+        });
+      }
+    });
+  }
+
+  /** Play the Fusion Altar reaction (deferred from the fuse commit to overlay
+   *  close): a bright pop on the altar sprite plus a ceremony/celebration line. */
+  private resolvePendingFusionReaction(): void {
+    const pending = this.pendingFusionReaction_;
+    this.pendingFusionReaction_ = undefined;
+    if (!pending) {
+      return;
+    }
+    this.playMonsSfx((sfx) => sfx.fusionPoof());
+    const altar = [...this.npcRuntimes.values()].find((r) => r.data.npcId === MONS_FARM_ALTAR_NPC_ID);
+    const sprite = altar?.sprite as (Phaser.GameObjects.Sprite | Phaser.GameObjects.Image) | undefined;
+    if (sprite) {
+      const baseScaleX = sprite.scaleX;
+      const baseScaleY = sprite.scaleY;
+      // CANVAS renderer: scale/alpha tween on a real texture is safe (no Shape,
+      // no setTint). A quick pop reads as the altar taking the two mons in.
+      this.tweens.add({
+        targets: sprite,
+        scaleX: baseScaleX * 1.3,
+        scaleY: baseScaleY * 1.3,
+        alpha: 0.55,
+        duration: 150,
+        yoyo: true,
+        ease: "Sine.easeOut",
+        onComplete: () => {
+          sprite.setScale(baseScaleX, baseScaleY);
+          sprite.setAlpha(1);
+        }
+      });
+    }
+    const story = this.data_.mons?.story;
+    if (story) {
+      const line = pending.firstEver && story.celebrations?.firstFusion?.length
+        ? story.celebrations.firstFusion[Math.floor(Math.abs(this.time.now / 1200)) % story.celebrations.firstFusion.length]
+        : this.rotateMonLine(story.fusionCeremony);
+      if (line) {
+        this.showMonNotice(line);
+      }
+    }
+  }
+
+  /** Play a mons SFX cue, resuming the audio context first (safe if suspended). */
+  private playMonsSfx(cue: (sfx: MonsSfx) => void): void {
+    try {
+      this.monsSfx_.resume();
+      cue(this.monsSfx_);
+    } catch {
+      // Audio is best-effort; never let a cue break gameplay.
+    }
+  }
+
+  /** Pick a line from an optional pool, rotated by the clock (stable per second). */
+  private rotateMonLine(pool: readonly string[] | undefined): string | undefined {
+    if (!pool || pool.length === 0) {
+      return undefined;
+    }
+    return pool[Math.floor(Math.abs(this.time.now / 1000)) % pool.length];
+  }
+
   /**
    * Bring in any recruit whose story flag is now set but who isn't in the party yet.
    * Called on boot (silent - restoring a save that already has them) and after story
@@ -9593,6 +9785,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.setActorSortDepth(actor);
     actor.y = enemy.state.player.y;
+    // Wild mons idle-bob so they read as curious little creatures rather than
+    // static roamers. Render-only (collision/touch use enemy.state, not the
+    // sprite y); a per-enemy phase keeps a cluster from bobbing in lockstep.
+    if (enemy.wildMonId) {
+      const phase = wildMonBobPhase(enemy.key);
+      actor.y = enemy.state.player.y + Math.sin(this.time.now / 240 + phase) * 2.5;
+    }
     this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       enemy.state.player.moving,
       enemy.frames,
@@ -10233,8 +10432,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.consumedCapturedMon_ = true;
       const caught = mons.catchMon(restore.capturedMon.registryId, { caughtAtFlag: "act2" });
       if (caught) {
+        const firstEver = !this.gameFlags.has("mons:first-catch");
         this.gameFlags.set("mons:first-catch");
-        this.showMonNotice(`${restore.capturedMon.displayName} is waiting at the farm.`);
+        const entry = this.data_.mons ? monById(this.data_.mons.registry, restore.capturedMon.registryId) : undefined;
+        this.showMonNotice(this.monCatchNoticeLine(entry, restore.capturedMon.displayName));
+        // The mon literally hops after Bosch when its roamer texture is still
+        // resident (the common case straight out of the catch battle).
+        if (entry) {
+          this.playMonHopAfter(entry);
+        }
+        // First-ever catch: a quiet landmark, shown after the catch line fades.
+        const firstCatch = this.data_.mons?.story.celebrations?.firstCatch;
+        if (firstEver && firstCatch?.length) {
+          const line = firstCatch[0];
+          this.time.delayedCall(3300, () => this.showMonNotice(line));
+        }
         // A catch is a discrete win the player expects to stick; persist the
         // roster now rather than waiting for a manual save or a town crossing.
         if (this.saveSlots) {

@@ -4622,6 +4622,10 @@ export const MonQuestionSchema = z.object({
 export const MonQuestionBankSchema = z.object({
   encounterLine: z.string().min(1).max(140),
   petLines: z.array(z.string().min(1).max(140)).min(2),
+  // Personality-flavored line shown the moment a wild mon of this personality
+  // agrees to come to the farm. Optional (additive): the catch notice falls back
+  // to a generic line when a bank omits it.
+  catchLine: z.string().min(1).max(140).optional(),
   questions: z.array(MonQuestionSchema).min(4)
 }).strict();
 
@@ -4690,6 +4694,15 @@ export const MonStorySchema = z.object({
   townLines: z.array(z.string().min(1).max(200)).min(3),
   journal: z.record(z.string(), z.string().min(1).max(90)),
   monEncounterHint: z.string().min(1).max(140),
-  momPhone: z.array(z.string().min(1).max(200)).min(1)
+  momPhone: z.array(z.string().min(1).max(200)).min(1),
+  // Rotated flavor read aloud each time a fusion commits at the altar (optional,
+  // additive: fusion still works with no ceremony line).
+  fusionCeremony: z.array(z.string().min(1).max(200)).min(1).optional(),
+  // One-time celebration beats surfaced the first time the player ever catches a
+  // mon / completes a fusion (optional, additive).
+  celebrations: z.object({
+    firstCatch: z.array(z.string().min(1).max(200)).min(1),
+    firstFusion: z.array(z.string().min(1).max(200)).min(1)
+  }).strict().optional()
 }).strict();
 export type MonStory = z.infer<typeof MonStorySchema>;
