@@ -437,6 +437,11 @@ type MonCatchBattleInit = {
   /** battle-260 art, path under public/ (e.g. generated/assets/mons/<id>/battle-260.png). */
   spritePath?: string;
   hint?: string;
+  /** Wrong-answer forgiveness from a bonded same-personality companion. */
+  forgiveness?: number;
+  /** The wild mon's real registry combat stats, applied to the template enemy so
+   *  the fight (and the catch HP window) scale with the mon's tier/level. */
+  stats?: { level: number; hp: number; offense: number; defense: number };
 };
 type MonCatchBattleState = MonCatchBattleInit & {
   negotiation: MonNegotiationState | null;
@@ -863,6 +868,17 @@ export class BattleScene extends Phaser.Scene {
       const lead = this.battle_.enemies[0];
       if (lead) {
         lead.name = this.monCatch_.displayName;
+        // Scale the fight to the mon's tier/level so the catch HP window is
+        // proportional (a tier-5 legend is not a 48-HP pushover) and Bosch can't
+        // overshoot-kill a big pool in one swing.
+        const s = this.monCatch_.stats;
+        if (s) {
+          lead.level = s.level;
+          lead.maxHp = s.hp;
+          lead.hp = createRollingMeter(s.hp);
+          lead.offense = s.offense;
+          lead.defense = s.defense;
+        }
         if (this.monCatch_.spritePath && this.spriteOverrides_) {
           this.spriteOverrides_ = {
             ...this.spriteOverrides_,
@@ -5446,7 +5462,7 @@ export class BattleScene extends Phaser.Scene {
       this.publish();
       return;
     }
-    monCatch.negotiation = createNegotiation(monCatch.questions);
+    monCatch.negotiation = createNegotiation(monCatch.questions, monCatch.forgiveness ?? 0);
     monCatch.selectionIndex = 0;
     this.commandIndex_ = 0;
     this.submenu_ = "command";
@@ -5506,7 +5522,9 @@ export class BattleScene extends Phaser.Scene {
     }
     if (next.outcome === "refused") {
       monCatch.attempted = true;
-      this.menuMessage_ = `${monCatch.displayName} turns away.`;
+      // Tell the player CONVINCE is spent for this fight and that walking away is
+      // fine (a fresh mon roams later) - otherwise "turns away" reads as "now kill it".
+      this.menuMessage_ = `${monCatch.displayName} won't hear you out now. Let it go. Another will come.`;
       this.beginCommandInputRound();
       this.renderStatus();
       this.publish();

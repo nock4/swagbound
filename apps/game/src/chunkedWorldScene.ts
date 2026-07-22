@@ -19,7 +19,7 @@ import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
-import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, type MonNegotiationQuestion } from "./monsModel";
+import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion } from "./monsModel";
 import { MonsState } from "./monsState";
 import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
 import { MonsOverlay } from "./monsOverlay";
@@ -29,6 +29,10 @@ const MONS_FARM_ANCHOR = { x: 2872, y: 7112 } as const;
 const MONS_FARM_ALTAR_RADIUS = 360;
 // Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
 const WILD_MON_ROAM_CHANCE = 0.12;
+// Cooldown between roaming-wild-mon spawn ROLLS so the 12% chance is per-attempt,
+// not per-frame (the roll only runs when this hits 0). ~6s keeps them rare.
+const WILD_MON_ROAM_COOLDOWN_MS = 6000;
+const MAX_BATTLE_MEMBERS = 4;
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -881,7 +885,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly partyState = new PartyState();
   private monsState_?: MonsState;
   private consumedCapturedMon_ = false;
-  private pendingMonHandover_ = false;
+  private wildMonRoamCooldownMs = 0;
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
   private readonly menuSfx: BattleSfx = createBattleSfx();
@@ -1333,17 +1337,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return active?.index;
       },
       setActive: (index) => {
-        const firstEver = index !== undefined && !this.gameFlags.has("mons:first-companion");
         const ok = this.monsRuntime()?.setActive(index) ?? false;
         if (ok && index !== undefined) {
+          // Setting first-companion arms the handover scene; maybePlayMonHandover
+          // fires it once control returns (derives "owed" from the flags).
           this.gameFlags.set("mons:first-companion");
-          // Fire the slot-3 handover scene (Cloak/Munch react) once the overlay
-          // closes - the third seat has been empty since MiFella got in the car.
-          if (firstEver && !this.gameFlags.has("mons:handover-played")) {
-            this.pendingMonHandover_ = true;
-          }
-        }
-        if (ok) {
           this.persistMonRoster();
         }
         return ok;
@@ -1375,8 +1373,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.isPlayerControllable() &&
         !this.bikeActive &&
         this.gameFlags.has("act1:complete") &&
-        this.gameFlags.has("mons:farm-met") &&
-        this.data_.mons !== undefined,
+        this.data_.mons !== undefined &&
+        // Open once you've met the Farmhand OR already caught something (so a mon
+        // caught in the wild before reaching the farm is never orphaned).
+        (this.gameFlags.has("mons:farm-met") || (this.monsRuntime()?.count() ?? 0) > 0),
       onRosterChanged: () => {
         this.handlePartyCompositionChanged();
         this.publish();
@@ -9394,6 +9394,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.syncEncounterTileState();
     this.overworldEnemySpawnCooldownMs = Math.max(0, this.overworldEnemySpawnCooldownMs - deltaMs);
+    this.wildMonRoamCooldownMs = Math.max(0, this.wildMonRoamCooldownMs - deltaMs);
     this.stepOverworldEnemies(deltaMs);
     if (this.canSpawnOverworldEnemy()) {
       this.trySpawnOverworldEnemy();
@@ -9987,7 +9988,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // (battlePartyOptions) so post-battle snapshots never compound them.
     const members = activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
     const companion = this.monCompanionBattleKit();
-    return companion ? [...members, companion.member] : members;
+    if (!companion) {
+      return members;
+    }
+    // The 4-slot battle cap (battleLogic slice(0,4)) would silently drop a
+    // companion appended after 4 heroes. Guarantee the companion its seat by
+    // benching the last hero when the active party is already full.
+    const heroSeats = members.slice(0, MAX_BATTLE_MEMBERS - 1);
+    return [...heroSeats, companion.member];
   }
 
   /** The active mon companion's battle kit (member + synthetic MOVES psi), or undefined. */
@@ -10017,7 +10025,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /** Play the slot-3 handover scene once the roster overlay has closed and the
    *  player is back in control (the scene can't run under the DOM overlay). */
   private maybePlayMonHandover(): void {
-    if (!this.pendingMonHandover_) {
+    // Owed whenever the first companion has been set but the scene hasn't played.
+    // Deriving this from flags (not a transient bool) means it survives a save
+    // taken between setting the companion and the scene actually firing.
+    if (!this.gameFlags.has("mons:first-companion") || this.gameFlags.has("mons:handover-played")) {
       return;
     }
     const story = this.data_.mons?.story;
@@ -10030,7 +10041,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     ) {
       return;
     }
-    this.pendingMonHandover_ = false;
     this.gameFlags.set("mons:handover-played");
     lockPlayer(this.playerState, this.playerFrames);
     this.dialogue.start(buildInlineDialoguePages([...story.handoverScene]));
@@ -10056,7 +10066,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /** Build the CONVINCE context for a wild-mon battle: personality question draw. */
-  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[]; spritePath?: string; hint?: string } | undefined {
+  private monCatchInitFor(registryId: string): {
+    registryId: string;
+    displayName: string;
+    questions: MonNegotiationQuestion[];
+    spritePath?: string;
+    hint?: string;
+    forgiveness?: number;
+    stats?: { level: number; hp: number; offense: number; defense: number };
+  } | undefined {
     const data = this.data_.mons;
     if (!data) {
       return undefined;
@@ -10070,13 +10088,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (questions.length < 3) {
       return undefined;
     }
+    // Bond forgiveness: an active companion of the wild's personality softens one
+    // wrong answer (makes petting/bond a real mechanic).
+    const active = this.monsRuntime()?.active();
+    const forgiveness = negotiationForgiveness(entry.personality, active
+      ? { personality: active.entry.personality, bond: active.mon.bond }
+      : undefined);
+    // The wild fights at its own registry stats (scaled by tier/level), so the
+    // catch window is proportional and difficulty tracks the tier gate.
+    const stats = monStatsAtLevel(entry, entry.baseLevel);
     return {
       registryId,
       displayName: monDisplayName(entry),
       questions,
       spritePath: `generated/${entry.sprites.battle}`,
-      ...(data.story.monEncounterHint ? { hint: data.story.monEncounterHint } : {})
+      ...(data.story.monEncounterHint ? { hint: data.story.monEncounterHint } : {}),
+      ...(forgiveness > 0 ? { forgiveness } : {}),
+      stats: { level: entry.baseLevel, hp: stats.maxHp, offense: stats.offense, defense: stats.defense }
     };
+  }
+
+  private isWorldPixelWalkable(p: { x: number; y: number }): boolean {
+    return !solidAtWorldPixel(this.solidRows, p, this.collisionGrid());
   }
 
   /** The catchable-tier ceiling by act: tiers 1-3 from Act 2, +4 at Act 3, +5 at
@@ -10102,22 +10135,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
     }
     const nearFarm = Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 1400;
-    // The scripted farm tutor ignores the encounter toggle (it is the guaranteed
-    // first catch); roaming wild mons obey it like any other roamer, so
-    // ?noEncounters and encounter-suppressed zones stay quiet.
-    if (!nearFarm && !this.encounterEnabled) {
-      return;
-    }
     let wild: MonsRegistryEntry | undefined;
     let spawnAt: { x: number; y: number } | undefined;
     if (nearFarm) {
       // Guaranteed guided first catch: a forgiving tier-1 Cheerful by the fence.
+      // The tutor ignores the encounter toggle (it IS the tutorial). Vet the
+      // fixed offset so it never lands in a wall/void; fall back to the finder.
       wild = data.registry.mons.find((m) => !m.secretRare && m.tier === 1 && m.personality === "Cheerful");
-      spawnAt = { x: MONS_FARM_ANCHOR.x + 96, y: MONS_FARM_ANCHOR.y + 128 };
+      const preferred = { x: MONS_FARM_ANCHOR.x + 96, y: MONS_FARM_ANCHOR.y + 128 };
+      spawnAt = this.isWorldPixelWalkable(preferred)
+        ? preferred
+        : (this.findOverworldEnemySpawnPoint() ?? undefined);
     } else {
-      // Roaming Act 2+: low-rate random catchable mon at a vetted walkable cell.
-      if (this.encounterCooldownMs > 0 || this.overworldEnemySpawnCooldownMs > 0) {
+      // Roaming Act 2+: only after the player has met the FARMHAND (learned
+      // CONVINCE), obeying the encounter toggle AND the sector/zone caps that
+      // normal roamers honor, and only on a spawn-roll cooldown (not per frame).
+      if (!this.gameFlags.has("mons:farm-met") || !this.encounterEnabled) {
         return;
+      }
+      if (this.wildMonRoamCooldownMs > 0) {
+        return;
+      }
+      this.wildMonRoamCooldownMs = WILD_MON_ROAM_COOLDOWN_MS;
+      const sector = this.currentEncounterSector();
+      if (sectorSpawnBudget(sector, { maxPerSector: OVERWORLD_ENEMY_GLOBAL_CAP }) <= 0) {
+        return; // quiet zone (town center, safe/story-locked sector)
       }
       if (this.encounterRng.next() > WILD_MON_ROAM_CHANCE) {
         return;

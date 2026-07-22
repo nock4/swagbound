@@ -267,9 +267,10 @@
    "name": "Grand Inning",
    "ppCost": 13,
    "kind": "damage",
-   "power": 55,
+   "power": 62,
    "target": "enemy",
-   "line": "{user} plays a whole inning at {target} in one move."
+   "line": "{user} plays a whole inning at {target}. The field itself pitches in.",
+   "element": "earth"
   },
   "practice-haunt": {
    "name": "Practice Haunt",

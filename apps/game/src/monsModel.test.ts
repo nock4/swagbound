@@ -14,6 +14,7 @@ import {
   answerNegotiation,
   createNegotiation,
   createOwnedMon,
+  negotiationForgiveness,
   drawNegotiationQuestions,
   executeFusion,
   grantMonXp,
@@ -139,6 +140,23 @@ describe("mon negotiation", () => {
     };
     expect(play(true).outcome).toBe("joined");
     expect(play(false).outcome).toBe("refused");
+  });
+
+  it("bond forgiveness shrugs off one wrong answer", () => {
+    // forgiveness 1: two right + one wrong should still reach 3 'correct' -> join
+    let state = createNegotiation(questions, 1);
+    state = answerNegotiation(state, questions[0].correctIndex);
+    state = answerNegotiation(state, questions[1].correctIndex);
+    state = answerNegotiation(state, (questions[2].correctIndex + 1) % 4); // wrong, forgiven
+    expect(state.forgiven).toBe(1);
+    expect(state.outcome).toBe("joined");
+  });
+
+  it("negotiationForgiveness needs a bonded same-personality companion", () => {
+    expect(negotiationForgiveness("Shy", { personality: "Shy", bond: 25 })).toBe(1);
+    expect(negotiationForgiveness("Shy", { personality: "Shy", bond: 5 })).toBe(0);
+    expect(negotiationForgiveness("Shy", { personality: "Cool", bond: 99 })).toBe(0);
+    expect(negotiationForgiveness("Shy", undefined)).toBe(0);
   });
 
   it("1/3 refuses outright", () => {

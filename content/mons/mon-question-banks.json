@@ -149,7 +149,7 @@
      ],
      "correctIndex": 2,
      "rightLine": "It preens. Justice has been served.",
-     "wrongLine": "It stares. This was not the moment for balance."
+     "wrongLine": "It stares. Balance. In THIS economy. For ME."
     },
     {
      "prompt": "Would you still like me if I was covered in mud?",
@@ -219,7 +219,7 @@
      ],
      "correctIndex": 2,
      "rightLine": "It nods hard. Sad happens. Snacks also happen.",
-     "wrongLine": "It smiles a little less brightly. That's not how it works inside."
+     "wrongLine": "It smiles a little less brightly. The sad still has to go somewhere first."
     },
     {
      "prompt": "Want to hear the song I made up? It's mostly one note.",
@@ -494,11 +494,11 @@
    ]
   },
   "Holy": {
-   "encounterLine": "The wild {name} was mid-blessing when you arrived. It starts over.",
+   "encounterLine": "The wild {name} was mid-blessing when you arrived. It blesses you, then eyes you like it is keeping score.",
    "petLines": [
-    "{name} blesses your hand. The hand is now the good hand.",
-    "{name} bows its head over its food bowl for a truly long time.",
-    "{name} forgives you for yesterday. It won't say for what."
+    "{name} blesses your hand. Then it blesses the hand again, harder, to be sure.",
+    "{name} bows over its food bowl, thanks the heavens, and guards the bowl.",
+    "{name} forgives you for yesterday. It has not forgotten yesterday."
    ],
    "questions": [
     {
@@ -546,7 +546,7 @@
       "Depends on the snack"
      ],
      "correctIndex": 1,
-     "rightLine": "It exhales, relieved. The friend is itself. The snacks are holy.",
+     "rightLine": "It exhales, relieved. We both know who the friend is. The snacks are holy.",
      "wrongLine": "It nods sadly and pretends the question was hypothetical."
     },
     {
@@ -593,7 +593,7 @@
      ],
      "correctIndex": 0,
      "rightLine": "IT'S ALREADY AT THE TREE. Best race ever.",
-     "wrongLine": "It runs the race alone. It wins. It's hollow."
+     "wrongLine": "It runs the race alone. It wins. Winning alone is barely winning."
     },
     {
      "prompt": "What if we dug a hole?! Right now! No reason!",
@@ -620,16 +620,16 @@
      "wrongLine": "It tries to slow down to your speed. It doesn't know how. It was scary for everyone."
     },
     {
-     "prompt": "Bedtime is SO far away. What do we do until then?!",
+     "prompt": "Bedtime is SO far away! What do we do until then?!",
      "options": [
       "Wind down early",
-      "Something quiet",
-      "Read a nice book",
-      "Everything. Twice."
+      "ONE amazing thing, all the way in",
+      "Read a nice quiet book",
+      "Everything. All of it. Twice."
      ],
-     "correctIndex": 3,
-     "rightLine": "It starts the first everything immediately.",
-     "wrongLine": "It yawns just from hearing that. A sad yawn."
+     "correctIndex": 1,
+     "rightLine": "YES. Pick the one and BE the one. It vibrates in agreement.",
+     "wrongLine": "It tries all of it at once, burns out, and gets very quiet. That was worse."
     },
     {
      "prompt": "Sometimes I crash and sleep for a whole day. Is that weird?",
@@ -1167,7 +1167,7 @@
      ],
      "correctIndex": 0,
      "rightLine": "It bows. The word given is the word kept. Even for small things.",
-     "wrongLine": "It looks through you at some distant, disappointed horizon."
+     "wrongLine": "It looks past you at nothing in particular. You feel it anyway."
     },
     {
      "prompt": "A little mon is being picked on by a big mon. You're medium. Do the math.",
@@ -1589,7 +1589,7 @@
      ],
      "correctIndex": 0,
      "rightLine": "It nods hard. Bad drawings from friends go in the BEST spots.",
-     "wrongLine": "It quietly decides to keep making you drawings anyway. Braver now."
+     "wrongLine": "It decides to keep making you drawings anyway. Quietly braver about it."
     },
     {
      "prompt": "If I made you a scarf but it came out as more of a tube, would you wear it?",
@@ -1718,7 +1718,7 @@
       "Hungry in the morning"
      ],
      "correctIndex": 3,
-     "rightLine": "Hungry in the morning. It bows slightly. The deepest answers fit in a pocket.",
+     "rightLine": "Hungry in the morning. It bows slightly. Short answer, right answer, same thing.",
      "wrongLine": "It waits. The real answer is under all those words, and it's shorter."
     }
    ]

@@ -175,7 +175,24 @@ export interface MonNegotiationState {
   correct: number;
   wrong: number;
   bonusGranted: boolean;
+  /** Wrong answers this many times can be shrugged off (bond with a same-
+   *  personality companion). Consumed before a wrong answer counts against you. */
+  forgiveness: number;
+  forgiven: number;
   outcome: "asking" | "joined" | "refused";
+}
+
+// Bond a same-personality active companion needs to grant one forgiveness.
+export const BOND_FORGIVENESS_THRESHOLD = 20;
+
+export function negotiationForgiveness(
+  wildPersonality: string | undefined,
+  companion: { personality?: string; bond: number } | undefined
+): number {
+  if (!companion || !wildPersonality || companion.personality !== wildPersonality) {
+    return 0;
+  }
+  return companion.bond >= BOND_FORGIVENESS_THRESHOLD ? 1 : 0;
 }
 
 // Deterministic question draw: hash of (monId, seedTag) picks without RNG so
@@ -211,8 +228,8 @@ export function drawNegotiationQuestions(
   return drawn;
 }
 
-export function createNegotiation(questions: MonNegotiationQuestion[]): MonNegotiationState {
-  return { questions, askedIndex: 0, correct: 0, wrong: 0, bonusGranted: false, outcome: "asking" };
+export function createNegotiation(questions: MonNegotiationQuestion[], forgiveness = 0): MonNegotiationState {
+  return { questions, askedIndex: 0, correct: 0, wrong: 0, bonusGranted: false, forgiveness, forgiven: 0, outcome: "asking" };
 }
 
 export function answerNegotiation(state: MonNegotiationState, optionIndex: number): MonNegotiationState {
@@ -223,11 +240,14 @@ export function answerNegotiation(state: MonNegotiationState, optionIndex: numbe
   if (!question) {
     return { ...state, outcome: "refused" };
   }
-  const right = optionIndex === question.correctIndex;
+  const actuallyRight = optionIndex === question.correctIndex;
+  // A wrong answer within the forgiveness budget is shrugged off (counts as right).
+  const forgivenThisAnswer = !actuallyRight && state.forgiven < state.forgiveness;
+  const right = actuallyRight || forgivenThisAnswer;
   const correct = state.correct + (right ? 1 : 0);
   const wrong = state.wrong + (right ? 0 : 1);
   const asked = state.askedIndex + 1;
-  const base = { ...state, askedIndex: asked, correct, wrong };
+  const base = { ...state, askedIndex: asked, correct, wrong, forgiven: state.forgiven + (forgivenThisAnswer ? 1 : 0) };
   if (asked < MON_BATTLE_QUESTION_COUNT) {
     return base;
   }
