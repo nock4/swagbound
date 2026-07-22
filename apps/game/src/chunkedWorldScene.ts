@@ -19,7 +19,7 @@ import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
-import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion } from "./monsModel";
+import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion, type OwnedMon } from "./monsModel";
 import { MonsState } from "./monsState";
 import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
 import { MonsOverlay } from "./monsOverlay";
@@ -39,6 +39,19 @@ const WILD_MON_CURIOUS_SPEED_PX_PER_SEC = 42;
 // The "?" over a wild mon floats above the foreground occluder layer (100_000),
 // like the player head overlays, so tree canopy never hides it.
 const WILD_MON_GLYPH_DEPTH = 111_000;
+// Living farm (Workstream A): how many roster mons are visible on the lot, how
+// far from the anchor the farm "is", and how they move. The active companion
+// ambles after Bosch; the rest wander the grass.
+const FARM_MON_VISIBLE_CAP = 10;
+const FARM_MON_ACTIVE_RADIUS_PX = 1400;
+const FARM_MON_SPAWN_RING_MIN_PX = 60;
+const FARM_MON_SPAWN_RING_MAX_PX = 260;
+const FARM_MON_WANDER_RADIUS_PX = 56;
+const FARM_MON_WANDER_SPEED_PX_PER_SEC = 24;
+const FARM_MON_FOLLOW_GAP_PX = 44;
+const FARM_MON_FOLLOW_SPEED_PX_PER_SEC = 46;
+const FARM_MON_PET_RANGE_PX = 30;
+const FARM_MON_PET_COOLDOWN_MS = 1800;
 const MAX_BATTLE_MEMBERS = 4;
 // The Postwick farm's idle prop NPCs (see content/added-npcs.json): the Fusion
 // Altar and the training dummy get a touch of life in syncNpc.
@@ -503,6 +516,21 @@ type OverworldEnemyRuntime = {
   glyph?: Phaser.GameObjects.Text;
 };
 
+/** A roster mon living visibly on the farm lot (Workstream A: the living farm).
+ *  Friendly actors: never solid, never battle on contact, petted with Z. */
+type FarmMonRuntime = {
+  key: string;
+  rosterIndex: number;
+  registryId: string;
+  isCompanion: boolean;
+  state: NpcRuntimeState;
+  frames: DirectionFrameSequence;
+  textureKey: string;
+  skin: SpriteOverrideSheet;
+  sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  petCooldownMs: number;
+};
+
 type BossGateRuntime = {
   triggerId: string;
   trigger: StoryTrigger;
@@ -912,6 +940,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   // Set when a fusion commits in the O overlay; consumed on overlay close so the
   // altar reaction plays once the DOM overlay is out of the way.
   private pendingFusionReaction_: { firstEver: boolean; before: number } | undefined;
+  // The living farm: visible roster mons on the lot. Keyed by spawn key; the
+  // signature detects roster changes (catch/fuse/release/companion swap) so the
+  // lot re-populates without polling deep state every frame.
+  private farmMons = new Map<string, FarmMonRuntime>();
+  private farmMonsSignature = "";
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private monsSfx_: MonsSfx = createMonsSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
@@ -1594,6 +1627,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.maybeStartMeadowDream();
     this.stepNpcs(delta);
+    this.syncFarmMons(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
     // in-warp escape pass may not have seen them yet. No-op once clear.
@@ -5090,6 +5124,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       // No Talk attempts while a cinematic owns the screen (the opening flyover is
       // tween-driven, so neither the event sequence nor the cutscene runner covers it).
       if (this.cinematicActive()) {
+        return;
+      }
+      // Petting a farm mon wins over regular interaction when one is closest:
+      // it is the most local thing to the press and never opens a dialogue.
+      if (!this.interactionTarget() && this.tryPetFarmMon()) {
         return;
       }
       if (this.interactionTarget() && this.dialogue.canOpen()) {
@@ -9243,6 +9282,236 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  /** The living farm: keep the lot populated with the player's roster while they
+   *  are at the farm. Non-active mons wander the grass; the active companion
+   *  ambles after Bosch. Friendly actors only: no collision, no battles. */
+  private syncFarmMons(deltaMs: number): void {
+    const data = this.data_.mons;
+    const mons = this.monsRuntime();
+    if (!data || !mons || !this.gameFlags.has("act1:complete")) {
+      return;
+    }
+    const nearFarm = Math.hypot(
+      this.playerState.x - MONS_FARM_ANCHOR.x,
+      this.playerState.y - MONS_FARM_ANCHOR.y
+    ) <= FARM_MON_ACTIVE_RADIUS_PX;
+    if (!nearFarm) {
+      if (this.farmMons.size > 0) {
+        this.despawnFarmMons();
+      }
+      return;
+    }
+    const roster = mons.list();
+    const activeIndex = mons.active()?.index;
+    const signature = `${roster.map((m) => m.registryId).join("|")}#${activeIndex ?? "-"}`;
+    if (signature !== this.farmMonsSignature) {
+      this.despawnFarmMons();
+      this.farmMonsSignature = signature;
+      this.spawnFarmMons(roster, activeIndex);
+    }
+    for (const runtime of this.farmMons.values()) {
+      runtime.petCooldownMs = Math.max(0, runtime.petCooldownMs - deltaMs);
+      this.stepFarmMon(runtime, deltaMs);
+      this.syncFarmMonSprite(runtime);
+    }
+  }
+
+  private spawnFarmMons(roster: readonly OwnedMon[], activeIndex: number | undefined): void {
+    const data = this.data_.mons;
+    if (!data) {
+      return;
+    }
+    let placed = 0;
+    for (let index = 0; index < roster.length; index += 1) {
+      const isCompanion = index === activeIndex;
+      if (!isCompanion && placed >= FARM_MON_VISIBLE_CAP) {
+        continue;
+      }
+      const entry = monById(data.registry, roster[index].registryId);
+      if (!entry) {
+        continue;
+      }
+      const spawnAt = isCompanion
+        ? this.farmMonSpawnPointNear({ x: this.playerState.x, y: this.playerState.y }, index)
+        : this.farmMonSpawnPointNear(MONS_FARM_ANCHOR, index);
+      if (!spawnAt) {
+        continue;
+      }
+      const skin: SpriteOverrideSheet = {
+        image: `generated/${entry.sprites.overworld}`,
+        frameWidth: 96,
+        frameHeight: 96,
+        animations: { down: [0], left: [0], right: [0], up: [0] },
+        displayHeight: 26,
+        originX: 0.5,
+        originY: 1
+      };
+      const textureKey = spriteOverrideEnemyOverworldSheetKey(900001, skin.image);
+      this.requestEnemySkinSheet(textureKey, skin);
+      const frames = spriteOverrideDirectionFrames(skin);
+      const sprite = this.spawnOverworldEnemyActor(spawnAt.x, spawnAt.y, undefined, textureKey, skin, 0);
+      if (!(sprite instanceof Phaser.GameObjects.Sprite)) {
+        sprite.setVisible(false);
+      }
+      const key = `farm-mon-${index}`;
+      this.farmMons.set(key, {
+        key,
+        rosterIndex: index,
+        registryId: roster[index].registryId,
+        isCompanion,
+        frames,
+        textureKey,
+        skin,
+        sprite,
+        petCooldownMs: 0,
+        state: createNpcState(spawnAt.x, spawnAt.y, toFacing(undefined), {
+          kind: "wander",
+          radiusPx: FARM_MON_WANDER_RADIUS_PX,
+          speedPxPerSec: FARM_MON_WANDER_SPEED_PX_PER_SEC,
+          seed: (Math.imul(index + 1, 0x9e3779b1) ^ 0x5eed) >>> 0
+        }, frames)
+      });
+      // Greeting: a little hop as the lot notices you arriving.
+      if (sprite instanceof Phaser.GameObjects.Sprite) {
+        this.tweens.add({ targets: sprite, y: spawnAt.y - 8, duration: 150, delay: placed * 90, yoyo: true, ease: "Sine.easeOut" });
+      }
+      if (!isCompanion) {
+        placed += 1;
+      }
+    }
+  }
+
+  /** A vetted walkable spot in a ring around `center`, varied by `seedIndex`. */
+  private farmMonSpawnPointNear(center: { x: number; y: number }, seedIndex: number): { x: number; y: number } | undefined {
+    for (let attempt = 0; attempt < 14; attempt += 1) {
+      const hash = (Math.imul(seedIndex * 17 + attempt + 1, 0x9e3779b1) >>> 0) / 0xffffffff;
+      const angle = hash * Math.PI * 2;
+      const radius = FARM_MON_SPAWN_RING_MIN_PX
+        + ((Math.imul(seedIndex + attempt * 31 + 7, 0x85ebca6b) >>> 0) / 0xffffffff)
+          * (FARM_MON_SPAWN_RING_MAX_PX - FARM_MON_SPAWN_RING_MIN_PX);
+      const point = {
+        x: Math.round(center.x + Math.cos(angle) * radius),
+        y: Math.round(center.y + Math.sin(angle) * radius * 0.7)
+      };
+      if (this.isWorldPixelWalkable(point)) {
+        return point;
+      }
+    }
+    return undefined;
+  }
+
+  private stepFarmMon(runtime: FarmMonRuntime, deltaMs: number): void {
+    if (runtime.isCompanion) {
+      const dist = this.distanceToPlayer(runtime.state.player);
+      if (dist > FARM_MON_FOLLOW_GAP_PX) {
+        const actor = runtime.state.player;
+        const deadzone = 2;
+        const dx = this.playerState.x - actor.x;
+        const dy = this.playerState.y - actor.y;
+        const input: MoveInput = {
+          left: dx < -deadzone,
+          right: dx > deadzone,
+          up: dy < -deadzone,
+          down: dy > deadzone
+        };
+        stepPlayer(actor, input, {
+          deltaMs,
+          speed: FARM_MON_FOLLOW_SPEED_PX_PER_SEC,
+          bounds: this.movementBounds(),
+          blocked: (x, y) => this.blocked(x, y),
+          frames: runtime.frames
+        });
+        return;
+      }
+      return; // settled beside Bosch
+    }
+    stepNpc(runtime.state, {
+      deltaMs,
+      bounds: this.movementBounds(),
+      blocked: (x, y) => this.blocked(x, y),
+      frames: runtime.frames
+    });
+  }
+
+  private syncFarmMonSprite(runtime: FarmMonRuntime): void {
+    // Swap the placeholder for the real sprite once its sheet loads.
+    if (!(runtime.sprite instanceof Phaser.GameObjects.Sprite) && this.textures.exists(runtime.textureKey)) {
+      runtime.sprite?.destroy();
+      runtime.sprite = this.spawnOverworldEnemyActor(
+        runtime.state.player.x,
+        runtime.state.player.y,
+        runtime.state.player.facing,
+        runtime.textureKey,
+        runtime.skin,
+        0
+      );
+    }
+    const actor = runtime.sprite;
+    if (!actor) {
+      return;
+    }
+    actor.x = runtime.state.player.x;
+    // Same render-only idle bob as wild mons: the lot reads as alive.
+    actor.y = runtime.state.player.y + Math.sin(this.time.now / 240 + wildMonBobPhase(runtime.key)) * 2.5;
+    this.setActorSortDepth(actor);
+    this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
+      runtime.state.player.moving,
+      runtime.frames,
+      runtime.state.player.facing,
+      900001
+    ));
+    actor.setVisible(this.worldPointInsideActiveRoom(runtime.state.player)
+      && !(runtime.textureKey && !(actor instanceof Phaser.GameObjects.Sprite)));
+  }
+
+  private despawnFarmMons(): void {
+    for (const runtime of this.farmMons.values()) {
+      runtime.sprite?.destroy();
+    }
+    this.farmMons.clear();
+    this.farmMonsSignature = "";
+  }
+
+  /** Z near a farm mon pets it: bond tick + chirp + personality line + a happy
+   *  hop. Returns true when a pet happened (consumes the press). */
+  private tryPetFarmMon(): boolean {
+    if (this.farmMons.size === 0) {
+      return false;
+    }
+    let best: FarmMonRuntime | undefined;
+    let bestDist = FARM_MON_PET_RANGE_PX;
+    for (const runtime of this.farmMons.values()) {
+      const dist = this.distanceToPlayer(runtime.state.player);
+      if (dist <= bestDist) {
+        best = runtime;
+        bestDist = dist;
+      }
+    }
+    if (!best || best.petCooldownMs > 0) {
+      return best !== undefined; // in range but cooling down still consumes the press
+    }
+    const mons = this.monsRuntime();
+    const roster = mons?.list();
+    // Re-validate the index against the live roster (it only shifts via overlay
+    // actions, which re-sign and respawn, but stay safe).
+    if (!mons || !roster || roster[best.rosterIndex]?.registryId !== best.registryId) {
+      return false;
+    }
+    const result = this.petMon(best.rosterIndex);
+    if (!result) {
+      return false;
+    }
+    best.petCooldownMs = FARM_MON_PET_COOLDOWN_MS;
+    this.persistMonRoster();
+    this.showMonNotice(result.line);
+    const sprite = best.sprite;
+    if (sprite instanceof Phaser.GameObjects.Sprite) {
+      const baseY = best.state.player.y;
+      this.tweens.add({ targets: sprite, y: baseY - 9, duration: 130, yoyo: true, repeat: 1, ease: "Sine.easeOut" });
+    }
+    return true;
+  }
+
   /** Pick a line from an optional pool, rotated by the clock (stable per second). */
   private rotateMonLine(pool: readonly string[] | undefined): string | undefined {
     if (!pool || pool.length === 0) {
@@ -10025,6 +10294,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private clearOverworldEnemies(): void {
     this.clearOverworldRoamers();
+    this.despawnFarmMons();
     for (const actor of this.bossGateActors.values()) {
       actor.sprite?.destroy();
     }
