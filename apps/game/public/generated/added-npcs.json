@@ -13358,6 +13358,45 @@
      "POSTWICK NEIGHBOR: (runtime swaps this for a town reaction line.)"
     ]
    }
+  },
+  {
+   "id": 910302,
+   "worldPixel": {
+    "x": 2824,
+    "y": 7128
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A squat ceramic altar. It hums, low and patient.",
+     "MONS ALTAR: Put two mons in, get one new mon out. The two you put in don't come back.",
+     "(Stand here and press O to fuse.)"
+    ]
+   }
+  },
+  {
+   "id": 910303,
+   "worldPixel": {
+    "x": 2928,
+    "y": 7136
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A burlap dummy on a wooden cross. Practice dents all over it.",
+     "Farm mons wear themselves out on this while they rest. It's how the little ones toughen up."
+    ]
+   }
   }
  ]
 }

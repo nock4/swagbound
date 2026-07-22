@@ -38,8 +38,9 @@ describe("sprite atlas extractor", () => {
       // + 6 more town turnings (910272-910277; malady skins; Postwick/Galleria/Dead Letter)
       // + 4 more town turnings (910278-910281; malady skins; Solana Beach/Scaraba)
       // + the Mons FARMHAND (910300; gns-kinfolks-004 skin; Postwick farm anchor)
-      // + the Mons townLines neighbor (910301; gns-little-fellow-001; companion-gated).
-      usedByNpcCount: 776,
+      // + the Mons townLines neighbor (910301; gns-little-fellow-001; companion-gated)
+      // + 2 Mons farm props (910302 fusion altar, 910303 training dummy; companion-gated).
+      usedByNpcCount: 778,
       overridden: true,
       overrideKind: "group"
     });
