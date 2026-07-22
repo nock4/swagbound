@@ -292,9 +292,31 @@ export class MonsOverlay {
         return `<div>${cur}${mark} ${escapeHtml(name)}</div>`;
       }).join("");
       const commitCur = mode.pickCursor >= inheritable.length ? "▶" : " ";
+      // Warn when the fusion result is weaker than the stronger parent (a level
+      // floor is not a power floor - a low-stat race can come back worse).
+      const power = (entry: MonsRegistryEntry | undefined, level: number) => {
+        if (!entry) return 0;
+        const s = monStatsAtLevel(entry, level);
+        return s.maxHp + s.offense * 2 + s.defense * 2;
+      };
+      const parentA = this.host.roster()[mode.a];
+      const parentB = this.host.roster()[mode.b];
+      const bestParentPower = Math.max(
+        power(parentA ? this.host.entryFor(parentA) : undefined, parentA?.level ?? 1),
+        power(parentB ? this.host.entryFor(parentB) : undefined, parentB?.level ?? 1)
+      );
+      const resultPower = result && preview.projectedLevel !== undefined ? power(result, preview.projectedLevel) : 0;
+      const downgrade = !preview.secretResult && resultPower > 0 && resultPower < bestParentPower;
+      const statLine = result && preview.projectedLevel !== undefined && !preview.secretResult
+        ? (() => {
+            const s = monStatsAtLevel(result, preview.projectedLevel);
+            return `<div style="opacity:.8;font-size:12px">HP ${s.maxHp}  OFF ${s.offense}  DEF ${s.defense}${downgrade ? ` <span style="color:#ff8a8a">(weaker than a parent)</span>` : ""}</div>`;
+          })()
+        : "";
       body = `<div style="margin-top:8px;border-top:1px solid #555;padding-top:6px">` +
         `<div>${escapeHtml(this.nameAt(mode.a))} + ${escapeHtml(this.nameAt(mode.b))}</div>` +
         `<div>&gt; ${preview.secretResult ? "?????" : escapeHtml(resultName)} (Lv${preview.projectedLevel ?? "?"}${result ? ` ${escapeHtml(result.race)}` : ""})</div>` +
+        statLine +
         `<div style="margin-top:4px;opacity:.85">Carry up to two moves (Z toggles):</div>${pickRows}` +
         `<div style="margin-top:4px">${commitCur}<b>FUSE</b> (both mons are spent)</div></div>`;
     }

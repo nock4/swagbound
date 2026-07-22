@@ -1279,7 +1279,11 @@ export class BattleScene extends Phaser.Scene {
   private cancelMenu(): void {
     if (this.monNegotiationActive()) {
       // Negotiation cannot be backed out of once opened; the mon is listening.
+      // Say so the first time the player tries to cancel.
       this.playBattleSfxCue("menuCancel");
+      this.executionMessageLines_ = ["The mon is waiting for an answer. You're in it now."];
+      this.renderStatus();
+      this.publish();
       return;
     }
     if (this.attestation_?.stage === "question") {
