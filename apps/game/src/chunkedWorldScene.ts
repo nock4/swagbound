@@ -665,6 +665,17 @@ const QUESTS: readonly Quest[] = [
     reward: "Act 1 complete"
   },
   {
+    id: "mons", name: "The Lot With No Paperwork",
+    blurb: "Wild mons roam past the Postwick farm. Rough one up, then talk. Actually listen.",
+    steps: [
+      { text: "Meet the FARMHAND at the Postwick farm", flag: "mons:farm-met" },
+      { text: "Convince your first wild mon", flag: "mons:first-catch" },
+      { text: "Pick a companion at the farm (press O)", flag: "mons:first-companion" },
+      { text: "Fuse two mons at the altar", flag: "mons:first-fusion" }
+    ],
+    reward: "A third seat that nobody sold you"
+  },
+  {
     id: "arena", name: "Metal Gauntlet",
     blurb: "Win The Venue's three-bracket exhibition.",
     steps: [
