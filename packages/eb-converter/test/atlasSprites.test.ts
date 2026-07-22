@@ -37,8 +37,9 @@ describe("sprite atlas extractor", () => {
       // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler)
       // + 6 more town turnings (910272-910277; malady skins; Postwick/Galleria/Dead Letter)
       // + 4 more town turnings (910278-910281; malady skins; Solana Beach/Scaraba)
-      // + the Mons FARMHAND (910300; gns-kinfolks-004 skin; Postwick farm anchor).
-      usedByNpcCount: 775,
+      // + the Mons FARMHAND (910300; gns-kinfolks-004 skin; Postwick farm anchor)
+      // + the Mons townLines neighbor (910301; gns-little-fellow-001; companion-gated).
+      usedByNpcCount: 776,
       overridden: true,
       overrideKind: "group"
     });

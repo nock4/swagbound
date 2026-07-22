@@ -13340,6 +13340,24 @@
      "FARMHAND: (placeholder - runtime swaps this for the live farm dialogue.)"
     ]
    }
+  },
+  {
+   "id": 910301,
+   "worldPixel": {
+    "x": 2960,
+    "y": 7128
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "requireFlags": [
+    "mons:first-companion"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "POSTWICK NEIGHBOR: (runtime swaps this for a town reaction line.)"
+    ]
+   }
   }
  ]
 }

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type CutsceneStep, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
+import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type CutsceneStep, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor, type MonsRegistryEntry } from "@eb/schemas";
 import { ACTOR_BODY_BOTTOM, ACTOR_BODY_HALF_WIDTH, ACTOR_BODY_TOP, actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
@@ -27,6 +27,8 @@ import { MonsOverlay } from "./monsOverlay";
 // Postwick Mons Farm anchor (NE lot, beside the base NPC at 2768,7080; FARMHAND 910300).
 const MONS_FARM_ANCHOR = { x: 2872, y: 7112 } as const;
 const MONS_FARM_ALTAR_RADIUS = 360;
+// Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
+const WILD_MON_ROAM_CHANCE = 0.12;
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -5507,6 +5509,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     if (action.option === "mom") {
+      // Once Bosch has a mon companion, Mom asks about it (mon-story momPhone);
+      // otherwise the usual reassurance.
+      const momPhone = this.data_.mons?.story.momPhone;
+      if (momPhone?.length && this.gameFlags.has("mons:first-companion")) {
+        lockPlayer(this.playerState, this.playerFrames);
+        this.closeMenu();
+        this.recordServiceResult("phone", "Called Mom.");
+        this.dialogue.start(buildInlineDialoguePages([...momPhone]));
+        this.updatePrompt();
+        return;
+      }
       this.recordServiceResult("phone", "Mom says you're doing great.");
       this.showMenuResult("Mom says you're doing great.");
       return;
@@ -6613,14 +6626,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return [tip, "(Press O to manage your mons.)"];
   }
 
+  /** A rotating Postwick town-reaction line (mon-story townLines) for the neighbor
+   *  who only shows up once Bosch is walking around with a live companion. */
+  private townLinePages(): string[] | undefined {
+    const lines = this.data_.mons?.story.townLines;
+    if (!lines?.length) {
+      return undefined;
+    }
+    const line = lines[Math.floor(Math.abs(this.time.now / 1000)) % lines.length] ?? lines[0];
+    return [line];
+  }
+
   private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
     if (isAddedWorldChunkedNpc(npc)) {
-      const farmhand = npc.npcId === 910300 ? this.farmhandPages() : undefined;
+      const dynamicPages = npc.npcId === 910300
+        ? this.farmhandPages()
+        : npc.npcId === 910301
+          ? this.townLinePages()
+          : undefined;
       return addedNpcInteractionEvents(
         {
           npcId: npc.npcId,
-          interaction: farmhand
-            ? { pages: farmhand }
+          interaction: dynamicPages
+            ? { pages: dynamicPages }
             : resolveEarlyGameDialogueInteraction(
               npc.addedInteraction,
               this.data_.earlyGameSequence
@@ -10051,15 +10079,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
   }
 
-  /** Scripted wild mon near the Postwick farm: a forgiving tier-1 Cheerful that
-   *  always respawns, so the guided first catch can never be missed. */
+  /** The catchable-tier ceiling by act: tiers 1-3 from Act 2, +4 at Act 3, +5 at
+   *  the endgame. Wild mons never exceed what the party can plausibly weaken. */
+  private wildMonTierCeiling(): number {
+    if (this.gameFlags.has("act3:complete")) return 5;
+    if (this.gameFlags.has("act3:begun") || this.gameFlags.has("deadletter:arrived")) return 4;
+    return 3;
+  }
+
+  /** Wild mons: the scripted forgiving tutorial mon guards the Postwick farm
+   *  (guaranteed first catch), and elsewhere in Act 2+ a random tier-appropriate
+   *  catchable mon occasionally roams. At most ONE wild mon at a time (they are
+   *  special catch targets, not filler encounters). */
   private trySpawnWildMon(): void {
     const data = this.data_.mons;
-    if (!data || !this.gameFlags.has("act1:complete") || this.openingRoamerHold) {
-      return;
-    }
-    const nearFarm = Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 1400;
-    if (!nearFarm) {
+    if (!data || !this.gameFlags.has("act1:complete") || this.openingRoamerHold || !this.overworldPlayActive()) {
       return;
     }
     for (const enemy of this.overworldEnemies.values()) {
@@ -10067,11 +10101,39 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
     }
-    const wild = data.registry.mons.find((m) => !m.secretRare && m.tier === 1 && m.personality === "Cheerful");
-    if (!wild) {
+    const nearFarm = Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 1400;
+    // The scripted farm tutor ignores the encounter toggle (it is the guaranteed
+    // first catch); roaming wild mons obey it like any other roamer, so
+    // ?noEncounters and encounter-suppressed zones stay quiet.
+    if (!nearFarm && !this.encounterEnabled) {
       return;
     }
-    const spawnAt = { x: MONS_FARM_ANCHOR.x + 96, y: MONS_FARM_ANCHOR.y + 128 };
+    let wild: MonsRegistryEntry | undefined;
+    let spawnAt: { x: number; y: number } | undefined;
+    if (nearFarm) {
+      // Guaranteed guided first catch: a forgiving tier-1 Cheerful by the fence.
+      wild = data.registry.mons.find((m) => !m.secretRare && m.tier === 1 && m.personality === "Cheerful");
+      spawnAt = { x: MONS_FARM_ANCHOR.x + 96, y: MONS_FARM_ANCHOR.y + 128 };
+    } else {
+      // Roaming Act 2+: low-rate random catchable mon at a vetted walkable cell.
+      if (this.encounterCooldownMs > 0 || this.overworldEnemySpawnCooldownMs > 0) {
+        return;
+      }
+      if (this.encounterRng.next() > WILD_MON_ROAM_CHANCE) {
+        return;
+      }
+      const ceiling = this.wildMonTierCeiling();
+      const pool = data.registry.mons.filter((m) => !m.secretRare && m.tier <= ceiling && m.personality);
+      if (pool.length === 0) {
+        return;
+      }
+      wild = pool[Math.floor(this.encounterRng.next() * pool.length)];
+      const spot = this.findOverworldEnemySpawnPoint();
+      spawnAt = spot ? { x: spot.x, y: spot.y } : undefined;
+    }
+    if (!wild || !spawnAt) {
+      return;
+    }
     this.overworldEnemySeq += 1;
     const key = `wild-mon-${this.overworldEnemySeq}`;
     const skin: SpriteOverrideSheet = {
