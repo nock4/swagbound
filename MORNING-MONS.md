@@ -120,14 +120,51 @@ until the limit resets.
 - momPhone: calling Mom with a companion plays the mon-story pages.
 - Runtime-edge unit tests (6) added for the fusion/release/restore paths.
 
-## The one true remaining follow-up
+## Adversarial round 2 (after the spend limit reset)
 
-- ART: the Fusion Altar prop, training dummy, race icons, MONS FARM sign, and barn
-  exterior still need image generation (Codex image_gen / building-regen). The roster
-  overlay uses clean text glyphs and the fusion spot is discoverable by dialogue
-  meanwhile, so nothing is blocked - it is purely a visual polish pass. It could not
-  run tonight because the account hit its monthly Anthropic spend limit (which also
-  killed two of the three review agents). Everything else is done.
+Ran all three critics fresh on the full branch. Content critic confirmed every
+round-1 fix landed and stayed clean; engine + player-experience got their first
+real passes. Everything actionable is fixed and re-verified:
+
+ENGINE (both P1s were in the new wild roamer):
+- Roaming wild rolled EVERY FRAME (cooldown checked but never set) -> near-constant
+  spawns. Added a ~6s roll cooldown, set at the top of the roaming branch.
+- Roaming ignored sector/zone suppression -> spawned in town centers / safe zones.
+  Now gated on the sector spawn budget AND on having met the Farmhand first.
+- Handover save-race: the scene was tracked by a transient field, so a save taken
+  between choosing a companion and the scene firing lost it on reload. Now derived
+  from flags (owed until played), survives reload.
+
+PLAYER EXPERIENCE:
+- H1 catch-before-farm orphaned the mon (O overlay refused) -> opens on a non-empty
+  roster too. VERIFIED.
+- H2 bond was a fake stat -> a bonded same-personality companion now grants one
+  negotiation forgiveness. +2 tests.
+- H3 companion silently dropped past 4 heroes -> it always gets a seat (last hero
+  benched), in battle AND the overworld HUD. VERIFIED (4 heroes + Zlappy -> both
+  show [Bosch, Cloak, Munch, Zlappy]).
+- M1 wild mons fought at the tutorial's lv1/48HP regardless of tier -> they now
+  fight at real registry stats, so the catch window scales. VERIFIED (tier-4 Devig
+  fights at 83 HP, not 48).
+- M2 refusal now points at the exit; M3 fusion preview shows result stats and flags
+  a downgrade in red; L1 cancel mid-negotiation explains you're committed.
+
+CONTENT: Holy bank re-flavored (it primed piety then punished it); Hyper free-win
+got a curveball; grand-inning capstone buffed; 8 voice-register line swaps.
+
+ART: the Fusion Altar and training dummy props were generated via Codex image_gen
+with the EB downscale pipeline, pixel-verified, and placed at the farm (the altar
+centered in the fusion radius so the fuse-spot has a visual). VERIFIED rendering.
+
+## Remaining (deliberate, low value)
+
+- Gamepad can't open the roster overlay (O) - but J and K have the same
+  keyboard-only limitation, so this matches the existing project pattern, not a
+  mons regression. Mapping a pad button is a project-wide follow-up.
+- The companion isn't in the party-order (K) reorder menu (minor; it fights fine).
+- Race icons / MONS FARM sign / barn exterior: the overlay's text glyphs read well
+  and the farm already has the altar + dummy + Farmhand + neighbor, so these are
+  optional visual polish.
 - The mon overworld follower (walking behind Bosch) stays parked for v2 by design.
 
 ## How to play it right now
