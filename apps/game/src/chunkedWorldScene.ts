@@ -5984,7 +5984,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const members = this.partyState.applyToPartyMembers(characters.map(buildPartyMember));
     const activeIds = new Set(this.partyState.party());
-    return activeIds.size > 0 ? members.filter((member) => activeIds.has(member.id)) : members;
+    const heroes = activeIds.size > 0 ? members.filter((member) => activeIds.has(member.id)) : members;
+    // Show the active mon companion in the overworld HUD too (it fights, so it
+    // belongs on the roster strip). Same seat contract as battlePartyMembers:
+    // bench the last hero when the party is otherwise full.
+    const companion = this.monCompanionBattleKit();
+    if (!companion) {
+      return heroes;
+    }
+    return [...heroes.slice(0, MAX_BATTLE_MEMBERS - 1), companion.member];
   }
 
   private setPartyLevelsDebug(level: number): SetPartyLevelDebugSummary[] {
