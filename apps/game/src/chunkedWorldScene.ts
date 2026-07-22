@@ -955,8 +955,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private consumedCapturedMon_ = false;
   private wildMonRoamCooldownMs = 0;
   // Set when a fusion commits in the O overlay; consumed on overlay close so the
-  // altar reaction plays once the DOM overlay is out of the way.
-  private pendingFusionReaction_: { firstEver: boolean; before: number } | undefined;
+  // ceremony plays once the DOM overlay is out of the way. Parent ids are
+  // captured at commit time (they leave the roster in the same call).
+  private pendingFusionReaction_: {
+    firstEver: boolean;
+    parentIds: [string, string];
+    resultId: string;
+  } | undefined;
+  // While set (a ceremony is playing), the farm stays clear so the temp ceremony
+  // sprites are the only mons on the lot; the roster respawns after.
+  private monCeremonyUntilMs_ = 0;
   // The living farm: visible roster mons on the lot. Keyed by spawn key; the
   // signature detects roster changes (catch/fuse/release/companion swap) so the
   // lot re-populates without polling deep state every frame.
@@ -1441,15 +1449,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
       },
       previewFusion: (a, b) => this.monsRuntime()?.previewFusion(a, b),
       fuse: (a, b, picks) => {
-        const before = this.monsRuntime()?.count() ?? 0;
+        const roster = this.monsRuntime()?.list();
+        const parentIds: [string, string] = [
+          roster?.[a]?.registryId ?? "",
+          roster?.[b]?.registryId ?? ""
+        ];
         const fused = this.monsRuntime()?.fuse(a, b, picks);
         if (fused) {
           const firstEver = !this.gameFlags.has("mons:first-fusion");
           this.gameFlags.set("mons:first-fusion");
           this.persistMonRoster();
-          // The visible altar reaction is deferred to overlay close (the DOM
-          // overlay covers the world while the player is still fusing).
-          this.pendingFusionReaction_ = { firstEver, before };
+          // The visible ceremony is deferred to overlay close (the DOM overlay
+          // covers the world while the player is still fusing).
+          this.pendingFusionReaction_ = { firstEver, parentIds, resultId: fused.registryId };
         }
         return fused;
       },
@@ -9300,24 +9312,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
   }
 
-  /** Play the Fusion Altar reaction (deferred from the fuse commit to overlay
-   *  close): a bright pop on the altar sprite plus a ceremony/celebration line. */
+  /** The fusion ceremony (Workstream F), deferred from the fuse commit to
+   *  overlay close: both parents hop onto the altar, lean together while the
+   *  ceremony line prints, the amber poof takes them, and the result hops down
+   *  toward Bosch. Falls back to the simple altar pop when sprites are missing. */
   private resolvePendingFusionReaction(): void {
     const pending = this.pendingFusionReaction_;
     this.pendingFusionReaction_ = undefined;
     if (!pending) {
       return;
     }
-    this.playMonsSfx((sfx) => sfx.fusionPoof());
+    const story = this.data_.mons?.story;
+    const line = pending.firstEver && story?.celebrations?.firstFusion?.length
+      ? story.celebrations.firstFusion[Math.floor(Math.abs(this.time.now / 1200)) % story.celebrations.firstFusion.length]
+      : this.rotateMonLine(story?.fusionCeremony);
     const altar = [...this.npcRuntimes.values()].find((r) => r.data.npcId === MONS_FARM_ALTAR_NPC_ID);
-    const sprite = altar?.sprite as (Phaser.GameObjects.Sprite | Phaser.GameObjects.Image) | undefined;
-    if (sprite) {
-      const baseScaleX = sprite.scaleX;
-      const baseScaleY = sprite.scaleY;
-      // CANVAS renderer: scale/alpha tween on a real texture is safe (no Shape,
-      // no setTint). A quick pop reads as the altar taking the two mons in.
+    const altarSprite = altar?.sprite as (Phaser.GameObjects.Sprite | Phaser.GameObjects.Image) | undefined;
+    const altarPop = (): void => {
+      this.playMonsSfx((sfx) => sfx.fusionPoof());
+      if (!altarSprite) {
+        return;
+      }
+      const baseScaleX = altarSprite.scaleX;
+      const baseScaleY = altarSprite.scaleY;
       this.tweens.add({
-        targets: sprite,
+        targets: altarSprite,
         scaleX: baseScaleX * 1.3,
         scaleY: baseScaleY * 1.3,
         alpha: 0.55,
@@ -9325,20 +9344,111 @@ export class ChunkedWorldScene extends Phaser.Scene {
         yoyo: true,
         ease: "Sine.easeOut",
         onComplete: () => {
-          sprite.setScale(baseScaleX, baseScaleY);
-          sprite.setAlpha(1);
+          altarSprite.setScale(baseScaleX, baseScaleY);
+          altarSprite.setAlpha(1);
         }
       });
-    }
-    const story = this.data_.mons?.story;
-    if (story) {
-      const line = pending.firstEver && story.celebrations?.firstFusion?.length
-        ? story.celebrations.firstFusion[Math.floor(Math.abs(this.time.now / 1200)) % story.celebrations.firstFusion.length]
-        : this.rotateMonLine(story.fusionCeremony);
+    };
+    // Spawn a temp ceremony sprite for a mon whose overworld texture is already
+    // resident (parents were just visible on the lot, so it normally is).
+    const ceremonySprite = (registryId: string, x: number, y: number): Phaser.GameObjects.Sprite | undefined => {
+      const data = this.data_.mons;
+      const entry = data ? monById(data.registry, registryId) : undefined;
+      if (!entry) {
+        return undefined;
+      }
+      const skin: SpriteOverrideSheet = {
+        image: `generated/${entry.sprites.overworld}`,
+        frameWidth: 96,
+        frameHeight: 96,
+        animations: { down: [0], left: [0], right: [0], up: [0] },
+        displayHeight: 26,
+        originX: 0.5,
+        originY: 1
+      };
+      const textureKey = spriteOverrideEnemyOverworldSheetKey(900001, skin.image);
+      this.requestEnemySkinSheet(textureKey, skin);
+      if (!this.textures.exists(textureKey)) {
+        return undefined;
+      }
+      const sprite = this.spawnOverworldEnemyActor(x, y, undefined, textureKey, skin, 0);
+      if (!(sprite instanceof Phaser.GameObjects.Sprite)) {
+        sprite?.destroy?.();
+        return undefined;
+      }
+      this.setActorSortDepth(sprite);
+      return sprite;
+    };
+    if (!altar) {
+      // No altar in range (debug fuse far from the farm): keep the old beat.
+      altarPop();
       if (line) {
         this.showMonNotice(line);
       }
+      return;
     }
+    const ax = altar.state.player.x;
+    const ay = altar.state.player.y;
+    // Clear the lot so the ceremony sprites are the only mons visible; the
+    // roster (with the result, without the parents) respawns after the beat.
+    this.despawnFarmMons();
+    this.monCeremonyUntilMs_ = this.time.now + 3400;
+    const parentA = ceremonySprite(pending.parentIds[0], ax - 44, ay + 16);
+    const parentB = ceremonySprite(pending.parentIds[1], ax + 44, ay + 16);
+    if (!parentA || !parentB) {
+      parentA?.destroy();
+      parentB?.destroy();
+      this.monCeremonyUntilMs_ = 0;
+      altarPop();
+      if (line) {
+        this.showMonNotice(line);
+      }
+      return;
+    }
+    // 1) Hop onto the altar.
+    this.tweens.add({ targets: parentA, x: ax - 11, y: ay - 8, duration: 550, ease: "Sine.easeInOut" });
+    this.tweens.add({ targets: parentB, x: ax + 11, y: ay - 8, duration: 550, ease: "Sine.easeInOut" });
+    // 2) Lean together while the ceremony line prints; the altar hums.
+    this.time.delayedCall(650, () => {
+      this.playMonsSfx((sfx) => sfx.altarHum());
+      this.tweens.add({ targets: parentA, angle: 12, x: ax - 6, duration: 420, ease: "Sine.easeInOut" });
+      this.tweens.add({ targets: parentB, angle: -12, x: ax + 6, duration: 420, ease: "Sine.easeInOut" });
+      if (line) {
+        this.showMonNotice(line);
+      }
+    });
+    // 3) The poof takes them.
+    this.time.delayedCall(1350, () => {
+      altarPop();
+      for (const sprite of [parentA, parentB]) {
+        this.tweens.add({ targets: sprite, alpha: 0, duration: 190, onComplete: () => sprite.destroy() });
+      }
+    });
+    // 4) The result steps out and hops down toward Bosch.
+    this.time.delayedCall(1650, () => {
+      const result = ceremonySprite(pending.resultId, ax, ay - 8);
+      if (!result) {
+        return; // texture still loading: the farm respawn will show it in a beat
+      }
+      result.setAlpha(0).setScale(result.scaleX * 0.6, result.scaleY * 0.6);
+      const targetScaleX = result.scaleX / 0.6;
+      const targetScaleY = result.scaleY / 0.6;
+      this.tweens.add({ targets: result, alpha: 1, scaleX: targetScaleX, scaleY: targetScaleY, duration: 240, ease: "Sine.easeOut" });
+      this.time.delayedCall(700, () => {
+        const dropX = this.playerState.x + (this.playerState.x < ax ? 24 : -24);
+        const dropY = this.playerState.y + 4;
+        this.tweens.add({ targets: result, x: dropX, duration: 520, ease: "Sine.easeInOut" });
+        this.tweens.add({
+          targets: result,
+          y: dropY,
+          duration: 520,
+          ease: "Sine.easeIn",
+          onComplete: () => {
+            this.tweens.add({ targets: result, alpha: 0, delay: 260, duration: 240, onComplete: () => result.destroy() });
+          }
+        });
+      });
+    });
   }
 
   /** Play a mons SFX cue, resuming the audio context first (safe if suspended). */
@@ -9369,6 +9479,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.despawnFarmMons();
       }
       return;
+    }
+    if (this.time.now < this.monCeremonyUntilMs_) {
+      return; // the fusion ceremony owns the lot; the roster respawns after
     }
     const roster = mons.list();
     const activeIndex = mons.active()?.index;
