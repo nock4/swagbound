@@ -2659,12 +2659,13 @@ export class BattleScene extends Phaser.Scene {
     return "Cannot act.";
   }
 
-  private inputContext(): { state: BattleState; psi?: PsiData[]; items?: ItemData[]; usabilityMatrix?: UsabilityMatrix } {
+  private inputContext(): { state: BattleState; psi?: PsiData[]; items?: ItemData[]; usabilityMatrix?: UsabilityMatrix; commandsFor?: (charId: number) => BattleCommand[] } {
     return {
       state: this.battle_,
       psi: this.psi_?.psi,
       items: this.items_?.items,
-      usabilityMatrix: this.usabilityMatrix_
+      usabilityMatrix: this.usabilityMatrix_,
+      commandsFor: (charId: number) => this.commandsForCharIdInBattle(charId)
     };
   }
 
@@ -2893,7 +2894,8 @@ export class BattleScene extends Phaser.Scene {
         ...(attestationRestore ? {
           flags: attestationRestore.flags,
           party: attestationRestore.party,
-          sourceCheck: attestationRestore.sourceCheck
+          sourceCheck: attestationRestore.sourceCheck,
+          ...(attestationRestore.capturedMon ? { capturedMon: attestationRestore.capturedMon } : {})
         } : {
           party: postBattleParty
         }),
@@ -4982,8 +4984,32 @@ export class BattleScene extends Phaser.Scene {
       victorySummaryPageKind: victoryPage?.kind ?? null,
       victorySummaryPageHighlighted: Boolean(victoryPage?.highlighted),
       attestation: this.attestationDebug(),
+      monCatch: this.monCatchDebug(),
       mortalWounds: debugMortalWounds(this.battle_, this.mortalWoundRescueCount_)
     });
+  }
+
+  private monCatchDebug(): NonNullable<Parameters<typeof publishBattleDebug>[0]["monCatch"]> | null {
+    const monCatch = this.monCatch_;
+    if (!monCatch) {
+      return null;
+    }
+    const negotiation = monCatch.negotiation;
+    const question = this.currentMonNegotiationQuestion();
+    return {
+      registryId: monCatch.registryId,
+      displayName: monCatch.displayName,
+      active: this.monNegotiationActive(),
+      attempted: monCatch.attempted,
+      askedIndex: negotiation?.askedIndex ?? 0,
+      correct: negotiation?.correct ?? 0,
+      bonusGranted: negotiation?.bonusGranted ?? false,
+      outcome: negotiation?.outcome ?? null,
+      selectionIndex: monCatch.selectionIndex,
+      correctOptionIndex: question?.correctIndex ?? -1,
+      options: question?.options ?? [],
+      prompt: question?.prompt ?? ""
+    };
   }
 
   private attestationDebug(): NonNullable<Parameters<typeof publishBattleDebug>[0]["attestation"]> | null {
@@ -5346,7 +5372,13 @@ export class BattleScene extends Phaser.Scene {
 
   private commandsForCurrentActor(): BattleCommand[] {
     const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
-    const charId = actor?.charId ?? 0;
+    return this.commandsForCharIdInBattle(actor?.charId ?? 0);
+  }
+
+  /** Canonical per-battle command list: shared by the render path AND the round
+   *  input machine (via inputContext.commandsFor) so the cursor can reach every
+   *  rendered command. */
+  private commandsForCharIdInBattle(charId: number): BattleCommand[] {
     if (isMonPartyCharId(charId)) {
       // Companion mons fight with their own moves (via the PSI submenu), no
       // items, and cannot flee on the party's behalf.

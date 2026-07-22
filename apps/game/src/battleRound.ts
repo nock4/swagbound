@@ -193,6 +193,8 @@ export type BattleRoundInputContext = {
   psi?: readonly PsiData[];
   items?: readonly BattleRoundItemData[];
   usabilityMatrix?: UsabilityMatrix;
+  /** Per-battle command-list override (mon companions, CONVINCE availability). */
+  commandsFor?: (charId: number) => BattleCommand[];
 };
 
 export type BattleRoundInputTransition = {
@@ -577,7 +579,7 @@ function confirmCommand(
     return { input, complete: true };
   }
   const combatant = combatantAt(context.state, actor);
-  const commands = commandsForCharId(combatant?.charId ?? 0);
+  const commands = (context.commandsFor ?? commandsForCharId)(combatant?.charId ?? 0);
   const command = commands[clampSelection(input.selectionIndex, commands.length)] ?? "BASH";
 
   if (command === "PSI") {
@@ -886,7 +888,7 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
     return 0;
   }
   if (input.submenu === "command") {
-    return commandsForCharId(combatant.charId).length;
+    return (context.commandsFor ?? commandsForCharId)(combatant.charId).length;
   }
   if (input.submenu === "psi-category") {
     return BATTLE_PSI_MENU_CATEGORIES.length;

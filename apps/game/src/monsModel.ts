@@ -15,7 +15,10 @@ import type {
 // (cap 8) or NPC/enemy ids. charId-keyed maps treat >= MON_PARTY_ID_BASE as mons.
 export const MON_PARTY_ID_BASE = 100000;
 
-export const CONVINCE_HP_RATIO = 0.35;
+// Generous on purpose: EB bash damage swings are large and Bosch has no weak
+// poke, so a tight window makes catches luck-dependent (verified in-engine:
+// a 42hp wild went 42 -> 17 -> dead around a 35% gate).
+export const CONVINCE_HP_RATIO = 0.5;
 export const MON_BATTLE_QUESTION_COUNT = 3;
 // 2/3 right earns one bonus question instead of outright failure.
 export const MON_BONUS_QUESTION_THRESHOLD = 2;
