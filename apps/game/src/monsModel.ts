@@ -71,7 +71,7 @@ export function monStatsAtLevel(entry: MonsRegistryEntry, level: number): MonSta
 
 // --- abilities ---------------------------------------------------------------
 
-export const MATERIAL_SPLASH_UNLOCK_LEVEL = 12;
+export const MATERIAL_SPLASH_UNLOCK_LEVEL = 8;
 
 export interface LearnedAbilityRef {
   abilityId: string;

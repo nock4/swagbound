@@ -102,10 +102,10 @@ describe("mon leveling", () => {
     expect(gain.learned).toContain(nextUnlock!.abilityId);
   });
 
-  it("material splash ability joins the learnset at level 12", () => {
+  it("material splash ability joins the learnset by level 8", () => {
     const entry = registry.mons.find((m) => !m.secretRare && abilities.materialSplash[m.element])!;
     const splash = abilities.materialSplash[entry.element]!;
-    const known = monKnownAbilities(entry, abilities, 12);
+    const known = monKnownAbilities(entry, abilities, 8);
     expect(known).toContain(splash);
   });
 });

@@ -579,23 +579,23 @@
    },
    {
     "abilityId": "thick-skin",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "double-straw",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "sponge-stance",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "big-gulp",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "buffet-rules",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Angel": [
@@ -605,23 +605,23 @@
    },
    {
     "abilityId": "kind-word",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "halo-polish",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "feather-guard",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "group-hug",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "sunday-light",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Demon": [
@@ -631,23 +631,23 @@
    },
    {
     "abilityId": "hot-temper",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "pitchfork-poke",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "brimstone-burp",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "wicked-swing",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "tantrum-royale",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Mystic": [
@@ -657,23 +657,23 @@
    },
    {
     "abilityId": "third-eyebrow",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "rune-zap",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "double-dare",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "comet-memo",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "grand-theorem",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Trickster": [
@@ -683,23 +683,23 @@
    },
    {
     "abilityId": "itching-joke",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "pocket-sand",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "gum-snap",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "double-dare",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "prank-storm",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Fielder": [
@@ -709,23 +709,23 @@
    },
    {
     "abilityId": "shoe-swap",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "small-mend",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "line-drive",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "team-chant",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "grand-inning",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Spirit": [
@@ -735,23 +735,23 @@
    },
    {
     "abilityId": "static-whisper",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "epoch-nap",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "ecto-flare",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "seance-scream",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "last-word",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Zombie": [
@@ -761,23 +761,23 @@
    },
    {
     "abilityId": "thick-skin",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "grave-breath",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "shamble-slam",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "moan-chorus",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "compost-crush",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Vampire": [
@@ -787,23 +787,23 @@
    },
    {
     "abilityId": "shoe-swap",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "neck-appraisal",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "midnight-tab",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "bat-rsvp",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "red-banquet",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Ancient": [
@@ -813,23 +813,23 @@
    },
    {
     "abilityId": "museum-fist",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "epoch-nap",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "pillar-drop",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "dust-of-ages",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "big-bang-rerun",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ],
   "Secret": [
@@ -839,23 +839,23 @@
    },
    {
     "abilityId": "spotlight-steal",
-    "unlockLevel": 5
+    "unlockLevel": 2
    },
    {
     "abilityId": "confetti-nova",
-    "unlockLevel": 10
+    "unlockLevel": 5
    },
    {
     "abilityId": "fourth-wall-lean",
-    "unlockLevel": 16
+    "unlockLevel": 9
    },
    {
     "abilityId": "backstage-pass",
-    "unlockLevel": 23
+    "unlockLevel": 15
    },
    {
     "abilityId": "secret-finale",
-    "unlockLevel": 31
+    "unlockLevel": 23
    }
   ]
  },
