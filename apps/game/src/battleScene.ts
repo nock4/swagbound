@@ -112,6 +112,14 @@ import {
 } from "./battleEffects";
 import { publishBattleDebug, type BattlePhase, type BattleTransitionPhase } from "./state";
 import {
+  answerNegotiation,
+  createNegotiation,
+  CONVINCE_HP_RATIO,
+  isMonPartyCharId,
+  type MonNegotiationQuestion,
+  type MonNegotiationState
+} from "./monsModel";
+import {
   CLEAN_UI_GRID_COLUMNS,
   CLEAN_UI_HP,
   CLEAN_UI_PANEL_BORDER,
@@ -422,6 +430,18 @@ type AttestationBattleInit = {
   gameFlagsSnapshot?: string[];
 };
 type AttestationBattleStage = "question" | "battle" | "complete";
+type MonCatchBattleInit = {
+  registryId: string;
+  displayName: string;
+  questions: MonNegotiationQuestion[];
+  hint?: string;
+};
+type MonCatchBattleState = MonCatchBattleInit & {
+  negotiation: MonNegotiationState | null;
+  selectionIndex: number;
+  attempted: boolean;
+  hintShown: boolean;
+};
 type AttestationBattleState = {
   check: DrifellaSourceCheck;
   cards: CardNfts;
@@ -691,6 +711,7 @@ export class BattleScene extends Phaser.Scene {
   private attestation_: AttestationBattleState | null = null;
   private attestationResolvedRestore_: ChunkedWorldRestore | null = null;
   private customVictoryPages_: string[][] | null = null;
+  private monCatch_: MonCatchBattleState | null = null;
   private tutorialDerivativeMimicCommand_: BattleCommand | undefined;
   private devConsole?: DevConsole;
   private devNoteCount = 0;
@@ -723,6 +744,7 @@ export class BattleScene extends Phaser.Scene {
     encounterSeed?: number;
     boss?: boolean;
     attestation?: AttestationBattleInit;
+    monCatch?: MonCatchBattleInit;
   }): void {
     const attestationRuntime = data.attestation
       ? buildAttestationBattleRuntime(data.battleData, data.attestation.check, data.attestation.battles)
@@ -829,6 +851,9 @@ export class BattleScene extends Phaser.Scene {
     this.devNoteCount = 0;
     this.attestation_ = data.attestation
       ? this.createAttestationState(data.attestation)
+      : null;
+    this.monCatch_ = data.monCatch && data.monCatch.questions.length >= 3
+      ? { ...data.monCatch, negotiation: null, selectionIndex: 0, attempted: false, hintShown: false }
       : null;
     if (this.encounterAdvantage_ === "instantWin") {
       this.resolveInstantWinBattleState(enemies);
@@ -1124,6 +1149,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private moveMenu(direction: BattleCommandGridDirection): void {
+    if (this.monNegotiationActive()) {
+      this.moveMonNegotiationSelection(direction);
+      return;
+    }
     if (this.attestation_?.stage === "question") {
       this.moveAttestationSelection(direction);
       return;
@@ -1146,6 +1175,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private confirmMenu(): void {
+    if (this.monNegotiationActive()) {
+      this.confirmMonNegotiationSelection();
+      return;
+    }
     if (this.attestation_?.stage === "question") {
       this.confirmAttestationSelection();
       return;
@@ -1192,6 +1225,10 @@ export class BattleScene extends Phaser.Scene {
       this.publish();
       return;
     }
+    if (this.inputState_.submenu === "command" && this.currentCommand() === "CONVINCE") {
+      this.tryBeginMonNegotiation();
+      return;
+    }
     const transition = nextInputState(this.inputState_, { kind: "confirm" }, this.inputContext());
     this.menuMessage_ = transition.input === this.inputState_ ? this.blockedInputMessage() : "";
     this.applyInputTransition(transition);
@@ -1200,6 +1237,11 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private cancelMenu(): void {
+    if (this.monNegotiationActive()) {
+      // Negotiation cannot be backed out of once opened; the mon is listening.
+      this.playBattleSfxCue("menuCancel");
+      return;
+    }
     if (this.attestation_?.stage === "question") {
       this.playBattleSfxCue("menuCancel");
       return;
@@ -4194,6 +4236,24 @@ export class BattleScene extends Phaser.Scene {
         statusCards: this.statusCardViews()
       };
     }
+    if (this.monNegotiationActive()) {
+      const monCatch = this.monCatch_;
+      const negotiation = monCatch?.negotiation;
+      const question = this.currentMonNegotiationQuestion();
+      const asked = (negotiation?.askedIndex ?? 0) + 1;
+      const total = negotiation?.bonusGranted ? 4 : 3;
+      return {
+        actorName: `${monCatch?.displayName ?? "MON"} ${asked}/${total}`,
+        commandLines: question?.options ?? [],
+        commandColumns: ATTESTATION_OPTION_COLUMNS,
+        commandWrap: true,
+        submenuLines: [],
+        descriptionLines: question ? [question.prompt] : [],
+        executionMessageLines: this.executionMessageLines_,
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
     if (this.attestation_?.stage === "question") {
       const question = this.currentAttestationQuestion();
       return {
@@ -5286,7 +5346,162 @@ export class BattleScene extends Phaser.Scene {
 
   private commandsForCurrentActor(): BattleCommand[] {
     const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
-    return commandsForCharId(actor?.charId ?? 0);
+    const charId = actor?.charId ?? 0;
+    if (isMonPartyCharId(charId)) {
+      // Companion mons fight with their own moves (via the PSI submenu), no
+      // items, and cannot flee on the party's behalf.
+      return ["BASH", "PSI", "DEFEND"];
+    }
+    const commands = commandsForCharId(charId);
+    if (charId === 0 && this.monCatch_ && !this.monCatch_.attempted && !this.monCatch_.negotiation) {
+      return [...commands, "CONVINCE"];
+    }
+    return commands;
+  }
+
+  private monNegotiationActive(): boolean {
+    return this.monCatch_?.negotiation?.outcome === "asking";
+  }
+
+  private catchableEnemyWeakened(): boolean {
+    const enemy = this.battle_.enemies[0];
+    if (!enemy) {
+      return false;
+    }
+    const hp = enemy.hp.target;
+    return hp > 0 && hp <= Math.max(1, Math.floor(enemy.maxHp * CONVINCE_HP_RATIO));
+  }
+
+  private tryBeginMonNegotiation(): void {
+    const monCatch = this.monCatch_;
+    if (!monCatch || monCatch.attempted) {
+      return;
+    }
+    if (!this.catchableEnemyWeakened()) {
+      this.menuMessage_ = `${monCatch.displayName} isn't winded enough to listen yet.`;
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+    monCatch.negotiation = createNegotiation(monCatch.questions);
+    monCatch.selectionIndex = 0;
+    this.commandIndex_ = 0;
+    this.submenu_ = "command";
+    this.menuMessage_ = "";
+    this.executionMessageLines_ = [];
+    this.renderStatus();
+    this.publish();
+  }
+
+  private currentMonNegotiationQuestion(): MonNegotiationQuestion | undefined {
+    const negotiation = this.monCatch_?.negotiation;
+    if (!negotiation || negotiation.outcome !== "asking") {
+      return undefined;
+    }
+    return negotiation.questions[negotiation.askedIndex];
+  }
+
+  private moveMonNegotiationSelection(direction: BattleCommandGridDirection): void {
+    const monCatch = this.monCatch_;
+    const question = this.currentMonNegotiationQuestion();
+    if (!monCatch || !question) {
+      return;
+    }
+    const next = moveBattleCommandGridIndex(
+      monCatch.selectionIndex,
+      question.options.length,
+      direction,
+      ATTESTATION_OPTION_COLUMNS
+    );
+    if (next === monCatch.selectionIndex) {
+      return;
+    }
+    monCatch.selectionIndex = next;
+    this.commandIndex_ = next;
+    this.playBattleSfxCue("menuMove");
+    this.renderStatus();
+    this.publish();
+  }
+
+  private confirmMonNegotiationSelection(): void {
+    const monCatch = this.monCatch_;
+    const negotiation = monCatch?.negotiation;
+    const question = this.currentMonNegotiationQuestion();
+    if (!monCatch || !negotiation || !question) {
+      return;
+    }
+    this.playBattleSfxCue("menuConfirm");
+    const wasRight = monCatch.selectionIndex === question.correctIndex;
+    const next = answerNegotiation(negotiation, monCatch.selectionIndex);
+    monCatch.negotiation = next;
+    monCatch.selectionIndex = 0;
+    this.commandIndex_ = 0;
+    this.executionMessageLines_ = [wasRight ? question.rightLine : question.wrongLine];
+    if (next.outcome === "joined") {
+      this.beginMonCatchSuccess();
+      return;
+    }
+    if (next.outcome === "refused") {
+      monCatch.attempted = true;
+      this.menuMessage_ = `${monCatch.displayName} turns away.`;
+      this.beginCommandInputRound();
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+    this.renderStatus();
+    this.publish();
+  }
+
+  private beginMonCatchSuccess(): void {
+    const monCatch = this.monCatch_;
+    if (!monCatch || !this.returnTo_) {
+      return;
+    }
+    monCatch.attempted = true;
+    this.playBattleMusicCue("victory");
+    this.playBattleSfxCue("victory");
+    this.startFlashOverlay(
+      BATTLE_FX_VICTORY_FLASH_COLOR,
+      BATTLE_FX_VICTORY_FLASH_ALPHA,
+      BATTLE_FX_VICTORY_FLASH_MS
+    );
+    this.settlePendingMortalWoundsForBattleEnd();
+    const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
+    const restore: ChunkedWorldRestore = {
+      ...this.returnTo_.restore,
+      outcome: "win",
+      party: postBattleParty,
+      flags: {
+        strings: [...this.returnTo_.restore.flags.strings],
+        numeric: [...this.returnTo_.restore.flags.numeric]
+      },
+      encounter: {
+        ...this.returnTo_.restore.encounter,
+        lastEncounterGroup: this.group_.id
+      },
+      capturedMon: {
+        registryId: monCatch.registryId,
+        displayName: monCatch.displayName
+      }
+    };
+    this.attestationResolvedRestore_ = restore;
+    this.customVictoryPages_ = [
+      ...(this.customVictoryPages_ ?? []),
+      [`${monCatch.displayName} looks Bosch over one more time... and hops after him. Off to the farm.`]
+    ];
+    this.victorySummaryPageIndex_ = 0;
+    this.victoryTally_ = null;
+    this.phase_ = "victory-summary";
+    this.transitionPhase_ = "summary";
+    this.markTerminalPhaseStarted();
+    this.submenu_ = "command";
+    this.commandIndex_ = 0;
+    this.currentActor_ = null;
+    this.menuMessage_ = "";
+    this.pendingFlee_ = false;
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
   }
 
   private resetMenuForActor(): void {

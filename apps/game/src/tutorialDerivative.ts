@@ -18,6 +18,10 @@ export function tutorialDerivativeActionIndex(command: BattleCommand | undefined
     case "PSI":
     case "PRAY":
       return 3;
+    // CONVINCE never queues a round action (scene-intercepted), so the mimic
+    // treats it as idle.
+    case "CONVINCE":
+      return 0;
   }
 }
 

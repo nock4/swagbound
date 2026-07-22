@@ -47,7 +47,9 @@ export type BattleActor = {
 };
 export type BattleOutcome = "ongoing" | "win" | "lose";
 export type EncounterAdvantage = "normal" | "partyFirstStrike" | "enemyFirstStrike" | "instantWin";
-const ALL_BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "SPY", "PRAY", "MIRROR", "DEFEND", "RUN"] as const;
+// CONVINCE is the mon-catch negotiation opener; it is intercepted by the battle
+// scene before the round input machine (like AUTO) and never queues a round action.
+const ALL_BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "SPY", "PRAY", "MIRROR", "DEFEND", "RUN", "CONVINCE"] as const;
 export type BattleCommand = typeof ALL_BATTLE_COMMANDS[number];
 export const BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "DEFEND", "RUN"] as const satisfies readonly BattleCommand[];
 const PAULA_BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "PRAY", "DEFEND", "RUN"] as const satisfies readonly BattleCommand[];

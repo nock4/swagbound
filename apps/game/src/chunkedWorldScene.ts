@@ -19,6 +19,9 @@ import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
+import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, type MonNegotiationQuestion } from "./monsModel";
+import { MonsState } from "./monsState";
+import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -856,6 +859,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   readonly dialogue = new DialogueController();
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
+  private monsState_?: MonsState;
+  private consumedCapturedMon_ = false;
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
   private readonly menuSfx: BattleSfx = createBattleSfx();
@@ -2991,6 +2996,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handlePartyCompositionChanged();
       return this.partyState.party();
     };
+    // Debug-only mon hooks: start a catchable wild-mon battle, inspect/seed the roster.
+    globals.__monBattle = (registryId: string, group = 4) =>
+      this.startBattleWithReturn(group, "encounter", "normal", undefined, registryId);
+    globals.__monRoster = () => {
+      const mons = this.monsRuntime();
+      return mons ? { roster: mons.snapshot(), count: mons.count() } : null;
+    };
+    globals.__monCatch = (registryId: string) => {
+      const mons = this.monsRuntime();
+      return mons?.catchMon(registryId) ?? null;
+    };
+    globals.__monSetActive = (index: number) => this.monsRuntime()?.setActive(index) ?? false;
+    globals.__monFuse = (a: number, b: number, picks: string[] = []) =>
+      this.monsRuntime()?.fuse(a, b, picks) ?? null;
     globals.__partyRoster = () => ({
       party: this.partyState.party(),
       names: this.effectiveBattlePartyMembers()?.map((entry) => ({ id: entry.id, name: entry.name })) ?? []
@@ -6070,12 +6089,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private saveGame(showResult: boolean): boolean {
     const savedAt = new Date().toISOString();
+    const monsRuntime = this.monsRuntime();
     const save = captureSaveState({
       flags: this.gameFlags,
       partyState: this.partyState,
       player: this.currentPlayerSnapshot(),
       intake: getFilingIntakeFromRegistry(this.registry),
-      savedAt
+      savedAt,
+      ...(monsRuntime ? { mons: monsRuntime } : {})
     });
     const blob = serializeSaveState(save);
     const saved = blob ? this.saveSlots?.saveToSlot(this.saveSlot, blob) ?? false : false;
@@ -6098,9 +6119,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.bootSaveState || !this.isCompatibleSavePlayer(this.bootSaveState.player)) {
       return undefined;
     }
+    const monsRuntimeForRestore = this.monsRuntime();
     const player = applySaveState(this.bootSaveState, {
       flags: this.gameFlags,
-      partyState: this.partyState
+      partyState: this.partyState,
+      ...(monsRuntimeForRestore ? { mons: monsRuntimeForRestore } : {})
     });
     if (!player) {
       return undefined;
@@ -6179,6 +6202,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.applyStoryGateReturn(restore);
     this.partyState.restore(restore.party);
     this.applySourceCheckReturn(restore);
+    this.applyMonBattleReturn(restore);
     this.encounterCooldownMs = Math.max(this.encounterCooldownMs, restore.encounter.cooldownMs);
     this.encounterRng.setState(restore.encounter.rngSeed);
     this.encounterSeed = restore.encounter.rngSeed;
@@ -8892,6 +8916,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  private showMonNotice(message: string): void {
+    this.recruitNoticeText = `✦ ${message}`;
+    this.recruitNoticeUntilMs = this.time.now + 3200;
+    this.updatePrompt();
+    this.publish();
+  }
+
   private showRecruitNotice(names: readonly string[]): void {
     this.recruitNoticeText = names.length === 1
       ? `✦ ${names[0]} joined the crew!`
@@ -9620,7 +9651,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     group: number,
     source: BattleReturnSource,
     encounterAdvantage: EncounterAdvantage = "normal",
-    pendingStoryGate?: PendingStoryGate
+    pendingStoryGate?: PendingStoryGate,
+    wildMonId?: string
   ): boolean {
     const sequence = this.data_.earlyGameSequence;
     const gatesActive = openingGatesActive(sequence, this.gameFlags);
@@ -9645,7 +9677,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       wallet: this.partyState.wallet,
       bank: this.partyState.bank,
       items: this.data_.items,
-      psi: this.data_.psi,
+      psi: this.monAugmentedPsi(),
       font: this.data_.font,
       window: this.data_.window,
       spriteOverrides: this.data_.spriteOverrides,
@@ -9654,8 +9686,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       encounterAdvantage,
       encounterSeed,
       boss: pendingStoryGate !== undefined,
+      ...(wildMonId ? { monCatch: this.monCatchInitFor(wildMonId) } : {}),
       returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
+    this.consumedCapturedMon_ = false;
     return true;
   }
 
@@ -9800,7 +9834,93 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const activeIds = new Set(this.partyState.party());
     // BASE stats only. Equip bonuses ride separately as combatant statBonuses
     // (battlePartyOptions) so post-battle snapshots never compound them.
-    return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+    const members = activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+    const companion = this.monCompanionBattleKit();
+    return companion ? [...members, companion.member] : members;
+  }
+
+  /** The active mon companion's battle kit (member + synthetic MOVES psi), or undefined. */
+  private monCompanionBattleKit(): MonBattleKit | undefined {
+    const mons = this.monsRuntime();
+    const active = mons?.active();
+    if (!mons || !active || !this.data_.mons) {
+      return undefined;
+    }
+    // Companions ride from Act 2 on (the farm unlocks in Postwick).
+    if (!this.gameFlags.has("act1:complete")) {
+      return undefined;
+    }
+    return buildMonBattleKit(active.entry, active.mon, this.data_.mons.abilities);
+  }
+
+  /** PSI collection augmented with the companion's synthetic MOVES entries. */
+  private monAugmentedPsi(): GameData["psi"] {
+    const base = this.data_.psi;
+    const companion = this.monCompanionBattleKit();
+    if (!base || !companion || companion.psi.length === 0) {
+      return base;
+    }
+    return { ...base, psi: [...base.psi, ...companion.psi] };
+  }
+
+  private monsRuntime(): MonsState | undefined {
+    if (!this.data_.mons) {
+      return undefined;
+    }
+    if (!this.monsState_) {
+      this.monsState_ = new MonsState(this.data_.mons.registry, this.data_.mons.abilities, this.data_.mons.fusion);
+    }
+    return this.monsState_;
+  }
+
+  /** Build the CONVINCE context for a wild-mon battle: personality question draw. */
+  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[] } | undefined {
+    const data = this.data_.mons;
+    if (!data) {
+      return undefined;
+    }
+    const entry = monById(data.registry, registryId);
+    if (!entry || entry.secretRare || !entry.personality) {
+      return undefined;
+    }
+    const seed = `${registryId}:${this.encounterSeed}`;
+    const questions = drawNegotiationQuestions(data.questionBanks, entry.personality, seed);
+    if (questions.length < 3) {
+      return undefined;
+    }
+    return { registryId, displayName: monDisplayName(entry), questions };
+  }
+
+  /** Consume a battle's mon results: capture + companion xp. Idempotent per restore. */
+  private applyMonBattleReturn(restore: ChunkedWorldRestore): void {
+    const mons = this.monsRuntime();
+    if (!mons) {
+      return;
+    }
+    if (restore.capturedMon && !this.consumedCapturedMon_) {
+      this.consumedCapturedMon_ = true;
+      const caught = mons.catchMon(restore.capturedMon.registryId, { caughtAtFlag: "act2" });
+      if (caught) {
+        this.gameFlags.set("mons:first-catch");
+        this.showMonNotice(`${restore.capturedMon.displayName} is waiting at the farm.`);
+      }
+    }
+    // Companion XP: the battle's post-battle snapshot carries the mon member
+    // (reserved charId); its experience delta is the battle's xp share.
+    const monMember = restore.party.battleMembers?.find((member) => isMonPartyCharId(member.charId));
+    const active = mons.active();
+    if (monMember && active && monMember.experience > active.mon.xp) {
+      const gain = mons.grantXp(active.index, monMember.experience - active.mon.xp);
+      if (gain?.leveledFrom !== undefined) {
+        this.showMonNotice(`${monDisplayName(active.entry)} grew to level ${gain.mon.level}!`);
+      }
+      for (const learned of gain?.learned ?? []) {
+        const ability = this.data_.mons?.abilities.abilities[learned];
+        if (ability) {
+          this.showMonNotice(`${monDisplayName(active.entry)} learned ${ability.name}!`);
+        }
+      }
+    }
   }
 
   /** Per-member combatant options aligned with battlePartyMembers(): equip bonuses as statBonuses. */
