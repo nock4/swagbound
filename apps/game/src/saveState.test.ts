@@ -34,7 +34,7 @@ describe("save import validation", () => {
 
 function saveState(): SaveState {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     savedAt: "2026-07-13T12:00:00.000Z",
     flags: { strings: ["intro:bedroom-opening-done"], numeric: [7] },
     party: {

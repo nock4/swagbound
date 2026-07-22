@@ -4475,3 +4475,221 @@ function parseLegacyMenuTargets(raw: string, expectedCount: number): string[] | 
   const targets = [...match[2].matchAll(/\{e\(([A-Za-z_][\w.-]*)\)\}/gu)].map((targetMatch) => targetMatch[1]);
   return targets.length >= expectedCount ? targets.slice(0, expectedCount) : undefined;
 }
+
+// --- Mons system (Super Metal Mons Gen 2 companion/fusion feature) -----------
+
+export const MON_RACES = [
+  "Drainer", "Angel", "Demon", "Mystic", "Trickster",
+  "Fielder", "Spirit", "Zombie", "Vampire", "Ancient"
+] as const;
+export const MonRaceSchema = z.enum(MON_RACES);
+export type MonRace = z.infer<typeof MonRaceSchema>;
+
+export const MON_PERSONALITIES = [
+  "Calm", "Charming", "Cheerful", "Cool", "Cute", "Dope", "Holy", "Hyper",
+  "Kind-hearted", "Lucky", "Mean", "Meh", "Mischievous", "Neat", "Noble",
+  "Shy", "Sick", "Sleepy", "Strange", "Sweet", "Wise"
+] as const;
+export const MonPersonalitySchema = z.enum(MON_PERSONALITIES);
+export type MonPersonality = z.infer<typeof MonPersonalitySchema>;
+
+export const MON_ELEMENTS = [
+  "rubber", "earth", "steel", "arcana", "crystal", "ooze", "grave", "frost", "ash"
+] as const;
+export const MonElementSchema = z.enum(MON_ELEMENTS);
+
+export const MonsRegistryEntrySchema = z.object({
+  id: z.string().trim().min(1),
+  tokenId: z.string(),
+  name: z.string().min(1),
+  displayName: z.string().trim().min(1).optional(),
+  race: z.union([MonRaceSchema, z.literal("Secret")]),
+  race2: MonRaceSchema.optional(),
+  tier: z.number().int().min(1).max(5),
+  secretRare: z.literal(true).optional(),
+  personality: MonPersonalitySchema.optional(),
+  personality2: MonPersonalitySchema.optional(),
+  materials: z.array(z.string().min(1)).min(1),
+  element: MonElementSchema,
+  baseLevel: z.number().int().min(1).max(50),
+  maxHp: z.number().int().positive(),
+  maxPp: z.number().int().nonnegative(),
+  offense: z.number().int().positive(),
+  defense: z.number().int().positive(),
+  speed: z.number().int().positive(),
+  sprites: z.object({
+    battle: z.string().min(1),
+    overworld: z.string().min(1)
+  }).strict()
+}).strict().superRefine((mon, context) => {
+  if (mon.secretRare !== true && mon.race === "Secret") {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Secret race requires secretRare" });
+  }
+  if (mon.secretRare === true && mon.personality !== undefined) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "secret rares have no personality bank" });
+  }
+  if (mon.secretRare !== true && mon.personality === undefined) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "catchable mons need a personality" });
+  }
+});
+
+export const MonsRegistrySchema = z.object({
+  schema: z.literal("swagbound.mons-registry.v1"),
+  source: z.string(),
+  count: z.number().int().positive(),
+  mons: z.array(MonsRegistryEntrySchema).min(1)
+}).strict().superRefine((value, context) => {
+  if (value.count !== value.mons.length) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "count mismatch", path: ["count"] });
+  }
+  const ids = new Set<string>();
+  value.mons.forEach((mon, index) => {
+    if (ids.has(mon.id)) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `duplicate mon id ${mon.id}`, path: ["mons", index, "id"] });
+    }
+    ids.add(mon.id);
+  });
+});
+export type MonsRegistry = z.infer<typeof MonsRegistrySchema>;
+export type MonsRegistryEntry = z.infer<typeof MonsRegistryEntrySchema>;
+
+export const MonAbilityKindSchema = z.enum(["damage", "drain", "heal", "buff", "debuff", "status"]);
+export const MonAbilityStatusSchema = z.enum([
+  "poison", "paralysis", "sleep", "confusion",
+  "offenseUp", "defenseUp", "speedUp", "offenseDown", "defenseDown", "shield"
+]);
+export const MonAbilitySchema = z.object({
+  name: z.string().trim().min(1).max(18),
+  ppCost: z.number().int().min(0).max(30),
+  kind: MonAbilityKindSchema,
+  power: z.number().int().min(1).max(120).optional(),
+  status: MonAbilityStatusSchema.optional(),
+  target: z.enum(["enemy", "allEnemies", "ally", "allAllies", "self"]),
+  element: MonElementSchema.optional(),
+  line: z.string().min(1).max(90)
+}).strict().superRefine((ability, context) => {
+  const needsPower = ability.kind === "damage" || ability.kind === "drain" || ability.kind === "heal";
+  if (needsPower && ability.power === undefined) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: `${ability.kind} needs power` });
+  }
+  const needsStatus = ability.kind === "buff" || ability.kind === "debuff" || ability.kind === "status";
+  if (needsStatus && ability.status === undefined) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: `${ability.kind} needs status` });
+  }
+});
+
+export const MonKitEntrySchema = z.object({
+  abilityId: z.string().trim().min(1),
+  unlockLevel: z.number().int().min(1).max(60)
+}).strict();
+
+export const MonAbilitiesSchema = z.object({
+  schema: z.literal("swagbound.mon-abilities.v1"),
+  comment: z.string().optional(),
+  abilities: z.record(z.string(), MonAbilitySchema),
+  raceKits: z.record(z.string(), z.array(MonKitEntrySchema).length(6)),
+  materialSplash: z.record(MonElementSchema, z.string())
+}).strict().superRefine((value, context) => {
+  const known = new Set(Object.keys(value.abilities));
+  for (const race of [...MON_RACES, "Secret"]) {
+    if (!value.raceKits[race]) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `missing race kit ${race}`, path: ["raceKits"] });
+    }
+  }
+  for (const [race, kit] of Object.entries(value.raceKits)) {
+    kit.forEach((entry, index) => {
+      if (!known.has(entry.abilityId)) {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: `unknown ability ${entry.abilityId}`, path: ["raceKits", race, index] });
+      }
+    });
+  }
+  for (const [element, abilityId] of Object.entries(value.materialSplash)) {
+    if (!known.has(abilityId)) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `unknown splash ability ${abilityId}`, path: ["materialSplash", element] });
+    }
+  }
+});
+export type MonAbilities = z.infer<typeof MonAbilitiesSchema>;
+
+export const MonQuestionSchema = z.object({
+  prompt: z.string().min(1).max(140),
+  options: z.array(z.string().min(1).max(48)).length(4),
+  correctIndex: z.number().int().min(0).max(3),
+  rightLine: z.string().min(1).max(120),
+  wrongLine: z.string().min(1).max(120)
+}).strict();
+
+export const MonQuestionBankSchema = z.object({
+  encounterLine: z.string().min(1).max(140),
+  petLines: z.array(z.string().min(1).max(140)).min(2),
+  questions: z.array(MonQuestionSchema).min(4)
+}).strict();
+
+export const MonQuestionBanksSchema = z.object({
+  schema: z.literal("swagbound.mon-question-banks.v1"),
+  comment: z.string().optional(),
+  banks: z.record(z.string(), MonQuestionBankSchema)
+}).strict().superRefine((value, context) => {
+  for (const personality of MON_PERSONALITIES) {
+    if (!value.banks[personality]) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `missing bank ${personality}`, path: ["banks"] });
+    }
+  }
+});
+export type MonQuestionBanks = z.infer<typeof MonQuestionBanksSchema>;
+
+export const MonFusionSchema = z.object({
+  schema: z.literal("swagbound.mon-fusion.v1"),
+  comment: z.string().optional(),
+  chart: z.record(MonRaceSchema, z.record(MonRaceSchema, z.union([MonRaceSchema, z.literal("SAME")]))),
+  secretRecipes: z.array(z.object({
+    resultId: z.string().trim().min(1),
+    requires: z.object({
+      races: z.array(MonRaceSchema).length(2),
+      minTier: z.number().int().min(3).max(5)
+    }).strict(),
+    riddle: z.string().min(1).max(160)
+  }).strict()).length(5)
+}).strict().superRefine((value, context) => {
+  for (const a of MON_RACES) {
+    const row = value.chart[a];
+    if (!row) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `missing chart row ${a}`, path: ["chart"] });
+      continue;
+    }
+    for (const b of MON_RACES) {
+      const cell = row[b];
+      if (cell === undefined) {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: `missing chart cell ${a}x${b}`, path: ["chart", a] });
+        continue;
+      }
+      if (a === b && cell !== "SAME") {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: `diagonal ${a} must be SAME`, path: ["chart", a, b] });
+      }
+      const mirror = value.chart[b]?.[a];
+      if (mirror !== undefined && mirror !== cell) {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: `asymmetric ${a}x${b}`, path: ["chart", a, b] });
+      }
+    }
+  }
+});
+export type MonFusion = z.infer<typeof MonFusionSchema>;
+
+export const MonStorySchema = z.object({
+  schema: z.literal("swagbound.mon-story.v1"),
+  comment: z.string().optional(),
+  farmhand: z.object({
+    intro: z.array(z.string().min(1).max(200)).min(3),
+    tutorialCatch: z.array(z.string().min(1).max(200)).min(1),
+    firstCompanion: z.array(z.string().min(1).max(200)).min(1),
+    fusionUnlock: z.array(z.string().min(1).max(200)).min(2),
+    idleTips: z.array(z.string().min(1).max(200)).min(4),
+    release: z.array(z.string().min(1).max(200)).min(1)
+  }).strict(),
+  handoverScene: z.array(z.string().min(1).max(200)).min(4),
+  townLines: z.array(z.string().min(1).max(200)).min(3),
+  journal: z.record(z.string(), z.string().min(1).max(90)),
+  monEncounterHint: z.string().min(1).max(140),
+  momPhone: z.array(z.string().min(1).max(200)).min(1)
+}).strict();
+export type MonStory = z.infer<typeof MonStorySchema>;

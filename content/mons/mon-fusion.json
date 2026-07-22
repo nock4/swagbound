@@ -1,0 +1,152 @@
+{
+ "schema": "swagbound.mon-fusion.v1",
+ "chart": {
+  "Drainer": {
+   "Drainer": "SAME",
+   "Angel": "Angel",
+   "Demon": "Vampire",
+   "Mystic": "Mystic",
+   "Trickster": "Vampire",
+   "Fielder": "Drainer",
+   "Spirit": "Drainer",
+   "Zombie": "Zombie",
+   "Vampire": "Drainer",
+   "Ancient": "Zombie"
+  },
+  "Angel": {
+   "Drainer": "Angel",
+   "Angel": "SAME",
+   "Demon": "Trickster",
+   "Mystic": "Mystic",
+   "Trickster": "Fielder",
+   "Fielder": "Angel",
+   "Spirit": "Angel",
+   "Zombie": "Spirit",
+   "Vampire": "Spirit",
+   "Ancient": "Ancient"
+  },
+  "Demon": {
+   "Drainer": "Vampire",
+   "Angel": "Trickster",
+   "Demon": "SAME",
+   "Mystic": "Spirit",
+   "Trickster": "Demon",
+   "Fielder": "Demon",
+   "Spirit": "Demon",
+   "Zombie": "Vampire",
+   "Vampire": "Demon",
+   "Ancient": "Ancient"
+  },
+  "Mystic": {
+   "Drainer": "Mystic",
+   "Angel": "Mystic",
+   "Demon": "Spirit",
+   "Mystic": "SAME",
+   "Trickster": "Trickster",
+   "Fielder": "Mystic",
+   "Spirit": "Ancient",
+   "Zombie": "Spirit",
+   "Vampire": "Mystic",
+   "Ancient": "Ancient"
+  },
+  "Trickster": {
+   "Drainer": "Vampire",
+   "Angel": "Fielder",
+   "Demon": "Demon",
+   "Mystic": "Trickster",
+   "Trickster": "SAME",
+   "Fielder": "Fielder",
+   "Spirit": "Trickster",
+   "Zombie": "Zombie",
+   "Vampire": "Vampire",
+   "Ancient": "Mystic"
+  },
+  "Fielder": {
+   "Drainer": "Drainer",
+   "Angel": "Angel",
+   "Demon": "Demon",
+   "Mystic": "Mystic",
+   "Trickster": "Fielder",
+   "Fielder": "SAME",
+   "Spirit": "Spirit",
+   "Zombie": "Zombie",
+   "Vampire": "Fielder",
+   "Ancient": "Ancient"
+  },
+  "Spirit": {
+   "Drainer": "Drainer",
+   "Angel": "Angel",
+   "Demon": "Demon",
+   "Mystic": "Ancient",
+   "Trickster": "Trickster",
+   "Fielder": "Spirit",
+   "Spirit": "SAME",
+   "Zombie": "Zombie",
+   "Vampire": "Spirit",
+   "Ancient": "Mystic"
+  },
+  "Zombie": {
+   "Drainer": "Zombie",
+   "Angel": "Spirit",
+   "Demon": "Vampire",
+   "Mystic": "Spirit",
+   "Trickster": "Zombie",
+   "Fielder": "Zombie",
+   "Spirit": "Zombie",
+   "Zombie": "SAME",
+   "Vampire": "Spirit",
+   "Ancient": "Zombie"
+  },
+  "Vampire": {
+   "Drainer": "Drainer",
+   "Angel": "Spirit",
+   "Demon": "Demon",
+   "Mystic": "Mystic",
+   "Trickster": "Vampire",
+   "Fielder": "Fielder",
+   "Spirit": "Spirit",
+   "Zombie": "Spirit",
+   "Vampire": "SAME",
+   "Ancient": "Vampire"
+  },
+  "Ancient": {
+   "Drainer": "Zombie",
+   "Angel": "Ancient",
+   "Demon": "Ancient",
+   "Mystic": "Ancient",
+   "Trickster": "Mystic",
+   "Fielder": "Ancient",
+   "Spirit": "Mystic",
+   "Zombie": "Zombie",
+   "Vampire": "Vampire",
+   "Ancient": "SAME"
+  }
+ },
+ "secretRecipes": [
+  {
+   "resultId": "supermetalmons-gen2-390-samo",
+   "requires": { "races": ["Angel", "Zombie"], "minTier": 5 },
+   "riddle": "Bury a halo where the dirt still remembers. Whatever digs itself back up will fetch forever."
+  },
+  {
+   "resultId": "supermetalmons-gen2-548-mmmmon-upgradeee",
+   "requires": { "races": ["Fielder", "Trickster"], "minTier": 4 },
+   "riddle": "Take one who does everything fine and one who does nothing fair. Together they do everything, unfairly."
+  },
+  {
+   "resultId": "supermetalmons-gen2-575-clown-pogger-0",
+   "requires": { "races": ["Angel", "Demon"], "minTier": 5 },
+   "riddle": "When the halo and the pitchfork quit arguing and start juggling, a clown is born. Feed them both well first."
+  },
+  {
+   "resultId": "supermetalmons-gen2-678-starcat-3",
+   "requires": { "races": ["Mystic", "Spirit"], "minTier": 5 },
+   "riddle": "A thing with nine lives naps way up in the deep sky. Send your two loudest minds to scratch it awake."
+  },
+  {
+   "resultId": "supermetalmons-gen2-717-bunnigotchi",
+   "requires": { "races": ["Drainer", "Vampire"], "minTier": 4 },
+   "riddle": "Two thirsts share one tiny bottle. Care for what hatches. It has long ears and a feeding schedule. The feed is you."
+  }
+ ]
+}
