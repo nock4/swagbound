@@ -208,9 +208,9 @@
    "originY": 1
   },
   "14": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-15-ponyrolly/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -230,9 +230,9 @@
    "originY": 1
   },
   "15": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-15-ponyrolly/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -21303,13 +21303,13 @@
    "originY": 0.5
   },
   "3": {
-   "image": "assets/swagbound/enemy/gns-smm2-11-mana-cauldron.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-11-mana-cauldron/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "4": {
-   "image": "assets/swagbound/enemy/gns-smm2-13-axl.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-13-axl/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21321,79 +21321,79 @@
    "originY": 0.5
   },
   "6": {
-   "image": "assets/swagbound/enemy/gns-smm2-171-figgypon.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-171-figgypon/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "7": {
-   "image": "assets/swagbound/enemy/gns-smm2-176-chop.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-176-chop/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "8": {
-   "image": "assets/swagbound/enemy/gns-smm2-177-burgie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-177-burgie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "9": {
-   "image": "assets/swagbound/enemy/gns-smm2-18-gonmey.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-18-gonmey/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "10": {
-   "image": "assets/swagbound/enemy/gns-smm2-181-roxy.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-181-roxy/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "11": {
-   "image": "assets/swagbound/enemy/gns-smm2-182-kullskor.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-182-kullskor/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "12": {
-   "image": "assets/swagbound/enemy/gns-smm2-203-splagoish.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-203-splagoish/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "13": {
-   "image": "assets/swagbound/enemy/gns-smm2-213-rhindos.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-213-rhindos/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "14": {
-   "image": "assets/swagbound/enemy/gns-smm2-230-drimbee.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-230-drimbee/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "15": {
-   "image": "assets/swagbound/enemy/gns-smm2-233-hobblebo.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-233-hobblebo/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "16": {
-   "image": "assets/swagbound/enemy/gns-smm2-240-soft-pale-luen.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-240-soft-pale-luen/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "17": {
-   "image": "assets/swagbound/enemy/gns-smm2-245-gapbus.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-245-gapbus/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "18": {
-   "image": "assets/swagbound/enemy/gns-smm2-253-pink-siifu.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-253-pink-siifu/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21405,61 +21405,61 @@
    "originY": 0.5
   },
   "20": {
-   "image": "assets/swagbound/enemy/gns-smm2-257-zwiggydor.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-257-zwiggydor/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "22": {
-   "image": "assets/swagbound/enemy/gns-smm2-259-sofgob.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-259-sofgob/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "23": {
-   "image": "assets/swagbound/enemy/gns-smm2-273-tubecyc.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-273-tubecyc/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "24": {
-   "image": "assets/swagbound/enemy/gns-smm2-277-flegrim.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-277-flegrim/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "25": {
-   "image": "assets/swagbound/enemy/gns-smm2-290-tarrmel.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-290-tarrmel/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "28": {
-   "image": "assets/swagbound/enemy/gns-smm2-310-star-seech.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-310-star-seech/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "29": {
-   "image": "assets/swagbound/enemy/gns-smm2-319-gajo.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-319-gajo/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "30": {
-   "image": "assets/swagbound/enemy/gns-smm2-324-grobe-royal.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-324-grobe-royal/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "31": {
-   "image": "assets/swagbound/enemy/gns-smm2-326-kimwi.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-326-kimwi/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "32": {
-   "image": "assets/swagbound/enemy/gns-smm2-335-starware.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-335-starware/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21471,13 +21471,13 @@
    "originY": 0.5
   },
   "35": {
-   "image": "assets/swagbound/enemy/gns-smm2-349-washysomp.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-349-washysomp/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "36": {
-   "image": "assets/swagbound/enemy/gns-smm2-357-reefdull-king.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-357-reefdull-king/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21489,67 +21489,67 @@
    "originY": 0.5
   },
   "38": {
-   "image": "assets/swagbound/enemy/gns-smm2-374-supergamma-mowch.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-374-supergamma-mowch/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "43": {
-   "image": "assets/swagbound/enemy/gns-smm2-375-oglobug.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-375-oglobug/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "44": {
-   "image": "assets/swagbound/enemy/gns-smm2-398-glooiece.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-398-glooiece/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "45": {
-   "image": "assets/swagbound/enemy/gns-smm2-405-power-rider.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-405-power-rider/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "46": {
-   "image": "assets/swagbound/enemy/gns-smm2-418-channa.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-418-channa/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "47": {
-   "image": "assets/swagbound/enemy/gns-smm2-419-tripgib.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-419-tripgib/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "48": {
-   "image": "assets/swagbound/enemy/gns-smm2-42-mergie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-42-mergie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "50": {
-   "image": "assets/swagbound/enemy/gns-smm2-426-guzzlemuggie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-426-guzzlemuggie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "51": {
-   "image": "assets/swagbound/enemy/gns-smm2-429-hustlewoof.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-429-hustlewoof/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "52": {
-   "image": "assets/swagbound/enemy/gns-smm2-439-moog.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-439-moog/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "53": {
-   "image": "assets/swagbound/enemy/gns-smm2-440-banhiss.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-440-banhiss/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21561,37 +21561,37 @@
    "originY": 0.5
   },
   "55": {
-   "image": "assets/swagbound/enemy/gns-smm2-461-bladeeo.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-461-bladeeo/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "56": {
-   "image": "assets/swagbound/enemy/gns-smm2-47-jeppa.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-47-jeppa/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "57": {
-   "image": "assets/swagbound/enemy/gns-smm2-473-clurbout.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-473-clurbout/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "58": {
-   "image": "assets/swagbound/enemy/gns-smm2-486-king-snowbie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-486-king-snowbie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "59": {
-   "image": "assets/swagbound/enemy/gns-smm2-488-gubonbon.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-488-gubonbon/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "60": {
-   "image": "assets/swagbound/enemy/gns-smm2-494-gitchy.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-494-gitchy/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21603,37 +21603,37 @@
    "originY": 0.5
   },
   "62": {
-   "image": "assets/swagbound/enemy/gns-smm2-512-frailgy-mezmar.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-512-frailgy-mezmar/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "63": {
-   "image": "assets/swagbound/enemy/gns-smm2-516-equaboi.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-516-equaboi/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "64": {
-   "image": "assets/swagbound/enemy/gns-smm2-518-wattaslob.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-518-wattaslob/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "65": {
-   "image": "assets/swagbound/enemy/gns-smm2-519-ultimorchestra.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-519-ultimorchestra/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "66": {
-   "image": "assets/swagbound/enemy/gns-smm2-523-panbiggie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-523-panbiggie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "67": {
-   "image": "assets/swagbound/enemy/gns-smm2-533-oblostar.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-533-oblostar/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21645,97 +21645,97 @@
    "originY": 0.5
   },
   "69": {
-   "image": "assets/swagbound/enemy/gns-smm2-556-roger.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-556-roger/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "70": {
-   "image": "assets/swagbound/enemy/gns-smm2-563-sgoko.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-563-sgoko/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "71": {
-   "image": "assets/swagbound/enemy/gns-smm2-579-mouzger.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-579-mouzger/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "72": {
-   "image": "assets/swagbound/enemy/gns-smm2-594-gwagu.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-594-gwagu/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "75": {
-   "image": "assets/swagbound/enemy/gns-smm2-595-seedgublet.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-595-seedgublet/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "76": {
-   "image": "assets/swagbound/enemy/gns-smm2-618-scordior.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-618-scordior/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "77": {
-   "image": "assets/swagbound/enemy/gns-smm2-619-ging.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-619-ging/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "78": {
-   "image": "assets/swagbound/enemy/gns-smm2-623-gelleph.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-623-gelleph/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "80": {
-   "image": "assets/swagbound/enemy/gns-smm2-63-zormie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-63-zormie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "81": {
-   "image": "assets/swagbound/enemy/gns-smm2-634-paddlegat.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-634-paddlegat/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "82": {
-   "image": "assets/swagbound/enemy/gns-smm2-637-poncho.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-637-poncho/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "84": {
-   "image": "assets/swagbound/enemy/gns-smm2-668-migtech.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-668-migtech/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "85": {
-   "image": "assets/swagbound/enemy/gns-smm2-683-soagoi.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-683-soagoi/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "86": {
-   "image": "assets/swagbound/enemy/gns-smm2-689-mugruloddle.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-689-mugruloddle/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "87": {
-   "image": "assets/swagbound/enemy/gns-smm2-699-nodber.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-699-nodber/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "88": {
-   "image": "assets/swagbound/enemy/gns-smm2-721-gummington.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-721-gummington/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -21747,31 +21747,31 @@
    "originY": 0.5
   },
   "91": {
-   "image": "assets/swagbound/enemy/gns-smm2-733-ulio.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-733-ulio/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "92": {
-   "image": "assets/swagbound/enemy/gns-smm2-738-gootshi.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-738-gootshi/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "94": {
-   "image": "assets/swagbound/enemy/gns-smm2-751-morp2.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-751-morp2/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "96": {
-   "image": "assets/swagbound/enemy/gns-smm2-775-ombiegob.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-775-ombiegob/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
   },
   "97": {
-   "image": "assets/swagbound/enemy/gns-smm2-9-puffygoob.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-9-puffygoob/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -22095,7 +22095,7 @@
    "originY": 0.5
   },
   "195": {
-   "image": "assets/swagbound/enemy/gns-smm2-398-glooiece.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-398-glooiece/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -22107,7 +22107,7 @@
    "originY": 0.5
   },
   "210": {
-   "image": "assets/swagbound/enemy/gns-smm2-177-burgie.png",
+   "image": "generated/assets/mons/supermetalmons-gen2-177-burgie/battle-260.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -27561,9 +27561,9 @@
  ],
  "overworldByEnemyId": {
   "1": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-108-superpoly-gorp-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-108-superpoly-gorp/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27583,9 +27583,9 @@
    "originY": 1
   },
   "3": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-11-mana-cauldron-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-11-mana-cauldron/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27605,9 +27605,9 @@
    "originY": 1
   },
   "4": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-13-axl-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-13-axl/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27627,9 +27627,9 @@
    "originY": 1
   },
   "5": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-15-ponyrolly/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27649,9 +27649,9 @@
    "originY": 1
   },
   "6": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-171-figgypon-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-171-figgypon/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27671,9 +27671,9 @@
    "originY": 1
   },
   "7": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-176-chop-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-176-chop/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27693,9 +27693,9 @@
    "originY": 1
   },
   "8": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-177-burgie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-177-burgie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27715,9 +27715,9 @@
    "originY": 1
   },
   "9": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-18-gonmey-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-18-gonmey/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27737,9 +27737,9 @@
    "originY": 1
   },
   "10": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-181-roxy-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-181-roxy/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27759,9 +27759,9 @@
    "originY": 1
   },
   "11": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-182-kullskor-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-182-kullskor/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27781,9 +27781,9 @@
    "originY": 1
   },
   "12": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-203-splagoish-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-203-splagoish/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27803,9 +27803,9 @@
    "originY": 1
   },
   "13": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-213-rhindos-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-213-rhindos/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27825,9 +27825,9 @@
    "originY": 1
   },
   "14": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-230-drimbee-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-230-drimbee/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27847,9 +27847,9 @@
    "originY": 1
   },
   "15": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-233-hobblebo-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-233-hobblebo/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27869,9 +27869,9 @@
    "originY": 1
   },
   "16": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-240-soft-pale-luen-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-240-soft-pale-luen/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27891,9 +27891,9 @@
    "originY": 1
   },
   "17": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-245-gapbus-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-245-gapbus/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27913,9 +27913,9 @@
    "originY": 1
   },
   "18": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-253-pink-siifu-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-253-pink-siifu/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27935,9 +27935,9 @@
    "originY": 1
   },
   "19": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-254-goondrip-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-254-goondrip/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27957,9 +27957,9 @@
    "originY": 1
   },
   "20": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-257-zwiggydor-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-257-zwiggydor/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -27979,9 +27979,9 @@
    "originY": 1
   },
   "22": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-259-sofgob-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-259-sofgob/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28001,9 +28001,9 @@
    "originY": 1
   },
   "23": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-273-tubecyc-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-273-tubecyc/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28023,9 +28023,9 @@
    "originY": 1
   },
   "24": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-277-flegrim-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-277-flegrim/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28045,9 +28045,9 @@
    "originY": 1
   },
   "25": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-290-tarrmel-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-290-tarrmel/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28067,9 +28067,9 @@
    "originY": 1
   },
   "28": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-310-star-seech-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-310-star-seech/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28089,9 +28089,9 @@
    "originY": 1
   },
   "29": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-319-gajo-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-319-gajo/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28111,9 +28111,9 @@
    "originY": 1
   },
   "30": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-324-grobe-royal-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-324-grobe-royal/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28133,9 +28133,9 @@
    "originY": 1
   },
   "31": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-326-kimwi-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-326-kimwi/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28155,9 +28155,9 @@
    "originY": 1
   },
   "32": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-335-starware-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-335-starware/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28199,9 +28199,9 @@
    "originY": 1
   },
   "35": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-349-washysomp-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-349-washysomp/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28221,9 +28221,9 @@
    "originY": 1
   },
   "36": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-357-reefdull-king-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-357-reefdull-king/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28265,9 +28265,9 @@
    "originY": 1
   },
   "38": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-374-supergamma-mowch-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-374-supergamma-mowch/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28287,9 +28287,9 @@
    "originY": 1
   },
   "43": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-375-oglobug-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-375-oglobug/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28309,9 +28309,9 @@
    "originY": 1
   },
   "44": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-398-glooiece-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-398-glooiece/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28331,9 +28331,9 @@
    "originY": 1
   },
   "45": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-405-power-rider-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-405-power-rider/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28353,9 +28353,9 @@
    "originY": 1
   },
   "46": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-418-channa-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-418-channa/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28375,9 +28375,9 @@
    "originY": 1
   },
   "47": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-419-tripgib-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-419-tripgib/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28397,9 +28397,9 @@
    "originY": 1
   },
   "48": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-42-mergie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-42-mergie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28419,9 +28419,9 @@
    "originY": 1
   },
   "50": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-426-guzzlemuggie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-426-guzzlemuggie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28441,9 +28441,9 @@
    "originY": 1
   },
   "51": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-429-hustlewoof-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-429-hustlewoof/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28463,9 +28463,9 @@
    "originY": 1
   },
   "52": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-439-moog-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-439-moog/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28485,9 +28485,9 @@
    "originY": 1
   },
   "53": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-440-banhiss-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-440-banhiss/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28529,9 +28529,9 @@
    "originY": 1
   },
   "55": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-461-bladeeo-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-461-bladeeo/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28551,9 +28551,9 @@
    "originY": 1
   },
   "56": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-47-jeppa-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-47-jeppa/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28573,9 +28573,9 @@
    "originY": 1
   },
   "57": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-473-clurbout-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-473-clurbout/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28595,9 +28595,9 @@
    "originY": 1
   },
   "58": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-486-king-snowbie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-486-king-snowbie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28617,9 +28617,9 @@
    "originY": 1
   },
   "59": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-488-gubonbon-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-488-gubonbon/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28639,9 +28639,9 @@
    "originY": 1
   },
   "60": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-494-gitchy-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-494-gitchy/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28661,9 +28661,9 @@
    "originY": 1
   },
   "61": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-497-gwibby-watcher-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-497-gwibby-watcher/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28683,9 +28683,9 @@
    "originY": 1
   },
   "62": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-512-frailgy-mezmar-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-512-frailgy-mezmar/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28705,9 +28705,9 @@
    "originY": 1
   },
   "63": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-516-equaboi-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-516-equaboi/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28727,9 +28727,9 @@
    "originY": 1
   },
   "64": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-518-wattaslob-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-518-wattaslob/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28749,9 +28749,9 @@
    "originY": 1
   },
   "65": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-519-ultimorchestra-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-519-ultimorchestra/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28771,9 +28771,9 @@
    "originY": 1
   },
   "66": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-523-panbiggie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-523-panbiggie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28793,9 +28793,9 @@
    "originY": 1
   },
   "67": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-533-oblostar-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-533-oblostar/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28815,9 +28815,9 @@
    "originY": 1
   },
   "68": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-553-golden-greshlar-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-553-golden-greshlar/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28837,9 +28837,9 @@
    "originY": 1
   },
   "69": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-556-roger-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-556-roger/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28859,9 +28859,9 @@
    "originY": 1
   },
   "70": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-563-sgoko-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-563-sgoko/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28881,9 +28881,9 @@
    "originY": 1
   },
   "71": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-579-mouzger-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-579-mouzger/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28903,9 +28903,9 @@
    "originY": 1
   },
   "72": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-594-gwagu-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-594-gwagu/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28925,9 +28925,9 @@
    "originY": 1
   },
   "75": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-595-seedgublet-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-595-seedgublet/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28947,9 +28947,9 @@
    "originY": 1
   },
   "76": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-618-scordior-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-618-scordior/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28969,9 +28969,9 @@
    "originY": 1
   },
   "77": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-619-ging-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-619-ging/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -28991,9 +28991,9 @@
    "originY": 1
   },
   "78": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-623-gelleph-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-623-gelleph/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29013,9 +29013,9 @@
    "originY": 1
   },
   "80": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-63-zormie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-63-zormie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29035,9 +29035,9 @@
    "originY": 1
   },
   "81": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-634-paddlegat-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-634-paddlegat/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29057,9 +29057,9 @@
    "originY": 1
   },
   "82": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-637-poncho-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-637-poncho/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29079,9 +29079,9 @@
    "originY": 1
   },
   "84": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-668-migtech-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-668-migtech/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29101,9 +29101,9 @@
    "originY": 1
   },
   "85": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-683-soagoi-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-683-soagoi/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29123,9 +29123,9 @@
    "originY": 1
   },
   "86": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-689-mugruloddle-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-689-mugruloddle/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29145,9 +29145,9 @@
    "originY": 1
   },
   "87": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-699-nodber-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-699-nodber/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29167,9 +29167,9 @@
    "originY": 1
   },
   "88": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-721-gummington-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-721-gummington/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29189,9 +29189,9 @@
    "originY": 1
   },
   "89": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-727-elder-thing-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-727-elder-thing/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29211,9 +29211,9 @@
    "originY": 1
   },
   "91": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-733-ulio-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-733-ulio/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29233,9 +29233,9 @@
    "originY": 1
   },
   "92": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-738-gootshi-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-738-gootshi/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29255,9 +29255,9 @@
    "originY": 1
   },
   "94": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-751-morp2-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-751-morp2/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29277,9 +29277,9 @@
    "originY": 1
   },
   "96": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-775-ombiegob-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-775-ombiegob/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -29299,9 +29299,9 @@
    "originY": 1
   },
   "97": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-9-puffygoob-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-9-puffygoob/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -30487,9 +30487,9 @@
    "originY": 1
   },
   "195": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-398-glooiece-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-398-glooiece/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -30509,9 +30509,9 @@
    "originY": 1
   },
   "209": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-15-ponyrolly/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0
@@ -30531,9 +30531,9 @@
    "originY": 1
   },
   "210": {
-   "image": "assets/swagbound/overworld-npc/gns-smm2-177-burgie-ow.png",
-   "frameWidth": 48,
-   "frameHeight": 48,
+   "image": "generated/assets/mons/supermetalmons-gen2-177-burgie/overworld-96.png",
+   "frameWidth": 96,
+   "frameHeight": 96,
    "animations": {
     "down": [
      0

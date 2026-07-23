@@ -257,15 +257,19 @@ describe("sprite override helpers", () => {
 
     const customBossBattleArt: Record<string, string> = {};
 
-    // Every enemy is sourced from the good-new-sprites batch (gns-*), except for
-    // bespoke attestation boss art that intentionally replaces a generic skin.
+    // Every enemy is sourced from the good-new-sprites batch: either checked-in
+    // gns-* art or the promoted 777-mon batch under generated/assets/mons (the
+    // legacy gns-smm2 casts were archived to the vault and re-pointed at the
+    // promoted set). Bespoke attestation boss art intentionally replaces a
+    // generic skin.
     for (const [enemyId, override] of Object.entries(byEnemyId)) {
       if (customBossBattleArt[enemyId]) {
         expect(override.image).toBe(customBossBattleArt[enemyId]);
         continue;
       }
       expect(
-        override.image.startsWith("assets/swagbound/enemy/gns-"),
+        override.image.startsWith("assets/swagbound/enemy/gns-")
+          || /^generated\/assets\/mons\/supermetalmons-gen2-[a-z0-9-]+\/battle-260\.png$/.test(override.image),
         `enemy ${enemyId} not sourced from good-new-sprites: ${override.image}`
       ).toBe(true);
     }
@@ -280,7 +284,10 @@ describe("sprite override helpers", () => {
 
     // Every enemy override is a single-image sprite anchored to the battle box.
     for (const override of Object.values(byEnemyId)) {
-      expect(override.image.startsWith("assets/swagbound/enemy/")).toBe(true);
+      expect(
+        override.image.startsWith("assets/swagbound/enemy/")
+          || override.image.startsWith("generated/assets/mons/")
+      ).toBe(true);
       expect(override.displayHeight).toBe(160);
       expect(override.originX).toBe(0.5);
       expect(override.originY).toBe(0.5);

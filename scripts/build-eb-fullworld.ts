@@ -604,6 +604,13 @@ async function validatePublicAssetImage(image: string, label: string): Promise<v
   if (relativeImagePath.startsWith("..") || isAbsolute(relativeImagePath)) {
     throw new Error(`${label} escapes ${GAME_PUBLIC_ROOT}: ${image}`);
   }
+  // Promoted mons sprites (the 777 batch) are re-filled by promote-mon-assets.mjs
+  // at the END of this pipeline, after this build wipes generated/. That step
+  // fails loudly on any missing sprite, so existence for these paths is deferred
+  // to it rather than checked against the freshly-wiped tree here.
+  if (relativeImagePath.startsWith("generated/assets/mons/")) {
+    return;
+  }
   await access(imagePath);
 }
 
