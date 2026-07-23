@@ -34,7 +34,9 @@ const WILD_MON_ROAM_CHANCE = 0.12;
 const WILD_MON_ROAM_COOLDOWN_MS = 6000;
 // A curious wild mon notices the player from further off than a hunting roamer,
 // and ambles over slower than a chase (70) so the player can still walk away.
-const WILD_MON_NOTICE_PX = 104;
+// Engage/release band = hysteresis (no drift/wander toggling at one boundary).
+const WILD_MON_NOTICE_ENGAGE_PX = 96;
+const WILD_MON_NOTICE_RELEASE_PX = 124;
 const WILD_MON_CURIOUS_SPEED_PX_PER_SEC = 42;
 // The "?" over a wild mon floats above the foreground occluder layer (100_000),
 // like the player head overlays, so tree canopy never hides it.
@@ -48,10 +50,19 @@ const FARM_MON_SPAWN_RING_MIN_PX = 60;
 const FARM_MON_SPAWN_RING_MAX_PX = 260;
 const FARM_MON_WANDER_RADIUS_PX = 56;
 const FARM_MON_WANDER_SPEED_PX_PER_SEC = 24;
-const FARM_MON_FOLLOW_GAP_PX = 44;
+// Follow hysteresis: start ambling when Bosch pulls ahead, settle well inside,
+// so the companion never start-stop jitters at a single boundary distance.
+const FARM_MON_FOLLOW_ENGAGE_PX = 60;
+const FARM_MON_FOLLOW_RELEASE_PX = 40;
 const FARM_MON_FOLLOW_SPEED_PX_PER_SEC = 46;
 const FARM_MON_PET_RANGE_PX = 30;
 const FARM_MON_PET_COOLDOWN_MS = 1800;
+// Idle bob: slow, +-2px, integer-rounded (fractional y shimmers on the CANVAS
+// renderer), and only while standing still.
+const MON_BOB_PERIOD_MS = 560;
+const MON_BOB_AMPLITUDE_PX = 2;
+// Directed-step deadzone: 6px so near-aligned axes don't flip facing per frame.
+const MON_STEP_DEADZONE_PX = 6;
 const MAX_BATTLE_MEMBERS = 4;
 // The Postwick farm's idle prop NPCs (see content/added-npcs.json): the Fusion
 // Altar and the training dummy get a touch of life in syncNpc.
@@ -515,6 +526,12 @@ type OverworldEnemyRuntime = {
   wildMonId?: string;
   /** A floating "?" over catchable wild mons so a catch reads as special from afar. */
   glyph?: Phaser.GameObjects.Text;
+  /** Curious-drift hysteresis (engage near, release far): no toggle jitter at
+   *  the notice boundary. */
+  curious?: boolean;
+  /** The farm's scripted tutor mon: wanders only, never drifts at the player
+   *  (you must be able to stand on your own farm without starting a battle). */
+  tutor?: boolean;
 };
 
 /** A roster mon living visibly on the farm lot (Workstream A: the living farm).
@@ -532,6 +549,12 @@ type FarmMonRuntime = {
   petCooldownMs: number;
   /** One training set per mon per farm visit (cleared when the lot despawns). */
   trainedThisVisit: boolean;
+  /** One-shot hop start (greet/pet), rendered as a y offset in the sprite sync
+   *  so nothing fights the per-frame position writer. May start in the future. */
+  hopStartMs?: number;
+  /** Follow hysteresis for the companion (engage far, release near) so it never
+   *  start-stop jitters at the gap boundary. */
+  following?: boolean;
 };
 
 /** The training-yard beat (Workstream B): a farm mon runs three strikes on the
@@ -3465,6 +3488,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       npc.data.npcId
     ));
     this.applyFarmPropIdle(npc, actor);
+    // Farm props: never show the crowd-sprite fallback while the bespoke prop
+    // art is still loading (a person flashing into a fence reads as a glitch).
+    // They render nothing for a beat instead, which is invisible.
+    if (npc.data.npcId >= MONS_FARM_ALTAR_NPC_ID && npc.data.npcId <= 910312) {
+      const override = this.npcSpriteOverrideResolution(npc.data.npcId, npc.data.spriteGroup);
+      if (override && actor instanceof Phaser.GameObjects.Sprite && actor.texture.key !== override.key) {
+        actor.setVisible(false);
+        return;
+      }
+    }
     actor.setVisible(this.npcInsideActiveRoom(npc) && this.cutsceneActorVisible(npc.data.npcId));
   }
 
@@ -9568,9 +9601,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
           seed: (Math.imul(index + 1, 0x9e3779b1) ^ 0x5eed) >>> 0
         }, frames)
       });
-      // Greeting: a little hop as the lot notices you arriving.
-      if (sprite instanceof Phaser.GameObjects.Sprite) {
-        this.tweens.add({ targets: sprite, y: spawnAt.y - 8, duration: 150, delay: placed * 90, yoyo: true, ease: "Sine.easeOut" });
+      // Greeting: a staggered hop as the lot notices you arriving (rendered by
+      // farmMonRenderOffsetY; a y-tween would fight the per-frame sync).
+      const spawned = this.farmMons.get(key);
+      if (spawned) {
+        spawned.hopStartMs = this.time.now + placed * 90;
       }
       if (!isCompanion) {
         placed += 1;
@@ -9600,27 +9635,37 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private stepFarmMon(runtime: FarmMonRuntime, deltaMs: number): void {
     if (runtime.isCompanion) {
       const dist = this.distanceToPlayer(runtime.state.player);
-      if (dist > FARM_MON_FOLLOW_GAP_PX) {
-        const actor = runtime.state.player;
-        const deadzone = 2;
-        const dx = this.playerState.x - actor.x;
-        const dy = this.playerState.y - actor.y;
-        const input: MoveInput = {
-          left: dx < -deadzone,
-          right: dx > deadzone,
-          up: dy < -deadzone,
-          down: dy > deadzone
-        };
-        stepPlayer(actor, input, {
-          deltaMs,
-          speed: FARM_MON_FOLLOW_SPEED_PX_PER_SEC,
-          bounds: this.movementBounds(),
-          blocked: (x, y) => this.blocked(x, y),
-          frames: runtime.frames
-        });
-        return;
+      // Hysteresis: engage when Bosch pulls ahead, release once settled well
+      // inside, so the boundary never start-stop jitters.
+      if (runtime.following) {
+        if (dist < FARM_MON_FOLLOW_RELEASE_PX) {
+          runtime.following = false;
+        }
+      } else if (dist > FARM_MON_FOLLOW_ENGAGE_PX) {
+        runtime.following = true;
       }
-      return; // settled beside Bosch
+      const actor = runtime.state.player;
+      const dx = this.playerState.x - actor.x;
+      const dy = this.playerState.y - actor.y;
+      // When settled, keep stepping with EMPTY input: that clears the moving
+      // flag and settles the walk frame. (Freezing the state mid-walk left
+      // moving=true forever, so the walk-mirror flapped while standing still.)
+      const input: MoveInput = runtime.following
+        ? {
+          left: dx < -MON_STEP_DEADZONE_PX,
+          right: dx > MON_STEP_DEADZONE_PX,
+          up: dy < -MON_STEP_DEADZONE_PX,
+          down: dy > MON_STEP_DEADZONE_PX
+        }
+        : { left: false, right: false, up: false, down: false };
+      stepPlayer(actor, input, {
+        deltaMs,
+        speed: FARM_MON_FOLLOW_SPEED_PX_PER_SEC,
+        bounds: this.movementBounds(),
+        blocked: (x, y) => this.blocked(x, y),
+        frames: runtime.frames
+      });
+      return;
     }
     stepNpc(runtime.state, {
       deltaMs,
@@ -9647,10 +9692,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!actor) {
       return;
     }
+    // Depth ALWAYS derives from the true position; bob/hop are render-only
+    // offsets applied afterwards. (Depth from a bobbed y made every farm mon's
+    // z-order oscillate against its neighbors: constant front/back flicker.)
     actor.x = runtime.state.player.x;
-    // Same render-only idle bob as wild mons: the lot reads as alive.
-    actor.y = runtime.state.player.y + Math.sin(this.time.now / 240 + wildMonBobPhase(runtime.key)) * 2.5;
+    actor.y = runtime.state.player.y;
     this.setActorSortDepth(actor);
+    actor.y = runtime.state.player.y + this.farmMonRenderOffsetY(runtime);
     this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       runtime.state.player.moving,
       runtime.frames,
@@ -9659,6 +9707,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     ));
     actor.setVisible(this.worldPointInsideActiveRoom(runtime.state.player)
       && !(runtime.textureKey && !(actor instanceof Phaser.GameObjects.Sprite)));
+  }
+
+  /** Render-only vertical offset: a one-shot hop arc (greet/pet) plus the idle
+   *  bob. Integer pixels only, and no bob while walking (a bobbing walker just
+   *  looks like it is vibrating). Single writer: nothing else touches sprite.y. */
+  private farmMonRenderOffsetY(runtime: FarmMonRuntime): number {
+    let offset = 0;
+    if (runtime.hopStartMs !== undefined) {
+      const t = (this.time.now - runtime.hopStartMs) / 300;
+      if (t >= 1) {
+        runtime.hopStartMs = undefined;
+      } else if (t >= 0) {
+        offset -= Math.round(Math.sin(Math.PI * t) * 8);
+      }
+    }
+    if (!runtime.state.player.moving) {
+      offset += Math.round(Math.sin(this.time.now / MON_BOB_PERIOD_MS + wildMonBobPhase(runtime.key)) * MON_BOB_AMPLITUDE_PX);
+    }
+    return offset;
   }
 
   private despawnFarmMons(): void {
@@ -9797,7 +9864,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
       const actor = runtime.state.player;
-      const deadzone = 2;
+      const deadzone = MON_STEP_DEADZONE_PX;
       const input: MoveInput = {
         left: target.x - actor.x < -deadzone,
         right: target.x - actor.x > deadzone,
@@ -9813,6 +9880,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
       });
       return;
     }
+    // Between strikes the mon stands at the yard: keep stepping with empty
+    // input so its moving flag clears and the walk frame settles.
+    stepPlayer(runtime.state.player, { left: false, right: false, up: false, down: false }, {
+      deltaMs,
+      speed: 0,
+      bounds: this.movementBounds(),
+      blocked: (x, y) => this.blocked(x, y),
+      frames: runtime.frames
+    });
     if (training.phase === "windup") {
       if (now >= training.phaseAtMs) {
         training.phase = "cue";
@@ -9974,11 +10050,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     best.petCooldownMs = FARM_MON_PET_COOLDOWN_MS;
     this.persistMonRoster();
     this.showMonNotice(result.line);
-    const sprite = best.sprite;
-    if (sprite instanceof Phaser.GameObjects.Sprite) {
-      const baseY = best.state.player.y;
-      this.tweens.add({ targets: sprite, y: baseY - 9, duration: 130, yoyo: true, repeat: 1, ease: "Sine.easeOut" });
-    }
+    best.hopStartMs = this.time.now; // the happy hop, rendered by the sync
     return true;
   }
 
@@ -10441,7 +10513,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // off they notice you and amble over (slower than a chase, so you can still
     // walk away), otherwise they wander. Approaching you IS the invitation.
     if (enemy.wildMonId) {
-      if (dist <= WILD_MON_NOTICE_PX) {
+      // Curious hysteresis: notice near, lose interest far (no toggle jitter).
+      // The farm tutor never drifts: standing on your own farm must be safe.
+      if (enemy.tutor) {
+        enemy.curious = false;
+      } else if (enemy.curious) {
+        if (dist > WILD_MON_NOTICE_RELEASE_PX) {
+          enemy.curious = false;
+        }
+      } else if (dist <= WILD_MON_NOTICE_ENGAGE_PX) {
+        enemy.curious = true;
+      }
+      if (enemy.curious) {
         this.stepOverworldEnemyDirected(enemy, deltaMs, false, WILD_MON_CURIOUS_SPEED_PX_PER_SEC);
       } else {
         stepNpc(enemy.state, {
@@ -10502,8 +10585,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const sign = away ? -1 : 1;
     const dx = (this.playerState.x - actor.x) * sign;
     const dy = (this.playerState.y - actor.y) * sign;
-    // Small deadzone so a near-aligned axis doesn't jitter left/right every frame.
-    const deadzone = 2;
+    // Deadzone so a near-aligned axis doesn't flip facing every frame.
+    const deadzone = MON_STEP_DEADZONE_PX;
     const input: MoveInput = {
       left: dx < -deadzone,
       right: dx > deadzone,
@@ -10552,10 +10635,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     actor.y = enemy.state.player.y;
     // Wild mons idle-bob so they read as curious little creatures rather than
     // static roamers. Render-only (collision/touch use enemy.state, not the
-    // sprite y); a per-enemy phase keeps a cluster from bobbing in lockstep.
-    if (enemy.wildMonId) {
+    // sprite y), integer pixels, and only while standing (a bobbing walker
+    // reads as vibrating); a per-enemy phase avoids lockstep.
+    if (enemy.wildMonId && !enemy.state.player.moving) {
       const phase = wildMonBobPhase(enemy.key);
-      actor.y = enemy.state.player.y + Math.sin(this.time.now / 240 + phase) * 2.5;
+      actor.y = enemy.state.player.y + Math.round(Math.sin(this.time.now / MON_BOB_PERIOD_MS + phase) * MON_BOB_AMPLITUDE_PX);
     }
     this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       enemy.state.player.moving,
@@ -10567,7 +10651,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     actor.setVisible(visible);
     if (enemy.glyph) {
       const gp = wildMonBobPhase(enemy.key);
-      enemy.glyph.setPosition(enemy.state.player.x, enemy.state.player.y - 30 + Math.sin(this.time.now / 300 + gp) * 2);
+      enemy.glyph.setPosition(
+        Math.round(enemy.state.player.x),
+        Math.round(enemy.state.player.y - 30 + Math.sin(this.time.now / MON_BOB_PERIOD_MS + gp) * MON_BOB_AMPLITUDE_PX)
+      );
       enemy.glyph.setVisible(visible);
     }
   }
@@ -10588,6 +10675,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private trySpawnOverworldEnemy(options: { forceArchetype?: "ambusher" | "prowler" } = {}): void {
     if (!shouldRunOverworldRoamers(this.openingRoamerHold)) {
+      return;
+    }
+    // The Mons Farm lot is a refuge: no hostile roamers spawn while the player
+    // is on it (the scripted tutor wild is the only encounter there). Standing
+    // on your own farm must be safe.
+    if (this.gameFlags.has("mons:farm-met")
+      && Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 600) {
       return;
     }
     const sector = this.currentEncounterSector();
@@ -11196,6 +11290,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       textureKey,
       skin,
       wildMonId: wild.id,
+      ...(nearFarm ? { tutor: true } : {}),
       glyph,
       contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
       flees: false,
