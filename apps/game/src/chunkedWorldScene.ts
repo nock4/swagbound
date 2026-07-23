@@ -22,6 +22,7 @@ import { pendingAttestationRewardForReturn, type BattleReturnContext, type Battl
 import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion, type OwnedMon } from "./monsModel";
 import { MonsState } from "./monsState";
 import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
+import { FarmOverlay } from "./farmOverlay";
 
 /** Texture key for a placed ranch structure (kind + tier picks the sheet). */
 function ranchStructureTextureKey(kind: string, tier: number): string {
@@ -69,6 +70,8 @@ const SITE_E_REFUGE_ANCHOR = { x: 2510, y: 7380 } as const;
 // Every door destination south of the vanilla map edge is ranch land; those
 // doors confirm before warping ("Enter Mons Farm? Yes/No").
 const RANCH_LAND_MIN_Y = 10240;
+// The ranch canvas rect (matches scripts/mint-ranch-land.py RANCH).
+const RANCH = { x0: 2048, y0: 10752, x1: 3584, y1: 11776 } as const;
 const MONS_FARM_ALTAR_RADIUS = 360;
 // Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
 const WILD_MON_ROAM_CHANCE = 0.12;
@@ -1144,6 +1147,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private farmState_?: FarmState;
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
+  private farmOverlay?: FarmOverlay;
+  private placementState_?: {
+    kind: string; decor: boolean; price: number; x: number; y: number;
+    ghost?: Phaser.GameObjects.Image; frame: Phaser.GameObjects.Graphics; repeatMs: number;
+  };
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
@@ -1494,6 +1502,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
 
     // Mons roster overlay (O): manage the companion roster once the farm is met.
+    this.farmOverlay = new FarmOverlay({
+      canOpen: () =>
+        this.isPlayerControllable() &&
+        !this.bikeActive &&
+        this.playerState.y >= RANCH_LAND_MIN_Y &&
+        !this.placementState_,
+      farm: () => this.farmRuntime(),
+      monNameById: (registryId) =>
+        this.data_.mons ? monById(this.data_.mons.registry, registryId)?.name : undefined,
+      beginPlacement: (kind, decor, price) => this.beginStructurePlacement(kind, decor, price),
+      onClose: () => this.updatePrompt()
+    });
+
     this.monsOverlay = new MonsOverlay({
       roster: () => this.monsRuntime()?.list() ?? [],
       entryFor: (mon) => this.monsRuntime()?.entryFor(mon),
@@ -1738,6 +1759,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.stepNpcs(delta);
     this.syncFarmMons(delta);
     this.syncRanchBuildings();
+    this.stepStructurePlacement(delta);
     this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -11336,8 +11358,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
         sprite = this.add.image(p.cell.x, p.cell.y, key).setOrigin(0.5, 1);
         this.ranchStructureSprites_.set(id, sprite);
-      } else if (sprite.texture.key !== key && this.textures.exists(key)) {
-        sprite.setTexture(key);
+      } else if (sprite.texture.key !== key) {
+        if (this.textures.exists(key)) {
+          sprite.setTexture(key);
+        } else {
+          this.queueRanchTextureLoad(key, p.kind, p.tier);
+        }
       }
       sprite.setPosition(p.cell.x, p.cell.y);
       sprite.setDepth(p.cell.y);
@@ -11358,6 +11384,111 @@ export class ChunkedWorldScene extends Phaser.Scene {
               })
           )
       : [];
+  }
+
+  /**
+   * In-world structure placement: a grid-snapped ghost follows the arrows,
+   * a stroke frame reads legal/blocked (CANVAS renderer cannot tint), Z
+   * confirms (spends coins, places, respawns actors), X cancels free.
+   * Modeled on the collisionOverrideEditor cursor pattern.
+   */
+  private beginStructurePlacement(kind: string, decor: boolean, price: number): void {
+    this.cancelStructurePlacement();
+    const key = ranchStructureTextureKey(kind, decor ? 1 : 1);
+    const start = {
+      x: Math.round((this.playerState.x + 48) / 8) * 8,
+      y: Math.round(this.playerState.y / 8) * 8
+    };
+    const ghost = this.textures.exists(key)
+      ? this.add.image(start.x, start.y, key).setOrigin(0.5, 1).setAlpha(0.55).setDepth(200_000)
+      : undefined;
+    if (!ghost) {
+      this.queueRanchTextureLoad(key, kind, 1);
+    }
+    const frame = this.add.graphics().setDepth(200_001);
+    this.placementState_ = { kind, decor, price, x: start.x, y: start.y, ghost, frame, repeatMs: 0 };
+    lockPlayer(this.playerState, this.playerFrames);
+    this.showDevToast(`Place: arrows move, Z confirm, X cancel`);
+  }
+
+  private cancelStructurePlacement(): void {
+    const p = this.placementState_;
+    if (!p) return;
+    p.ghost?.destroy();
+    p.frame.destroy();
+    this.placementState_ = undefined;
+    unlockPlayer(this.playerState);
+  }
+
+  private placementFootprint(p: { kind: string; decor: boolean; x: number; y: number }) {
+    const fp = p.decor
+      ? DECOR_CATALOG[p.kind as keyof typeof DECOR_CATALOG].footprint
+      : FARM_CATALOG[p.kind as keyof typeof FARM_CATALOG].footprint;
+    return { x: p.x - fp.w / 2, y: p.y - fp.h, w: fp.w, h: fp.h };
+  }
+
+  private placementLegal(p: { kind: string; decor: boolean; x: number; y: number }): boolean {
+    if (p.y < RANCH_LAND_MIN_Y) return false;
+    const rect = this.placementFootprint(p);
+    for (let sy = rect.y; sy <= rect.y + rect.h; sy += 8) {
+      for (let sx = rect.x; sx <= rect.x + rect.w; sx += 8) {
+        if (this.blocked(sx, sy, { includeNpcs: false })) return false;
+      }
+    }
+    return true;
+  }
+
+  private stepStructurePlacement(deltaMs: number): void {
+    const p = this.placementState_;
+    if (!p) return;
+    const kb = this.input.keyboard;
+    if (!kb) return;
+    p.repeatMs -= deltaMs;
+    const held = (codes: number[]) => codes.some((c) => kb.checkDown(kb.addKey(c), 0));
+    const move = (dx: number, dy: number) => {
+      if (p.repeatMs > 0) return;
+      p.x = Math.max(RANCH.x0 + 16, Math.min(RANCH.x1 - 16, p.x + dx * 8));
+      p.y = Math.max(RANCH_LAND_MIN_Y + 16, Math.min(RANCH.y1 - 8, p.y + dy * 8));
+      p.repeatMs = 90;
+    };
+    const K = Phaser.Input.Keyboard.KeyCodes;
+    if (held([K.LEFT])) move(-1, 0);
+    else if (held([K.RIGHT])) move(1, 0);
+    else if (held([K.UP])) move(0, -1);
+    else if (held([K.DOWN])) move(0, 1);
+    else p.repeatMs = 0;
+    const legal = this.placementLegal(p);
+    if (p.ghost) {
+      p.ghost.setPosition(p.x, p.y);
+    } else if (this.textures.exists(ranchStructureTextureKey(p.kind, 1))) {
+      p.ghost = this.add.image(p.x, p.y, ranchStructureTextureKey(p.kind, 1))
+        .setOrigin(0.5, 1).setAlpha(0.55).setDepth(200_000);
+    }
+    const rect = this.placementFootprint(p);
+    p.frame.clear();
+    p.frame.lineStyle(2, legal ? 0x66dd66 : 0xdd5544, 1);
+    p.frame.strokeRect(rect.x, rect.y, rect.w, rect.h);
+    if (Phaser.Input.Keyboard.JustDown(kb.addKey(K.Z))) {
+      if (!legal) {
+        this.showDevToast("Blocked here.");
+      } else if (!this.farmRuntime().spendCoins(p.price)) {
+        this.showDevToast("Not enough Swag Coins.");
+        this.cancelStructurePlacement();
+      } else {
+        if (p.decor) {
+          this.farmRuntime().placeDecor(p.kind as never, { x: p.x, y: p.y });
+        } else {
+          this.farmRuntime().placeBuilding(p.kind as never, { x: p.x, y: p.y });
+        }
+        this.playMenuSfx("menuConfirm");
+        this.cancelStructurePlacement();
+        this.syncRanchBuildings();
+        this.saveGame(false);
+      }
+    } else if (Phaser.Input.Keyboard.JustDown(kb.addKey(K.X))) {
+      this.playMenuSfx("menuCancel");
+      this.cancelStructurePlacement();
+    }
   }
 
   /** Load ranch art on demand; fall back to the placeholder sheet when the
