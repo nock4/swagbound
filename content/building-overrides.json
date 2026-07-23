@@ -397,6 +397,24 @@
    "w": 140,
    "h": 320,
    "image": "assets/buildings/mons-yard-right.png"
+  },
+  {
+   "id": "field-blend-left",
+   "chunk": "4,14",
+   "x": 492,
+   "y": 236,
+   "w": 20,
+   "h": 156,
+   "image": "assets/buildings/field-blend-left.png"
+  },
+  {
+   "id": "field-blend-right",
+   "chunk": "5,14",
+   "x": 0,
+   "y": 236,
+   "w": 120,
+   "h": 156,
+   "image": "assets/buildings/field-blend-right.png"
   }
  ]
 }
