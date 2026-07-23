@@ -10,9 +10,14 @@ existing buildings. Canon references (cropped from the live map, 2x):
 
 ## The rules (all mandatory)
 
-1. **Projection**: front-on oblique. Flat front facade + ONE side wall at the EB
-   angle. The roof is drawn as flat, angled COLOR PLANES (2 shades + ridge
-   highlight), never a textured or perspective roof.
+1. **Projection / CAMERA (the rule that gets missed)**: the camera is ELEVATED,
+   looking down at ~3/4. Every building shows the TOP SURFACE of its roof as a
+   large flat plane ABOVE the facade: full building width, roughly 30-40% of the
+   building's height (measure the canon home: ~0.3), ridge running LEFT-RIGHT.
+   Gable triangles may appear only on the SIDE wall. An eye-level elevation
+   (thin roof strip, or a front-facing A-frame gable as the dominant face) is an
+   automatic kill. The roof planes are flat color (2 shades + ridge highlight),
+   never textured, never in perspective.
 2. **Surface discipline**: large flat color areas. 2-3 shades per material.
    NO texture noise (no wood grain, no brick noise beyond simple coursing like
    the hotel's).
