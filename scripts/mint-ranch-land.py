@@ -123,39 +123,52 @@ def paint(w):
         for wx in range(R["x0"], R["x1"], 32):
             canvas.paste(grass, (wx, wy - OY))
 
-    # 2. dirt yard blob with the EB edge recipe (broken dark outline + olive band)
+    # 2. dirt yard blob with the VANILLA dirt edge (no dark outline: EB dirt
+    #    meets grass through a soft brown lip into an olive fade, sampled from
+    #    the real Site E yard boundary — pure (49,49,49) reads as a mask cutout)
     yard = dict(cx=2816, cy=11020, rx=290, ry=165)
-    OLIVE = (148, 173, 99, 255); DARK = (49, 49, 49, 255)
+    OLIVE = (148, 173, 99, 255)     # worn-grass band
+    BROWN = (148, 123, 90, 255)     # dirt-shoulder lip
+    TAN2 = (224, 152, 80, 255)      # darker dirt fleck near the lip
     px = canvas.load()
     def yard_d(wx, wy):
         dx = (wx - yard["cx"]) / yard["rx"]; dy = (wy - yard["cy"]) / yard["ry"]
         return math.hypot(dx, dy) + vn(math.atan2(dy, dx) * 60, 5) / 34.0
-    for wy in range(yard["cy"] - yard["ry"] - 40, yard["cy"] + yard["ry"] + 40):
-        for wx in range(yard["cx"] - yard["rx"] - 40, yard["cx"] + yard["rx"] + 40):
-            d = yard_d(wx, wy)
-            if d < 1.0:
-                dp = dirt.getpixel((wx % 32, wy % 32))
-                px[wx, wy - OY] = (dp[0], dp[1], dp[2], 255)
-                if d > 0.985 and hash01(wx, wy) < 0.65:
-                    px[wx, wy - OY] = DARK
-            elif d < 1.035 and hash01(wx, wy) < 0.8:
-                px[wx, wy - OY] = OLIVE
-            elif d < 1.07 and hash01(wx, wy) < 0.3:
-                px[wx, wy - OY] = OLIVE
-
-    # 3. gate corridor: a packed-dirt path through the north wall so arrival
-    #    reads as a passage, not a void (the black above is the door mouth)
-    for wy in range(R["y0"] - 60, R["y0"] + WALL):
-        for wx in range(2792, 2856):
-            if wy < R["y0"] - 20 and not (2804 < wx < 2844):
-                continue                      # narrow to a door mouth at the top
+    def paint_dirt_edge(wx, wy, d):
+        """Vanilla dirt->grass transition, no black outline."""
+        if d < 0.97:
             dp = dirt.getpixel((wx % 32, wy % 32))
             px[wx, wy - OY] = (dp[0], dp[1], dp[2], 255)
-    # corridor edge lip
+        elif d < 1.0:                       # inner dirt lip: brown flecks
+            dp = dirt.getpixel((wx % 32, wy % 32))
+            px[wx, wy - OY] = TAN2 if hash01(wx, wy) < 0.45 else (dp[0], dp[1], dp[2], 255)
+        elif d < 1.02:                      # the shoulder itself
+            px[wx, wy - OY] = BROWN if hash01(wx, wy) < 0.5 else OLIVE
+        elif d < 1.06 and hash01(wx, wy) < 0.7:
+            px[wx, wy - OY] = OLIVE
+        elif d < 1.1 and hash01(wx, wy) < 0.25:
+            px[wx, wy - OY] = OLIVE
+    for wy in range(yard["cy"] - yard["ry"] - 40, yard["cy"] + yard["ry"] + 40):
+        for wx in range(yard["cx"] - yard["rx"] - 40, yard["cx"] + yard["rx"] + 40):
+            paint_dirt_edge(wx, wy, yard_d(wx, wy))
+
+    # 3. gate corridor: a packed-dirt path through the north wall so arrival
+    #    reads as a passage, not a void (the black above is the door mouth).
+    #    The corridor sides get the same brown/olive lip, never a dark line.
     for wy in range(R["y0"] - 60, R["y0"] + WALL):
-        for wx in (2792, 2793, 2854, 2855):
-            if wy >= R["y0"] - 20 and hash01(wx, wy) < 0.6:
-                px[wx, wy - OY] = DARK
+        for wx in range(2790, 2858):
+            if wy < R["y0"] - 20 and not (2804 < wx < 2844):
+                continue                      # narrow to a door mouth at the top
+            dist_edge = min(wx - 2792, 2856 - wx)
+            if dist_edge < 0:
+                continue
+            if dist_edge <= 1:
+                px[wx, wy - OY] = BROWN if hash01(wx, wy) < 0.5 else OLIVE
+            elif dist_edge <= 3 and hash01(wx, wy) < 0.4:
+                px[wx, wy - OY] = TAN2
+            else:
+                dp = dirt.getpixel((wx % 32, wy % 32))
+                px[wx, wy - OY] = (dp[0], dp[1], dp[2], 255)
 
     # 4. forest wall: dense staggered rows, painted top-to-bottom so lower
     #    canopies overlap upper trunks (EB forest look)
