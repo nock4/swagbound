@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  SAVE_STATE_SCHEMA_VERSION,
   deserializeSaveState,
   serializeSaveState,
   validateImportedSaveBlob,
@@ -34,7 +35,7 @@ describe("save import validation", () => {
 
 function saveState(): SaveState {
   return {
-    schemaVersion: 2,
+    schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     savedAt: "2026-07-13T12:00:00.000Z",
     flags: { strings: ["intro:bedroom-opening-done"], numeric: [7] },
     party: {

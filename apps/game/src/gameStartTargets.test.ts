@@ -7,7 +7,12 @@ import {
   type WorldStartData
 } from "./gameStartTargets";
 import type { GameData } from "./loader";
-import { serializeSaveState, type SaveSlotPersistence, type SaveState } from "./saveState";
+import {
+  SAVE_STATE_SCHEMA_VERSION,
+  serializeSaveState,
+  type SaveSlotPersistence,
+  type SaveState
+} from "./saveState";
 
 describe("game start targets", () => {
   it("builds the title CONTINUE target from the current save slot", () => {
@@ -76,7 +81,7 @@ function slots(blob: string | null): SaveSlotPersistence {
 
 function saveState(player: Pick<SaveState["player"], "x" | "y">): SaveState {
   return {
-    schemaVersion: 2,
+    schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     savedAt: "2026-07-07T00:00:00.000Z",
     flags: { strings: ["intro:bedroom-opening-done"], numeric: [] },
     party: {

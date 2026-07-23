@@ -21,6 +21,36 @@ import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng
 import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
 import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion, type OwnedMon } from "./monsModel";
 import { MonsState } from "./monsState";
+import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
+
+/** Texture key for a placed ranch structure (kind + tier picks the sheet). */
+function ranchStructureTextureKey(kind: string, tier: number): string {
+  return `ranch-${kind}-t${tier}`;
+}
+
+/** File name for a ranch structure sprite under assets/swagbound/ranch/. */
+function ranchStructureFileName(kind: string, tier: number): string {
+  const kebab: Record<string, string> = {
+    monBarn: `mon-barn-t${tier}`,
+    trainingYard: tier === 1 ? "training-yard-t1" : tier === 2 ? "dojo-t2" : "arena-t3",
+    itemWorks: `item-works-t${tier}`,
+    snackKitchen: `snack-kitchen-t${Math.min(tier, 2)}`,
+    monBath: `mon-bath-t${Math.min(tier, 2)}`,
+    gachaShrine: "gacha-shrine",
+    billboard: "billboard",
+    fenceH: "fence-h",
+    fenceV: "fence-v",
+    pathTile: "path-tile",
+    lamp: "lamp",
+    statueMon: "statue-mon",
+    topiary: "topiary",
+    ranchFlag: "ranch-flag",
+    bench: "bench",
+    crate: "crate",
+    well: "well"
+  };
+  return kebab[kind] ?? kind;
+}
 import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
 import { MonsOverlay } from "./monsOverlay";
 
@@ -1111,6 +1141,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private pendingRanchDoorWarp_?: { destination: EventWarpDestination; options: DoorWarpOptions };
   /** World-rect solids for player-placed ranch structures (see blocked()). */
   private runtimeSolidRects_: Array<{ x: number; y: number; w: number; h: number }> = [];
+  private farmState_?: FarmState;
+  private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
+  private ranchTextureLoads_ = new Set<string>();
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
@@ -1704,6 +1737,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.maybeStartMeadowDream();
     this.stepNpcs(delta);
     this.syncFarmMons(delta);
+    this.syncRanchBuildings();
     this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -3174,6 +3208,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
     globals.__overworldStatusHud = () => this.overworldStatusHud();
+    // DEV: ranch QA hooks — place/inspect farm structures without the UI.
+    if (import.meta.env.DEV) {
+      globals.__farmDebug = () => {
+        const farm = this.farmRuntime();
+        return {
+          swagCoins: farm.swagCoins,
+          buildings: farm.buildings.map((b) => ({ ...b })),
+          decor: farm.decor.map((d) => ({ ...d })),
+          swagRating: farm.swagRating(),
+          solids: this.runtimeSolidRects_.length,
+          sprites: this.ranchStructureSprites_.size
+        };
+      };
+      globals.__farmPlace = (kind: string, x: number, y: number, decor = false) => {
+        const farm = this.farmRuntime();
+        const placed = decor
+          ? farm.placeDecor(kind as never, { x, y })
+          : farm.placeBuilding(kind as never, { x, y });
+        this.syncRanchBuildings();
+        return placed;
+      };
+      globals.__farmCoins = (amount: number) => {
+        this.farmRuntime().addCoins(amount);
+      };
+    }
     // DEV: set a story flag and run the same reactions a real trigger would (night
     // dawn fade, music handoff, barriers). Reusable QA infra for flag-gated
     // acceptance runs (docs/qa/goal-prompts.md Template A/S boundary checks).
@@ -6062,6 +6121,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.monsRuntime()?.farmTick();
       }
     }
+    // Ranch production: progress happens as you walk, anywhere in the world.
+    this.farmState_?.tickStep();
     const ticks = this.partyState.applyFieldPoisonStep();
     if (ticks.length === 0) {
       return;
@@ -6468,7 +6529,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       player: this.currentPlayerSnapshot(),
       intake: getFilingIntakeFromRegistry(this.registry),
       savedAt,
-      ...(monsRuntime ? { mons: monsRuntime } : {})
+      ...(monsRuntime ? { mons: monsRuntime } : {}),
+      farmState: this.farmRuntime()
     });
     const blob = serializeSaveState(save);
     const saved = blob ? this.saveSlots?.saveToSlot(this.saveSlot, blob) ?? false : false;
@@ -6495,7 +6557,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const player = applySaveState(this.bootSaveState, {
       flags: this.gameFlags,
       partyState: this.partyState,
-      ...(monsRuntimeForRestore ? { mons: monsRuntimeForRestore } : {})
+      ...(monsRuntimeForRestore ? { mons: monsRuntimeForRestore } : {}),
+      farmState: this.farmRuntime()
     });
     if (!player) {
       return undefined;
@@ -11230,6 +11293,88 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.monsState_ = new MonsState(this.data_.mons.registry, this.data_.mons.abilities, this.data_.mons.fusion);
     }
     return this.monsState_;
+  }
+
+  private farmRuntime(): FarmState {
+    if (!this.farmState_) {
+      this.farmState_ = new FarmState();
+    }
+    return this.farmState_;
+  }
+
+  /**
+   * Reconcile placed ranch structures with the world: one sprite actor per
+   * placed building/decor (y-sorted, base-anchored) plus runtime solid rects
+   * for their footprints. The fusion altar and riddle archive stay classic
+   * added-NPC props, so their kinds are skipped here.
+   */
+  private syncRanchBuildings(): void {
+    const farm = this.farmState_;
+    const placed = new Map<string, { kind: string; tier: number; cell: { x: number; y: number }; decor: boolean }>();
+    if (farm) {
+      for (const b of farm.buildings) {
+        if (b.kind === "fusionAltar" || b.kind === "riddleArchive") continue;
+        placed.set(b.id, { kind: b.kind, tier: b.tier, cell: b.cell, decor: false });
+      }
+      for (const d of farm.decor) {
+        placed.set(d.id, { kind: d.kind, tier: 1, cell: d.cell, decor: true });
+      }
+    }
+    for (const [id, sprite] of [...this.ranchStructureSprites_]) {
+      if (!placed.has(id)) {
+        sprite.destroy();
+        this.ranchStructureSprites_.delete(id);
+      }
+    }
+    for (const [id, p] of placed) {
+      const key = ranchStructureTextureKey(p.kind, p.tier);
+      let sprite = this.ranchStructureSprites_.get(id);
+      if (!sprite) {
+        if (!this.textures.exists(key)) {
+          this.queueRanchTextureLoad(key, p.kind, p.tier);
+          continue;
+        }
+        sprite = this.add.image(p.cell.x, p.cell.y, key).setOrigin(0.5, 1);
+        this.ranchStructureSprites_.set(id, sprite);
+      } else if (sprite.texture.key !== key && this.textures.exists(key)) {
+        sprite.setTexture(key);
+      }
+      sprite.setPosition(p.cell.x, p.cell.y);
+      sprite.setDepth(p.cell.y);
+    }
+    this.runtimeSolidRects_ = farm
+      ? farm.buildings
+          .filter((b) => b.kind !== "fusionAltar" && b.kind !== "riddleArchive")
+          .map((b) => {
+            const fp = FARM_CATALOG[b.kind].footprint;
+            return { x: b.cell.x - fp.w / 2, y: b.cell.y - fp.h, w: fp.w, h: fp.h };
+          })
+          .concat(
+            farm.decor
+              .filter((d) => d.kind !== "pathTile")
+              .map((d) => {
+                const fp = DECOR_CATALOG[d.kind].footprint;
+                return { x: d.cell.x - fp.w / 2, y: d.cell.y - fp.h, w: fp.w, h: fp.h };
+              })
+          )
+      : [];
+  }
+
+  /** Load ranch art on demand; fall back to the placeholder sheet when the
+   * generated sprite is not on disk yet. */
+  private queueRanchTextureLoad(key: string, kind: string, tier: number): void {
+    if (this.ranchTextureLoads_.has(key)) {
+      return;
+    }
+    this.ranchTextureLoads_.add(key);
+    const file = ranchStructureFileName(kind, tier);
+    this.load.image(key, `/assets/swagbound/ranch/${file}.png`);
+    this.load.once(`loaderror-image-${key}`, () => {
+      this.load.image(key, `/assets/swagbound/ranch/${file}.placeholder.png`);
+      this.load.start();
+    });
+    this.load.once("complete", () => this.syncRanchBuildings());
+    this.load.start();
   }
 
   /** Build the CONVINCE context for a wild-mon battle: personality question draw. */

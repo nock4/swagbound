@@ -10,10 +10,19 @@ import type { Facing } from "./playerController";
 import { STATUS_AILMENTS, type StatusAilment, type StatusState } from "./statusEffects";
 import { validateFilingIntake, type FilingIntakeValues } from "./filingIntakeModel";
 import type { OwnedMon } from "./monsModel";
+import {
+  DECOR_CATALOG,
+  FARM_CATALOG,
+  type FarmBuildingKind,
+  type FarmDecorKind,
+  type PlacedBuilding,
+  type PlacedDecor
+} from "./farmState";
 
-// v2 adds the optional `mons` snapshot (companion roster). v1 blobs are accepted
-// and MIGRATED forward (identical fields, empty roster) - never invalidated.
-export const SAVE_STATE_SCHEMA_VERSION = 2;
+// v3 adds the optional `farmState` snapshot (Mons Ranch economy). v1 and v2
+// blobs are accepted and MIGRATED forward with newly introduced state empty.
+export const SAVE_STATE_SCHEMA_VERSION = 3;
+export const SAVE_STATE_SCHEMA_VERSION_V2 = 2;
 export const SAVE_STATE_SCHEMA_VERSION_V1 = 1;
 
 export type SaveMode = "region" | "chunked";
@@ -46,6 +55,12 @@ export type MonsSaveSnapshot = {
   activeIndex?: number;
 };
 
+export type FarmSaveSnapshot = {
+  swagCoins: number;
+  buildings: PlacedBuilding[];
+  decor: PlacedDecor[];
+};
+
 export type SaveState = {
   schemaVersion: typeof SAVE_STATE_SCHEMA_VERSION;
   savedAt?: string;
@@ -54,6 +69,7 @@ export type SaveState = {
   party: PartyStateSnapshot;
   player: SavePlayerSnapshot;
   mons?: MonsSaveSnapshot;
+  farmState?: FarmSaveSnapshot;
 };
 
 export type SaveStateSources = {
@@ -70,6 +86,9 @@ export type SaveStateSources = {
   mons?: {
     snapshot(): MonsSaveSnapshot;
   };
+  farmState?: {
+    snapshot(): FarmSaveSnapshot;
+  };
 };
 
 export type SaveStateSinks = {
@@ -83,6 +102,9 @@ export type SaveStateSinks = {
   };
   mons?: {
     restore(snapshot: MonsSaveSnapshot | undefined): void;
+  };
+  farmState?: {
+    restore(snapshot: FarmSaveSnapshot | undefined): void;
   };
 };
 
@@ -111,7 +133,8 @@ export function captureSaveState(sources: SaveStateSources): SaveState {
     },
     party: clonePartyStateSnapshot(sources.partyState.snapshot()),
     player: clonePlayerSnapshot(sources.player),
-    ...(sources.mons ? { mons: cloneMonsSnapshot(sources.mons.snapshot()) } : {})
+    ...(sources.mons ? { mons: cloneMonsSnapshot(sources.mons.snapshot()) } : {}),
+    ...(sources.farmState ? { farmState: cloneFarmSnapshot(sources.farmState.snapshot()) } : {})
   };
   const validated = validateSaveState(save);
   if (!validated) {
@@ -134,6 +157,7 @@ export function applySaveState(save: unknown, sinks: SaveStateSinks): SavePlayer
   }
   sinks.partyState.restore(validated.party);
   sinks.mons?.restore(validated.mons);
+  sinks.farmState?.restore(validated.farmState);
   return clonePlayerSnapshot(validated.player);
 }
 
@@ -178,10 +202,14 @@ export function validateSaveState(value: unknown): SaveState | null {
   if (!isRecord(value)) {
     return null;
   }
-  // v1 blobs (pre-mons) migrate forward: identical body, no roster. Any other
-  // version is rejected.
+  // v1 blobs (pre-mons) and v2 blobs (pre-farm) migrate forward with newly
+  // introduced state empty. Any other version is rejected.
   const version = value.schemaVersion;
-  if (version !== SAVE_STATE_SCHEMA_VERSION && version !== SAVE_STATE_SCHEMA_VERSION_V1) {
+  if (
+    version !== SAVE_STATE_SCHEMA_VERSION &&
+    version !== SAVE_STATE_SCHEMA_VERSION_V2 &&
+    version !== SAVE_STATE_SCHEMA_VERSION_V1
+  ) {
     return null;
   }
   const flags = validateFlagsSnapshot(value.flags);
@@ -191,11 +219,18 @@ export function validateSaveState(value: unknown): SaveState | null {
   if (!flags || !party || !player) {
     return null;
   }
-  // v1 blobs must not carry a mons payload; v2 mons are validated strictly.
+  // v1 blobs restore an empty roster; v2 and v3 mons are validated strictly.
   const mons = version === SAVE_STATE_SCHEMA_VERSION_V1
     ? undefined
     : (value.mons === undefined ? undefined : validateMonsSnapshot(value.mons));
-  if (version === SAVE_STATE_SCHEMA_VERSION && value.mons !== undefined && !mons) {
+  if (version !== SAVE_STATE_SCHEMA_VERSION_V1 && value.mons !== undefined && !mons) {
+    return null;
+  }
+  // v1 and v2 blobs restore an empty farm; v3 farm state is validated strictly.
+  const farmState = version === SAVE_STATE_SCHEMA_VERSION
+    ? (value.farmState === undefined ? undefined : validateFarmSnapshot(value.farmState))
+    : undefined;
+  if (version === SAVE_STATE_SCHEMA_VERSION && value.farmState !== undefined && !farmState) {
     return null;
   }
   return {
@@ -205,7 +240,8 @@ export function validateSaveState(value: unknown): SaveState | null {
     flags,
     party,
     player,
-    ...(mons ? { mons } : {})
+    ...(mons ? { mons } : {}),
+    ...(farmState ? { farmState } : {})
   };
 }
 
@@ -273,6 +309,102 @@ function cloneMonsSnapshot(snapshot: MonsSaveSnapshot): MonsSaveSnapshot {
     })),
     ...(snapshot.activeIndex !== undefined ? { activeIndex: snapshot.activeIndex } : {})
   };
+}
+
+function validateFarmSnapshot(value: unknown): FarmSaveSnapshot | null {
+  if (!isRecord(value) || !Array.isArray(value.buildings) || !Array.isArray(value.decor)) {
+    return null;
+  }
+  const swagCoins = validateId(value.swagCoins);
+  if (swagCoins === undefined) {
+    return null;
+  }
+  const buildings: PlacedBuilding[] = [];
+  const ids = new Set<string>();
+  for (const entry of value.buildings) {
+    if (
+      !isRecord(entry) ||
+      typeof entry.id !== "string" ||
+      entry.id.length === 0 ||
+      ids.has(entry.id) ||
+      !isFarmBuildingKind(entry.kind)
+    ) {
+      return null;
+    }
+    const tier = validateId(entry.tier);
+    const cell = validatePoint(entry.cell);
+    const progressSteps = validateId(entry.progressSteps);
+    const assignedMonIds = validateStringArray(entry.assignedMonIds);
+    if (
+      tier === undefined ||
+      tier < 1 ||
+      tier > 3 ||
+      !cell ||
+      progressSteps === undefined ||
+      !assignedMonIds ||
+      assignedMonIds.some((registryId) => registryId.length === 0) ||
+      (entry.jobRecipeId !== undefined && typeof entry.jobRecipeId !== "string")
+    ) {
+      return null;
+    }
+    ids.add(entry.id);
+    buildings.push({
+      id: entry.id,
+      kind: entry.kind,
+      tier,
+      cell,
+      progressSteps,
+      ...(typeof entry.jobRecipeId === "string" ? { jobRecipeId: entry.jobRecipeId } : {}),
+      assignedMonIds
+    });
+  }
+  const decor: PlacedDecor[] = [];
+  for (const entry of value.decor) {
+    if (
+      !isRecord(entry) ||
+      typeof entry.id !== "string" ||
+      entry.id.length === 0 ||
+      ids.has(entry.id) ||
+      !isFarmDecorKind(entry.kind)
+    ) {
+      return null;
+    }
+    const cell = validatePoint(entry.cell);
+    if (!cell) {
+      return null;
+    }
+    ids.add(entry.id);
+    decor.push({ id: entry.id, kind: entry.kind, cell });
+  }
+  return { swagCoins, buildings, decor };
+}
+
+function cloneFarmSnapshot(snapshot: FarmSaveSnapshot): FarmSaveSnapshot {
+  return {
+    swagCoins: snapshot.swagCoins,
+    buildings: snapshot.buildings.map((building) => ({
+      id: building.id,
+      kind: building.kind,
+      tier: building.tier,
+      cell: { ...building.cell },
+      progressSteps: building.progressSteps,
+      ...(building.jobRecipeId !== undefined ? { jobRecipeId: building.jobRecipeId } : {}),
+      assignedMonIds: [...building.assignedMonIds]
+    })),
+    decor: snapshot.decor.map((decor) => ({
+      id: decor.id,
+      kind: decor.kind,
+      cell: { ...decor.cell }
+    }))
+  };
+}
+
+function isFarmBuildingKind(value: unknown): value is FarmBuildingKind {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(FARM_CATALOG, value);
+}
+
+function isFarmDecorKind(value: unknown): value is FarmDecorKind {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(DECOR_CATALOG, value);
 }
 
 function clonePlayerSnapshot(player: SavePlayerSnapshot): SavePlayerSnapshot {
