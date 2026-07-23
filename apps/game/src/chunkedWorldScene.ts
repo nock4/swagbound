@@ -23,6 +23,7 @@ import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, mo
 import { MonsState } from "./monsState";
 import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
 import { FarmOverlay } from "./farmOverlay";
+import { NEEDS_CREW, resolveProductionCycle, stepsForCycle } from "./farmProduction";
 
 /** Texture key for a placed ranch structure (kind + tier picks the sheet). */
 function ranchStructureTextureKey(kind: string, tier: number): string {
@@ -1147,6 +1148,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private farmState_?: FarmState;
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
+  private ranchGauges_?: Phaser.GameObjects.Graphics;
   private farmOverlay?: FarmOverlay;
   private placementState_?: {
     kind: string; decor: boolean; price: number; x: number; y: number;
@@ -1511,6 +1513,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       farm: () => this.farmRuntime(),
       monNameById: (registryId) =>
         this.data_.mons ? monById(this.data_.mons.registry, registryId)?.name : undefined,
+      roster: () =>
+        (this.monsRuntime()?.list() ?? []).map((m) => ({
+          registryId: m.registryId,
+          name: (this.data_.mons ? monById(this.data_.mons.registry, m.registryId)?.name : undefined) ?? m.registryId,
+          level: m.level
+        })),
       beginPlacement: (kind, decor, price) => this.beginStructurePlacement(kind, decor, price),
       onClose: () => this.updatePrompt()
     });
@@ -1760,6 +1768,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncFarmMons(delta);
     this.syncRanchBuildings();
     this.stepStructurePlacement(delta);
+    this.drawRanchGauges();
     this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -6145,6 +6154,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     // Ranch production: progress happens as you walk, anywhere in the world.
     this.farmState_?.tickStep();
+    this.resolveRanchProduction();
     const ticks = this.partyState.applyFieldPoisonStep();
     if (ticks.length === 0) {
       return;
@@ -11384,6 +11394,84 @@ export class ChunkedWorldScene extends Phaser.Scene {
               })
           )
       : [];
+  }
+
+  /**
+   * Resolve completed production cycles: item output to the party bags,
+   * training XP / bath bond to the assigned crew. EB notice per completion.
+   */
+  private resolveRanchProduction(): void {
+    const farm = this.farmState_;
+    if (!farm) return;
+    for (const building of farm.buildings) {
+      const threshold = stepsForCycle(building);
+      if (threshold === undefined || building.progressSteps < threshold) continue;
+      if (NEEDS_CREW.has(building.kind) && building.assignedMonIds.length === 0) {
+        building.progressSteps = 0;
+        continue;
+      }
+      building.progressSteps = 0;
+      const crewElements: string[] = building.assignedMonIds
+        .map((id) => (this.data_.mons ? monById(this.data_.mons.registry, id)?.element : undefined))
+        .filter((e): e is NonNullable<typeof e> => typeof e === "string")
+        .map((e) => String(e));
+      const result = resolveProductionCycle(building, crewElements);
+      const name = FARM_CATALOG[building.kind].name;
+      if (result?.kind === "item") {
+        this.grantStoryTriggerItems([result.itemId]);
+        const item = this.data_.items?.items.find((i) => i.id === result.itemId);
+        this.showRanchNotice(`${name}: ${item?.name ?? "something"} is ready.`);
+      } else if (result?.kind === "training") {
+        const mons = this.monsRuntime();
+        if (mons) {
+          for (const id of building.assignedMonIds) {
+            const index = mons.list().findIndex((m) => m.registryId === id);
+            if (index >= 0) mons.grantXp(index, result.xp);
+          }
+          this.persistMonRoster();
+          this.showRanchNotice(`${name}: the crew got stronger.`);
+        }
+      } else if (result?.kind === "bond") {
+        const mons = this.monsRuntime();
+        if (mons) {
+          for (const id of building.assignedMonIds) {
+            const index = mons.list().findIndex((m) => m.registryId === id);
+            if (index >= 0) mons.pet(index);
+          }
+          this.showRanchNotice(`${name}: everyone is very clean.`);
+        }
+      }
+    }
+  }
+
+  private showRanchNotice(text: string): void {
+    this.recruitNoticeText = text;
+    this.recruitNoticeUntilMs = Date.now() + 3200;
+    this.publish();
+  }
+
+  /** In-world progress gauges over working buildings (EB bar proportions). */
+  private drawRanchGauges(): void {
+    const farm = this.farmState_;
+    if (!this.ranchGauges_) {
+      this.ranchGauges_ = this.add.graphics().setDepth(190_000);
+    }
+    const g = this.ranchGauges_;
+    g.clear();
+    if (!farm || this.playerState.y < RANCH_LAND_MIN_Y) return;
+    for (const building of farm.buildings) {
+      const threshold = stepsForCycle(building);
+      if (threshold === undefined) continue;
+      if (NEEDS_CREW.has(building.kind) && building.assignedMonIds.length === 0) continue;
+      const sprite = this.ranchStructureSprites_.get(building.id);
+      if (!sprite) continue;
+      const frac = Math.max(0, Math.min(1, building.progressSteps / threshold));
+      const w = 26;
+      const x = building.cell.x - w / 2;
+      const y = building.cell.y - sprite.displayHeight - 8;
+      g.fillStyle(0x101010, 0.9).fillRect(x - 1, y - 1, w + 2, 5);
+      g.fillStyle(0x66cc66, 1).fillRect(x, y, Math.round(w * frac), 3);
+    }
   }
 
   /**

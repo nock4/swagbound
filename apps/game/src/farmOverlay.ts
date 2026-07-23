@@ -18,6 +18,7 @@ export type FarmOverlayHost = {
   canOpen(): boolean;
   farm(): FarmState;
   monNameById(registryId: string): string | undefined;
+  roster(): Array<{ registryId: string; name: string; level: number }>;
   beginPlacement(kind: string, decor: boolean, price: number): void;
   onClose(): void;
 };
@@ -42,6 +43,7 @@ export class FarmOverlay {
   private tab: Tab = "shop";
   private cursor = 0;
   private notice = "";
+  private jobMode: { kind: "actions"; row: number; cursor: number } | { kind: "assign"; row: number; cursor: number } | undefined;
   private panel: HTMLElement | undefined;
 
   private readonly keyHandler = (event: KeyboardEvent): void => {
@@ -101,6 +103,11 @@ export class FarmOverlay {
   }
 
   private handleKey(code: string): void {
+    if (this.jobMode) {
+      this.handleJobModeKey(code);
+      this.render();
+      return;
+    }
     if (code === "Escape" || code === "KeyX" || isFarmOverlayKey(code)) {
       this.close();
       return;
@@ -120,6 +127,66 @@ export class FarmOverlay {
       this.confirm();
     }
     this.render();
+  }
+
+  private handleJobModeKey(code: string): void {
+    const farm = this.host.farm();
+    const mode = this.jobMode;
+    if (!mode) return;
+    const building = farm.buildings[mode.row];
+    if (!building) {
+      this.jobMode = undefined;
+      return;
+    }
+    if (code === "Escape" || code === "KeyX") {
+      this.jobMode = mode.kind === "assign" ? { kind: "actions", row: mode.row, cursor: 0 } : undefined;
+      return;
+    }
+    if (mode.kind === "actions") {
+      const actions = 3;
+      if (code === "ArrowUp") mode.cursor = Math.max(0, mode.cursor - 1);
+      else if (code === "ArrowDown") mode.cursor = Math.min(actions - 1, mode.cursor + 1);
+      else if (code === "KeyZ" || code === "Enter") {
+        if (mode.cursor === 0) {
+          this.jobMode = { kind: "assign", row: mode.row, cursor: 0 };
+        } else if (mode.cursor === 1) {
+          for (const id of [...building.assignedMonIds]) farm.recallMon(building.id, id);
+          building.jobRecipeId = undefined;
+          this.notice = "Crew recalled.";
+          this.jobMode = undefined;
+        } else {
+          const entry = FARM_CATALOG[building.kind];
+          const nextPrice = entry.price[building.tier];
+          if (nextPrice === undefined) this.notice = "Already top tier.";
+          else if (!farm.spendCoins(nextPrice)) this.notice = "Not enough Swag Coins.";
+          else {
+            farm.upgradeBuilding(building.id);
+            this.notice = `${entry.name} upgraded to tier ${building.tier}.`;
+          }
+          this.jobMode = undefined;
+        }
+      }
+      return;
+    }
+    // assign mode
+    const available = this.availableCrew();
+    if (code === "ArrowUp") mode.cursor = Math.max(0, mode.cursor - 1);
+    else if (code === "ArrowDown") mode.cursor = Math.min(Math.max(0, available.length - 1), mode.cursor + 1);
+    else if (code === "KeyZ" || code === "Enter") {
+      const pick = available[mode.cursor];
+      if (!pick) return;
+      if (farm.assignMon(building.id, pick.registryId)) {
+        building.jobRecipeId = "crew";
+        this.notice = `${pick.name} reports for duty.`;
+      }
+      this.jobMode = { kind: "actions", row: mode.row, cursor: 0 };
+    }
+  }
+
+  private availableCrew(): Array<{ registryId: string; name: string; level: number }> {
+    const farm = this.host.farm();
+    const assigned = new Set(farm.buildings.flatMap((b) => b.assignedMonIds));
+    return this.host.roster().filter((m) => !assigned.has(m.registryId));
   }
 
   private confirm(): void {
@@ -150,19 +217,27 @@ export class FarmOverlay {
     if (this.tab === "jobs") {
       const building = farm.buildings[this.cursor];
       if (!building) return;
-      const entry = FARM_CATALOG[building.kind];
-      const nextPrice = entry.price[building.tier] ?? undefined;
-      if (nextPrice === undefined) {
-        this.notice = "Already top tier.";
-        return;
-      }
-      if (!farm.spendCoins(nextPrice)) {
-        this.notice = "Not enough Swag Coins.";
-        return;
-      }
-      farm.upgradeBuilding(building.id);
-      this.notice = `${entry.name} upgraded to tier ${building.tier}.`;
+      this.jobMode = { kind: "actions", row: this.cursor, cursor: 0 };
     }
+  }
+
+  private jobMenuHtml(): string {
+    const mode = this.jobMode;
+    if (!mode) return "";
+    if (mode.kind === "actions") {
+      const items = ["Assign a mon", "Recall crew", "Upgrade"];
+      return `<div style="margin-top:5px;border-top:1px solid #444;padding-top:4px">` +
+        items.map((label, i) =>
+          `<div style="padding:2px 6px;font-size:12px;${i === mode.cursor ? "background:#33333d;color:#f2efe6" : "color:#a9a390"}">${label}</div>`
+        ).join("") + `</div>`;
+    }
+    const crew = this.availableCrew();
+    return `<div style="margin-top:5px;border-top:1px solid #444;padding-top:4px">` +
+      (crew.length === 0
+        ? `<div style="padding:2px 6px;font-size:12px;color:#a9a390">Nobody is free.</div>`
+        : crew.map((m, i) =>
+            `<div style="padding:2px 6px;font-size:12px;${i === mode.cursor ? "background:#33333d;color:#f2efe6" : "color:#a9a390"}">${m.name} Lv${m.level}</div>`
+          ).join("")) + `</div>`;
   }
 
   private barHtml(fraction: number): string {
@@ -218,7 +293,8 @@ export class FarmOverlay {
               <b style="color:#f2efe6">${e.name}</b> <span style="color:#8fb3d9">T${b.tier}</span>
               <span style="float:right;color:#e0c060">${next !== undefined ? `Z: upgrade ${next} SC` : "top tier"}</span>
               <div style="color:#a9a390;font-size:12px">crew: ${workers}</div>
-              ${this.barHtml((b.progressSteps % 300) / 300)}</div>`;
+              ${this.barHtml((b.progressSteps % 300) / 300)}
+              ${sel && this.jobMode ? this.jobMenuHtml() : ""}</div>`;
           }).join("");
     } else {
       body = `<div style="padding:10px;color:#f2efe6">
