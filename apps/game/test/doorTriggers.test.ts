@@ -567,8 +567,10 @@ describe("doorActiveForFlags (EB conditional doors)", () => {
       .map((eventFlag) => eventFlag ? Number.parseInt(eventFlag, 16) : 0)
       .filter((raw) => Number.isFinite(raw) && raw > 0);
 
-    expect(world.doors).toHaveLength(1164);
-    expect(eventFlagDoors).toHaveLength(1072);
+    // 1164 vanilla doors + the minted ranch gate (scripts/mint-ranch-land.py);
+    // the Site E barn door loses its eventFlag when repointed at the ranch.
+    expect(world.doors).toHaveLength(1165);
+    expect(eventFlagDoors).toHaveLength(1071);
     expect(distinctEventFlags.size).toBe(57);
     expect(nonzeroFlags).toHaveLength(56);
     expect(eventFlagDoors.every((door) => doorActiveForFlags(door.eventFlag, flags([])))).toBe(true);
