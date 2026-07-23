@@ -2525,11 +2525,11 @@
    "note": "Mons Farm E tree guard: mat west-edge tree full footprint (sparse fg canopy, keep walkers off)"
   },
   {
-   "x": 2384,
-   "y": 7358,
-   "w": 32,
-   "h": 26,
-   "note": "Mons Farm E tree guard: southwest tree full footprint (sparse fg canopy, keep walkers off)"
+   "x": 2370,
+   "y": 7374,
+   "w": 54,
+   "h": 86,
+   "note": "Mons Farm E tree guard: southwest big tree full footprint (was undersized sliver)"
   },
   {
    "x": 2434,
@@ -2579,6 +2579,20 @@
    "w": 48,
    "h": 30,
    "note": "Mons Farm E tree guard: east cliff trees full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2276,
+   "y": 7388,
+   "w": 52,
+   "h": 70,
+   "note": "Mons Farm E tree guard: west big tree (imp was drawing over canopy)"
+  },
+  {
+   "x": 2334,
+   "y": 7392,
+   "w": 40,
+   "h": 38,
+   "note": "Mons Farm E tree guard: west mid tree full footprint"
   }
  ]
 }
