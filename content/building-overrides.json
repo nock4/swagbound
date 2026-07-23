@@ -399,22 +399,31 @@
    "image": "assets/buildings/mons-yard-right.png"
   },
   {
-   "id": "field-blend-left",
+   "id": "field-sweep-4",
    "chunk": "4,14",
    "x": 492,
    "y": 236,
    "w": 20,
-   "h": 156,
-   "image": "assets/buildings/field-blend-left.png"
+   "h": 212,
+   "image": "assets/buildings/field-sweep-4.png"
   },
   {
-   "id": "field-blend-right",
+   "id": "field-sweep-5",
    "chunk": "5,14",
    "x": 0,
    "y": 236,
-   "w": 120,
-   "h": 156,
-   "image": "assets/buildings/field-blend-right.png"
+   "w": 512,
+   "h": 212,
+   "image": "assets/buildings/field-sweep-5.png"
+  },
+  {
+   "id": "field-sweep-6",
+   "chunk": "6,14",
+   "x": 0,
+   "y": 236,
+   "w": 276,
+   "h": 212,
+   "image": "assets/buildings/field-sweep-6.png"
   }
  ]
 }
