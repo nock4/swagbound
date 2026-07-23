@@ -13362,8 +13362,8 @@
   {
    "id": 910302,
    "worldPixel": {
-    "x": 2455,
-    "y": 7398
+    "x": 2700,
+    "y": 11060
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13382,8 +13382,8 @@
   {
    "id": 910303,
    "worldPixel": {
-    "x": 2600,
-    "y": 7402
+    "x": 2930,
+    "y": 11070
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13401,8 +13401,8 @@
   {
    "id": 910304,
    "worldPixel": {
-    "x": 2450,
-    "y": 7330
+    "x": 2820,
+    "y": 10930
    },
    "spriteGroup": 59,
    "facing": "down",

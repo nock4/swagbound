@@ -27,10 +27,18 @@ import { MonsOverlay } from "./monsOverlay";
 // Postwick Mons Farm anchor: site E, the south-meadow homestead by the town's
 // arrival lawn. The barn is baked terrain (building-overrides stamp) at the old
 // SW house footprint; the yard spreads east of it (FARMHAND 910300).
-const MONS_FARM_ANCHOR = { x: 2510, y: 7380 } as const;
+// The Mons Ranch: minted land south of the vanilla map (see
+// scripts/mint-ranch-land.py). Entered through the Site E barn door.
+const MONS_FARM_ANCHOR = { x: 2816, y: 11020 } as const;
 // Resting mons spawn ON the dirt yard (not a radial ring): keeps the lot's
-// creatures on the farm ground instead of idling against the barn or hedges.
-const MONS_FARM_YARD_RECT = { x0: 2422, y0: 7282, x1: 2648, y1: 7408 } as const;
+// creatures on the farm ground instead of idling against the forest wall.
+const MONS_FARM_YARD_RECT = { x0: 2600, y0: 10900, x1: 3030, y1: 11140 } as const;
+// The overworld farmstead (Site E) stays a hostile-free refuge even though the
+// living farm now lives on the ranch.
+const SITE_E_REFUGE_ANCHOR = { x: 2510, y: 7380 } as const;
+// Every door destination south of the vanilla map edge is ranch land; those
+// doors confirm before warping ("Enter Mons Farm? Yes/No").
+const RANCH_LAND_MIN_Y = 10240;
 const MONS_FARM_ALTAR_RADIUS = 360;
 // Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
 const WILD_MON_ROAM_CHANCE = 0.12;
@@ -1100,6 +1108,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
   private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
+  private pendingRanchDoorWarp_?: { destination: EventWarpDestination; options: DoorWarpOptions };
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
@@ -4640,6 +4649,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.openOpeningNightLockedDoorDialogue();
       return true;
     }
+    if (result.door.destinationWorldPixel.y >= RANCH_LAND_MIN_Y) {
+      this.openRanchEntryPrompt(result.door);
+      return true;
+    }
     this.applyDoorWarp({
       x: result.door.destinationWorldPixel.x,
       y: result.door.destinationWorldPixel.y,
@@ -4651,6 +4664,45 @@ export class ChunkedWorldScene extends Phaser.Scene {
       triggerWorldPixel: result.door.worldPixel
     });
     return true;
+  }
+
+  /**
+   * Ranch doors confirm before warping. The choice rides the normal dialogue
+   * choice UI; confirm/cancel resolve through the pendingRanchDoorWarp_ field
+   * (see confirmDialogueChoice / cancelDialogueChoice).
+   */
+  private openRanchEntryPrompt(door: WorldDoor): void {
+    lockPlayer(this.playerState, this.playerFrames);
+    this.pendingRanchDoorWarp_ = {
+      destination: {
+        x: door.destinationWorldPixel.x,
+        y: door.destinationWorldPixel.y,
+        worldPixel: door.destinationWorldPixel,
+        direction: door.direction
+      },
+      options: {
+        kind: transitionKindForDoorType(door.type),
+        style: door.style,
+        triggerWorldPixel: door.worldPixel
+      }
+    };
+    this.startOverriddenScriptedDialogue(
+      buildInlineDialoguePages(["Enter Mons Farm?"]),
+      () => this.afterDialogueClosed()
+    );
+    this.dialogue.showChoice([{ label: "Yes" }, { label: "No" }]);
+    this.publish();
+  }
+
+  private resolveRanchEntryPrompt(enter: boolean): void {
+    const pending = this.pendingRanchDoorWarp_;
+    this.pendingRanchDoorWarp_ = undefined;
+    this.dialogue.clearChoice();
+    this.closeDialogue();
+    if (pending && enter) {
+      this.applyDoorWarp(pending.destination, pending.options);
+    }
+    this.publish();
   }
 
   private openOpeningNightLockedDoorDialogue(): void {
@@ -5307,6 +5359,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.playMenuSfx("menuConfirm");
+    if (this.pendingRanchDoorWarp_) {
+      this.resolveRanchEntryPrompt(selectedIndex === 0);
+      return;
+    }
     this.eventSequence?.choose(selectedIndex);
     this.updatePrompt();
     this.publish();
@@ -5319,6 +5375,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const noIndex = choice.options.findIndex((option) => option.label.trim().toLowerCase() === "no");
     this.playMenuSfx("menuCancel");
+    if (this.pendingRanchDoorWarp_) {
+      this.resolveRanchEntryPrompt(false);
+      return;
+    }
     this.eventSequence?.choose(noIndex >= 0 ? noIndex : choice.options.length - 1);
     this.updatePrompt();
     this.publish();
@@ -10692,11 +10752,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!shouldRunOverworldRoamers(this.openingRoamerHold)) {
       return;
     }
-    // The Mons Farm lot is a refuge: no hostile roamers spawn while the player
-    // is on it (the scripted tutor wild is the only encounter there). Standing
-    // on your own farm must be safe.
+    // The Mons Ranch and the Site E farmstead are refuges: no hostile roamers
+    // spawn while the player is on them (the scripted tutor wild is the only
+    // encounter there). Standing on your own farm must be safe.
+    if (this.playerState.y >= RANCH_LAND_MIN_Y) {
+      return;
+    }
     if (this.gameFlags.has("mons:farm-met")
-      && Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 600) {
+      && Math.hypot(this.playerState.x - SITE_E_REFUGE_ANCHOR.x, this.playerState.y - SITE_E_REFUGE_ANCHOR.y) <= 600) {
       return;
     }
     const sector = this.currentEncounterSector();
