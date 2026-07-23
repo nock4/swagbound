@@ -257,8 +257,8 @@
   {
    "x": 2410,
    "y": 7270,
-   "w": 290,
-   "h": 160,
+   "w": 250,
+   "h": 145,
    "note": "Mons Farm E: dirt yard (mat footprint only)"
   }
  ],
@@ -2497,11 +2497,11 @@
    "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
   },
   {
-   "x": 2086,
+   "x": 2108,
    "y": 7378,
    "w": 144,
    "h": 74,
-   "note": "Mons Farm E: barn full visual footprint solid"
+   "note": "Mons Farm E: barn full visual footprint solid (shifted +22)"
   }
  ]
 }

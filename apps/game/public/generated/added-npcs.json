@@ -12942,8 +12942,8 @@
   {
    "id": 910250,
    "worldPixel": {
-    "x": 2136,
-    "y": 7480
+    "x": 2262,
+    "y": 7502
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13326,8 +13326,8 @@
   {
    "id": 910300,
    "worldPixel": {
-    "x": 2510,
-    "y": 7372
+    "x": 2515,
+    "y": 7362
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13362,8 +13362,8 @@
   {
    "id": 910302,
    "worldPixel": {
-    "x": 2450,
-    "y": 7420
+    "x": 2455,
+    "y": 7398
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13382,8 +13382,8 @@
   {
    "id": 910303,
    "worldPixel": {
-    "x": 2610,
-    "y": 7420
+    "x": 2600,
+    "y": 7402
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -13401,8 +13401,8 @@
   {
    "id": 910304,
    "worldPixel": {
-    "x": 2440,
-    "y": 7318
+    "x": 2450,
+    "y": 7330
    },
    "spriteGroup": 59,
    "facing": "down",

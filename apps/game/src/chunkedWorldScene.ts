@@ -28,6 +28,9 @@ import { MonsOverlay } from "./monsOverlay";
 // arrival lawn. The barn is baked terrain (building-overrides stamp) at the old
 // SW house footprint; the yard spreads east of it (FARMHAND 910300).
 const MONS_FARM_ANCHOR = { x: 2510, y: 7380 } as const;
+// Resting mons spawn ON the dirt yard (not a radial ring): keeps the lot's
+// creatures on the farm ground instead of idling against the barn or hedges.
+const MONS_FARM_YARD_RECT = { x0: 2422, y0: 7282, x1: 2648, y1: 7408 } as const;
 const MONS_FARM_ALTAR_RADIUS = 360;
 // Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
 const WILD_MON_ROAM_CHANCE = 0.12;
@@ -9615,18 +9618,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  /** A vetted walkable spot in a ring around `center`, varied by `seedIndex`. */
+  /** A vetted walkable spot for a resting mon: sampled INSIDE the dirt yard
+   *  (hash-varied by seedIndex), so the herd lives on the farm ground. The
+   *  companion still spawns near the player via the ring fallback. */
   private farmMonSpawnPointNear(center: { x: number; y: number }, seedIndex: number): { x: number; y: number } | undefined {
+    const nearAnchor = Math.hypot(center.x - MONS_FARM_ANCHOR.x, center.y - MONS_FARM_ANCHOR.y) < 8;
     for (let attempt = 0; attempt < 14; attempt += 1) {
-      const hash = (Math.imul(seedIndex * 17 + attempt + 1, 0x9e3779b1) >>> 0) / 0xffffffff;
-      const angle = hash * Math.PI * 2;
-      const radius = FARM_MON_SPAWN_RING_MIN_PX
-        + ((Math.imul(seedIndex + attempt * 31 + 7, 0x85ebca6b) >>> 0) / 0xffffffff)
-          * (FARM_MON_SPAWN_RING_MAX_PX - FARM_MON_SPAWN_RING_MIN_PX);
-      const point = {
-        x: Math.round(center.x + Math.cos(angle) * radius),
-        y: Math.round(center.y + Math.sin(angle) * radius * 0.7)
-      };
+      const h1 = (Math.imul(seedIndex * 17 + attempt + 1, 0x9e3779b1) >>> 0) / 0xffffffff;
+      const h2 = (Math.imul(seedIndex + attempt * 31 + 7, 0x85ebca6b) >>> 0) / 0xffffffff;
+      const point = nearAnchor
+        ? {
+          x: Math.round(MONS_FARM_YARD_RECT.x0 + h1 * (MONS_FARM_YARD_RECT.x1 - MONS_FARM_YARD_RECT.x0)),
+          y: Math.round(MONS_FARM_YARD_RECT.y0 + h2 * (MONS_FARM_YARD_RECT.y1 - MONS_FARM_YARD_RECT.y0))
+        }
+        : {
+          x: Math.round(center.x + Math.cos(h1 * Math.PI * 2) * (FARM_MON_SPAWN_RING_MIN_PX + h2 * (FARM_MON_SPAWN_RING_MAX_PX - FARM_MON_SPAWN_RING_MIN_PX))),
+          y: Math.round(center.y + Math.sin(h1 * Math.PI * 2) * (FARM_MON_SPAWN_RING_MIN_PX + h2 * (FARM_MON_SPAWN_RING_MAX_PX - FARM_MON_SPAWN_RING_MIN_PX)) * 0.7)
+        };
+      // Never seat a mon against the barn face (the ring around the player can
+      // reach it when Bosch stands at the frontage).
+      if (point.x > 2096 && point.x < 2264 && point.y > 7366 && point.y < 7466) {
+        continue;
+      }
       if (this.isWorldPixelWalkable(point)) {
         return point;
       }
