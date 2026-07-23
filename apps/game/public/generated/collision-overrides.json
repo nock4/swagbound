@@ -255,18 +255,11 @@
    "note": "[escalators] open boarding-lip row above escalator cell 6816,7304 (foot-box top y-6 samples it; was solid, made standing on the cell impossible)"
   },
   {
-   "x": 2400,
-   "y": 7176,
-   "w": 300,
-   "h": 320,
-   "note": "Mons Farm E yard: cleared trees/hedges under the stamped yard"
-  },
-  {
-   "x": 2226,
-   "y": 7378,
-   "w": 24,
-   "h": 80,
-   "note": "Mons Farm E: old SW-house solid strip east of the stamped barn"
+   "x": 2410,
+   "y": 7270,
+   "w": 290,
+   "h": 160,
+   "note": "Mons Farm E: dirt yard (mat footprint only)"
   }
  ],
  "solids": [
@@ -2505,10 +2498,10 @@
   },
   {
    "x": 2086,
-   "y": 7380,
-   "w": 8,
-   "h": 72,
-   "note": "Mons Farm E: barn west edge (barn slightly wider than the old house)"
+   "y": 7378,
+   "w": 144,
+   "h": 74,
+   "note": "Mons Farm E: barn full visual footprint solid"
   }
  ]
 }
