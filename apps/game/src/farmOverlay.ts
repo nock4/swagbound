@@ -14,6 +14,33 @@ import {
   type FarmState
 } from "./farmState";
 import { discountedPrice } from "./farmPerks";
+import {
+  CLEAN_UI_FONT_FAMILY,
+  CLEAN_UI_HP,
+  CLEAN_UI_PRIMARY,
+  CLEAN_UI_SECONDARY,
+  CLEAN_UI_SELECTION_TEXT
+} from "./cleanUi";
+
+// EarthBound clean-window tokens (mirror cleanUi.ts) so the farm menu reads as
+// the same square near-black EB window the rest of the game uses.
+const EB_FILL = "#101010";
+const EB_BORDER = "#ffffff";
+const EB_BEVEL = "#585868";
+const EB_PRIMARY = CLEAN_UI_PRIMARY;      // #EEF1F6
+const EB_SECONDARY = CLEAN_UI_SECONDARY;  // #9AA3B2
+const EB_SELECT_TEXT = CLEAN_UI_SELECTION_TEXT; // #0a0a0a on the reverse-video row
+const EB_COIN = "#e6bd54";
+const EB_HP = `#${CLEAN_UI_HP.toString(16).padStart(6, "0")}`; // gauge fill
+/** A selected menu row: EarthBound reverse video (light bar, dark text) + caret. */
+function ebRowStyle(selected: boolean): string {
+  return selected
+    ? `background:${EB_PRIMARY};color:${EB_SELECT_TEXT}`
+    : `color:${EB_PRIMARY}`;
+}
+function ebCaret(selected: boolean): string {
+  return selected ? '<span style="margin-right:4px">&#9654;</span>' : '<span style="margin-right:4px;visibility:hidden">&#9654;</span>';
+}
 
 export type FarmOverlayHost = {
   canOpen(): boolean;
@@ -246,18 +273,18 @@ export class FarmOverlay {
         ).join("") + `</div>`;
     }
     const crew = this.availableCrew();
-    return `<div style="margin-top:5px;border-top:1px solid #444;padding-top:4px">` +
+    return `<div style="margin-top:5px;border-top:1px solid ${EB_BEVEL};padding-top:4px">` +
       (crew.length === 0
-        ? `<div style="padding:2px 6px;font-size:12px;color:#a9a390">Nobody is free.</div>`
+        ? `<div style="padding:2px 8px;font-size:13px;color:${EB_SECONDARY}">Nobody is free.</div>`
         : crew.map((m, i) =>
-            `<div style="padding:2px 6px;font-size:12px;${i === mode.cursor ? "background:#33333d;color:#f2efe6" : "color:#a9a390"}">${m.name} Lv${m.level}</div>`
+            `<div style="padding:2px 8px;font-size:13px;${ebRowStyle(i === mode.cursor)}">${ebCaret(i === mode.cursor)}${m.name}<span style="float:right">Lv${m.level}</span></div>`
           ).join("")) + `</div>`;
   }
 
   private barHtml(fraction: number): string {
     const pct = Math.round(Math.max(0, Math.min(1, fraction)) * 100);
-    return `<div style="height:8px;background:#222;border:1px solid #555;margin-top:3px">
-      <div style="height:100%;width:${pct}%;background:#7cc47c"></div></div>`;
+    return `<div style="height:7px;background:${EB_FILL};border:1px solid ${EB_BEVEL};margin-top:3px">
+      <div style="height:100%;width:${pct}%;background:${EB_HP}"></div></div>`;
   }
 
   private render(): void {
@@ -267,64 +294,72 @@ export class FarmOverlay {
       this.panel.id = "farm-overlay";
       this.panel.style.cssText =
         "position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;" +
-        "background:rgba(0,0,0,0.55);font-family:'Courier New',monospace;image-rendering:pixelated";
+        `background:rgba(0,0,0,0.55);font-family:${CLEAN_UI_FONT_FAMILY};image-rendering:pixelated`;
       document.body.appendChild(this.panel);
     }
     const farm = this.host.farm();
-    const tabsHtml = TABS.map((t) =>
-      `<span style="padding:2px 10px;margin-right:6px;border:2px solid ${t === this.tab ? "#f2efe6" : "#555"};` +
-      `color:${t === this.tab ? "#f2efe6" : "#999"};text-transform:uppercase;font-size:12px">${t}</span>`
-    ).join("");
+    const tabsHtml = TABS.map((t) => {
+      const on = t === this.tab;
+      return `<span style="padding:2px 11px;margin-right:5px;border:2px solid ${on ? EB_BORDER : EB_BEVEL};` +
+        `background:${on ? EB_PRIMARY : "transparent"};color:${on ? EB_SELECT_TEXT : EB_SECONDARY};` +
+        `text-transform:uppercase;font-size:13px;letter-spacing:.04em">${t}</span>`;
+    }).join("");
     let body = "";
     if (this.tab === "shop") {
       body = BUILDING_ORDER.map((kind, i) => {
         const e = FARM_CATALOG[kind];
         const sel = i === this.cursor;
-        return `<div style="padding:5px 8px;${sel ? "background:#26262e;outline:1px solid #f2efe6" : ""}">
-          <b style="color:#f2efe6">${e.name}</b>
-          <span style="float:right;color:#e0c060">${discountedPrice(e.price[0], farm.swagRating())} SC</span>
-          <div style="color:#a9a390;font-size:12px">${e.desc}</div></div>`;
+        const descColor = sel ? EB_SELECT_TEXT : EB_SECONDARY;
+        return `<div style="padding:4px 8px;${ebRowStyle(sel)}">
+          ${ebCaret(sel)}<b>${e.name}</b>
+          <span style="float:right">${discountedPrice(e.price[0], farm.swagRating())} SC</span>
+          <div style="color:${descColor};font-size:12.5px;margin-left:20px">${e.desc}</div></div>`;
       }).join("");
     } else if (this.tab === "decor") {
       body = DECOR_ORDER.map((kind, i) => {
         const e = DECOR_CATALOG[kind];
         const sel = i === this.cursor;
-        return `<div style="padding:4px 8px;${sel ? "background:#26262e;outline:1px solid #f2efe6" : ""}">
-          <b style="color:#f2efe6">${e.name}</b>
-          <span style="float:right;color:#e0c060">${discountedPrice(e.price, farm.swagRating())} SC</span></div>`;
+        return `<div style="padding:3px 8px;${ebRowStyle(sel)}">
+          ${ebCaret(sel)}<b>${e.name}</b>
+          <span style="float:right">${discountedPrice(e.price, farm.swagRating())} SC</span></div>`;
       }).join("");
     } else if (this.tab === "jobs") {
       body = farm.buildings.length === 0
-        ? `<div style="color:#a9a390;padding:8px">Nothing built yet. Visit the SHOP.</div>`
+        ? `<div style="color:${EB_SECONDARY};padding:8px">Nothing built yet. Visit the SHOP.</div>`
         : farm.buildings.map((b, i) => {
             const e = FARM_CATALOG[b.kind];
             const sel = i === this.cursor;
+            const sub = sel ? EB_SELECT_TEXT : EB_SECONDARY;
             const workers = b.assignedMonIds
               .map((id) => this.host.monNameById(id) ?? id)
               .join(", ") || "nobody";
             const next = e.price[b.tier];
-            return `<div style="padding:5px 8px;${sel ? "background:#26262e;outline:1px solid #f2efe6" : ""}">
-              <b style="color:#f2efe6">${e.name}</b> <span style="color:#8fb3d9">T${b.tier}</span>
-              <span style="float:right;color:#e0c060">${next !== undefined ? `Z: upgrade ${next} SC` : "top tier"}</span>
-              <div style="color:#a9a390;font-size:12px">crew: ${workers}</div>
-              ${this.barHtml((b.progressSteps % 300) / 300)}
-              ${sel && this.jobMode ? this.jobMenuHtml() : ""}</div>`;
+            return `<div style="padding:4px 8px;${ebRowStyle(sel)}">
+              ${ebCaret(sel)}<b>${e.name}</b> <span style="opacity:.85">T${b.tier}</span>
+              <span style="float:right">${next !== undefined ? `Z: upgrade ${next} SC` : "top tier"}</span>
+              <div style="color:${sub};font-size:12.5px;margin-left:20px">crew: ${workers}</div>
+              <div style="margin-left:20px">${this.barHtml((b.progressSteps % 300) / 300)}</div>
+              ${sel && this.jobMode ? `<div style="margin-left:20px">${this.jobMenuHtml()}</div>` : ""}</div>`;
           }).join("");
     } else {
-      body = `<div style="padding:10px;color:#f2efe6">
-        <div>Swag Coins: <b style="color:#e0c060">${farm.swagCoins}</b></div>
-        <div style="margin-top:6px">Swag Rating: <b style="color:#8fd98f">${farm.swagRating()}</b></div>
-        <div style="margin-top:6px;color:#a9a390;font-size:12px">
+      body = `<div style="padding:10px;color:${EB_PRIMARY}">
+        <div style="font-size:16px">Swag Coins: <b style="color:${EB_COIN}">${farm.swagCoins}</b></div>
+        <div style="margin-top:7px;font-size:16px">Swag Rating: <b style="color:${EB_HP}">${farm.swagRating()}</b></div>
+        <div style="margin-top:7px;color:${EB_SECONDARY};font-size:13px">
           Buildings: ${farm.buildings.length} &middot; Decor: ${farm.decor.length}</div>
       </div>`;
     }
+    // EarthBound clean window: opaque near-black, white border with an inner bevel.
     this.panel.innerHTML =
-      `<div style="width:430px;max-height:400px;overflow-y:auto;border:3px solid #f2efe6;background:#0d0d1a;padding:10px">
-        <div style="margin-bottom:8px">${tabsHtml}
-          <span style="float:right;color:#e0c060;font-size:13px">${farm.swagCoins} SC</span></div>
+      `<div style="width:452px;max-height:404px;overflow-y:auto;background:${EB_FILL};` +
+      `border:2px solid ${EB_BORDER};box-shadow:inset 0 0 0 2px ${EB_FILL},inset 0 0 0 3px ${EB_BEVEL};` +
+      `padding:12px;font-size:15px;line-height:1.5">
+        <div style="margin-bottom:9px;display:flex;align-items:center">
+          <span>${tabsHtml}</span>
+          <span style="margin-left:auto;color:${EB_COIN};font-size:14px">${farm.swagCoins} SC</span></div>
         ${body}
-        <div style="margin-top:8px;color:#8a857a;font-size:11px">Q/E tabs &middot; arrows move &middot; Z select &middot; X close</div>
-        ${this.notice ? `<div style="color:#e0a060;font-size:12px;margin-top:4px">${this.notice}</div>` : ""}
+        <div style="margin-top:9px;color:${EB_SECONDARY};font-size:12px">Q/E tabs &nbsp; arrows move &nbsp; Z select &nbsp; X close</div>
+        ${this.notice ? `<div style="color:${EB_COIN};font-size:13px;margin-top:5px">${this.notice}</div>` : ""}
       </div>`;
   }
 }
