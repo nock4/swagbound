@@ -40,9 +40,10 @@ describe("sprite atlas extractor", () => {
       // + the Mons FARMHAND (910300; gns-kinfolks-004 skin; Postwick farm anchor)
       // + the Mons townLines neighbor (910301; gns-little-fellow-001; companion-gated)
       // + 2 Mons farm props (910302 fusion altar, 910303 training dummy; companion-gated)
-      // + 8 Mons Farm slate props (910304 riddle board, 910305 barn, 910306-910310
-      //   fence run, 910312 gate; byNpcId prop skins).
-      usedByNpcCount: 786,
+      // + 7 Mons Farm slate props (910304 riddle board, 910306-910310 fence run,
+      //   910312 gate; byNpcId prop skins; the 910305 barn prop retired when the
+      //   barn became baked terrain at site E via building-overrides).
+      usedByNpcCount: 785,
       overridden: true,
       overrideKind: "group"
     });

@@ -24,8 +24,10 @@ import { MonsState } from "./monsState";
 import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
 import { MonsOverlay } from "./monsOverlay";
 
-// Postwick Mons Farm anchor (NE lot, beside the base NPC at 2768,7080; FARMHAND 910300).
-const MONS_FARM_ANCHOR = { x: 2872, y: 7112 } as const;
+// Postwick Mons Farm anchor: site E, the south-meadow homestead by the town's
+// arrival lawn. The barn is baked terrain (building-overrides stamp) at the old
+// SW house footprint; the yard spreads east of it (FARMHAND 910300).
+const MONS_FARM_ANCHOR = { x: 2510, y: 7380 } as const;
 const MONS_FARM_ALTAR_RADIUS = 360;
 // Per-eligible-tick chance a roaming wild mon appears away from the farm (Act 2+).
 const WILD_MON_ROAM_CHANCE = 0.12;
@@ -9304,7 +9306,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       frameWidth: 96,
       frameHeight: 96,
       animations: { down: [0], left: [0], right: [0], up: [0] },
-      displayHeight: 26,
+      displayHeight: 30,
       originX: 0.5,
       originY: 1
     };
@@ -9396,7 +9398,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameWidth: 96,
         frameHeight: 96,
         animations: { down: [0], left: [0], right: [0], up: [0] },
-        displayHeight: 26,
+        displayHeight: 30,
         originX: 0.5,
         originY: 1
       };
@@ -9571,7 +9573,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameWidth: 96,
         frameHeight: 96,
         animations: { down: [0], left: [0], right: [0], up: [0] },
-        displayHeight: 26,
+        displayHeight: 30,
         originX: 0.5,
         originY: 1
       };
@@ -11262,7 +11264,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       frameWidth: 96,
       frameHeight: 96,
       animations: { down: [0], left: [0], right: [0], up: [0] },
-      displayHeight: 26,
+      displayHeight: 30,
       originX: 0.5,
       originY: 1
     };

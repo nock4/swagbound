@@ -28608,28 +28608,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "910305": {
-      "image": "assets/swagbound/prop/mons-farm-barn.png",
-      "frameWidth": 192,
-      "frameHeight": 144,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 84,
-      "originX": 0.5,
-      "originY": 1
-    },
     "910306": {
       "image": "assets/swagbound/prop/mons-farm-fence.png",
       "frameWidth": 48,

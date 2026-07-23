@@ -1351,6 +1351,20 @@
    "w": 48,
    "h": 40,
    "note": "meteor-approach cliff tongue south face: clear the walk-behind rows that swallowed the player on the night route (playthrough note 3)."
+  },
+  {
+   "x": 2400,
+   "y": 7176,
+   "w": 300,
+   "h": 320,
+   "note": "Mons Farm E yard: clear canopy overlays above the stamped yard"
+  },
+  {
+   "x": 2080,
+   "y": 7328,
+   "w": 176,
+   "h": 136,
+   "note": "Mons Farm E barn: clear old SW-house foreground"
   }
  ]
 }
