@@ -24,6 +24,7 @@ import { MonsState } from "./monsState";
 import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
 import { FarmOverlay } from "./farmOverlay";
 import { NEEDS_CREW, resolveProductionCycle, stepsForCycle } from "./farmProduction";
+import { pickVisitor, shouldVisitorAppear, type VisitorEntry } from "./ranchVisitors";
 
 /** Texture key for a placed ranch structure (kind + tier picks the sheet). */
 function ranchStructureTextureKey(kind: string, tier: number): string {
@@ -1149,6 +1150,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
   private ranchGauges_?: Phaser.GameObjects.Graphics;
+  private ranchVisitor_?: { entry: VisitorEntry; sprite: Phaser.GameObjects.Image; x: number; y: number };
+  private ranchVisitorSteps_ = 0;
+  private recentVisitorIds_: string[] = [];
+  private visitorRngState_ = 0x9e3779b9;
+  private forceVisitor_ = false;
   private farmOverlay?: FarmOverlay;
   private placementState_?: {
     kind: string; decor: boolean; price: number; x: number; y: number;
@@ -3262,6 +3268,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       };
       globals.__farmCoins = (amount: number) => {
         this.farmRuntime().addCoins(amount);
+      };
+      globals.__ranchVisitor = () => {
+        this.forceVisitor_ = true;
+        this.recentVisitorIds_ = [];
+        this.stepRanchVisitors();
+        return this.ranchVisitor_ ? { id: this.ranchVisitor_.entry.id, x: this.ranchVisitor_.x, y: this.ranchVisitor_.y } : null;
       };
     }
     // DEV: set a story flag and run the same reactions a real trigger would (night
@@ -6164,6 +6176,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // Ranch production: progress happens as you walk, anywhere in the world.
     this.farmState_?.tickStep();
     this.resolveRanchProduction();
+    this.stepRanchVisitors();
     const ticks = this.partyState.applyFieldPoisonStep();
     if (ticks.length === 0) {
       return;
@@ -11433,9 +11446,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       } else if (result?.kind === "training") {
         const mons = this.monsRuntime();
         if (mons) {
+          const xp = Math.round(result.xp * (1 + farm.perks().xpBonus));
           for (const id of building.assignedMonIds) {
             const index = mons.list().findIndex((m) => m.registryId === id);
-            if (index >= 0) mons.grantXp(index, result.xp);
+            if (index >= 0) mons.grantXp(index, xp);
           }
           this.persistMonRoster();
           this.showRanchNotice(`${name}: the crew got stronger.`);
@@ -11459,6 +11473,70 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  /** Per-visitor overworld sprite (48x48 townsperson art). */
+  private static readonly VISITOR_SPRITES: Record<string, string> = {
+    "merchant-pocket": "80clu20fa-002-ow",
+    "tourist-marcy": "cryptic-kids-001-ow",
+    "rival-buck": "80clu20fa-001-ow",
+    "photographer-pam": "bando-kids-002-ow",
+    "scout-dottie": "cryptic-kids-2-003-ow",
+    "weather-wendell": "archivist-ow",
+    "adjuster-clive": "archivist-001-ow",
+    "judge-rosette": "bando-kids-004-ow"
+  };
+
+  /**
+   * Ranch visitors: while the player walks the ranch, an eligible visitor
+   * occasionally ambles in near the arrival pad. Talking to them (handled in
+   * tryRanchBuildingInteraction) delivers their line and a Swag Coin tip.
+   */
+  private stepRanchVisitors(): void {
+    if (this.playerState.y < RANCH_LAND_MIN_Y) {
+      if (this.ranchVisitor_) {
+        this.ranchVisitor_.sprite.destroy();
+        this.ranchVisitor_ = undefined;
+      }
+      return;
+    }
+    if (this.ranchVisitor_) {
+      this.ranchVisitor_.sprite.setDepth(this.ranchVisitor_.y);
+      return;
+    }
+    this.ranchVisitorSteps_ = (this.ranchVisitorSteps_ ?? 0) + 1;
+    const rareChance = this.farmState_?.perks().rareVisitChance ?? 0;
+    if (!this.forceVisitor_ && !shouldVisitorAppear(this.ranchVisitorSteps_, rareChance, () => this.visitorRng())) {
+      return;
+    }
+    const rating = this.farmState_?.swagRating() ?? 0;
+    const entry = pickVisitor(rating, () => this.visitorRng(), this.recentVisitorIds_);
+    if (!entry) return;
+    this.forceVisitor_ = false;
+    this.ranchVisitorSteps_ = 0;
+    const key = ranchStructureTextureKey("visitor", 1);
+    const spawn = { x: MONS_FARM_ANCHOR.x + (this.visitorRng() < 0.5 ? -70 : 70), y: 10870 };
+    const sheet = ChunkedWorldScene.VISITOR_SPRITES[entry.id] ?? "80clu20fa-001-ow";
+    const texKey = `ranch-visitor-${entry.id}`;
+    const place = () => {
+      const sprite = this.add.image(spawn.x, spawn.y, texKey).setOrigin(0.5, 1).setDepth(spawn.y);
+      this.ranchVisitor_ = { entry, sprite, x: spawn.x, y: spawn.y };
+    };
+    if (this.textures.exists(texKey)) {
+      place();
+    } else {
+      this.load.image(texKey, `/assets/swagbound/overworld-npc/${sheet}.png`);
+      this.load.once("complete", () => { if (!this.ranchVisitor_ && this.playerState.y >= RANCH_LAND_MIN_Y) place(); });
+      this.load.start();
+    }
+    void key;
+  }
+
+  /** Deterministic-enough visitor RNG (no Math.random ban worry here: overworld
+   * scene, not a workflow). Seeded off step count + coins so it varies. */
+  private visitorRng(): number {
+    this.visitorRngState_ = (this.visitorRngState_ * 1664525 + 1013904223 + (this.farmState_?.swagCoins ?? 0)) >>> 0;
+    return this.visitorRngState_ / 0xffffffff;
+  }
+
   /** Billboard request pool: everyday goods the board asks the ranch to ship. */
   private static readonly BILLBOARD_POOL = [88, 90, 103, 106, 101] as const;
   private static readonly GACHA_POOL = [88, 90, 101, 106, 123] as const;
@@ -11480,9 +11558,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return px >= b.cell.x - fp.w / 2 - 20 && px <= b.cell.x + fp.w / 2 + 20 &&
         py >= b.cell.y - fp.h - 20 && py <= b.cell.y + 28;
     });
-    if (!near) return false;
     const say = (pages: string[]) =>
       this.startOverriddenScriptedDialogue(buildInlineDialoguePages(pages), () => this.afterDialogueClosed());
+    // A visitor standing nearby answers Z first: their line, then a tip.
+    const visitor = this.ranchVisitor_;
+    if (visitor && Math.hypot(px - visitor.x, py - visitor.y) <= 40) {
+      lockPlayer(this.playerState, this.playerFrames);
+      farm.addCoins(visitor.entry.tipCoins);
+      this.recentVisitorIds_ = [visitor.entry.id, ...this.recentVisitorIds_].slice(0, 4);
+      say([visitor.entry.line, `${visitor.entry.name} leaves ${visitor.entry.tipCoins} Swag Coins and wanders off.`]);
+      visitor.sprite.destroy();
+      this.ranchVisitor_ = undefined;
+      this.saveGame(false);
+      return true;
+    }
+    if (!near) return false;
     lockPlayer(this.playerState, this.playerFrames);
     const itemName = (id: number) => this.data_.items?.items.find((i) => i.id === id)?.name ?? "something";
     if (near.kind === "billboard") {

@@ -255,7 +255,15 @@ def wire_doors(w):
         ]))
     print("doors: barn->ranch + ranch gate->barn wired")
 
-RANCH_SONG = "eaglescliffe"   # the farm's established cue
+RANCH_SONG_ID = 128           # same EB song id as the Site E farm (sector 1833)
+
+def ranch_sector_indices():
+    """Sector indices covering the ranch rect (col = x//256, row = y//128)."""
+    idx = []
+    for row in range(RANCH["y0"] // 128, RANCH["y1"] // 128):
+        for col in range(RANCH["x0"] // 256, (RANCH["x1"] // 256) + 1):
+            idx.append(row * 32 + col)
+    return idx
 
 def extend_sector_music():
     p = f"{ROOT}/sector-music.json"
@@ -267,15 +275,38 @@ def extend_sector_music():
         return
     target_rows = (NEW_HEIGHT_TILES * 32) // 128
     add = target_rows - m["rows"]
-    if add <= 0:
-        print("sector-music: already extended")
-        return
-    m["rows"] = target_rows
-    m["song"].extend([RANCH_SONG] * (add * m["cols"]))
-    m["indoor"].extend([0] * (add * m["cols"]))
+    if add > 0:
+        m["rows"] = target_rows
+        m["song"].extend([0] * (add * m["cols"]))     # 0 = no song (schema wants int)
+        m["indoor"].extend([0] * (add * m["cols"]))
+    # stamp the ranch sectors with the farm song id
+    for si in ranch_sector_indices():
+        if 0 <= si < len(m["song"]):
+            m["song"][si] = RANCH_SONG_ID
     with open(p, "w") as f:
         json.dump(m, f)
-    print(f"sector-music: extended to {target_rows} rows ({RANCH_SONG})")
+    print(f"sector-music: {target_rows} rows, ranch sectors -> song {RANCH_SONG_ID}")
+
+def register_ranch_music_area():
+    """Add the ranch sector ids to the music-manifest 'mons-farm' area so the
+    eaglescliffe cue plays on the ranch (both source + generated copies)."""
+    ranch = ranch_sector_indices()
+    for p in ("content/music-manifest.json", f"{ROOT}/music-manifest.json"):
+        try:
+            with open(p) as f:
+                mm = json.load(f, object_pairs_hook=collections.OrderedDict)
+        except FileNotFoundError:
+            continue
+        for area in mm.get("areas", []):
+            if area.get("id") == "mons-farm":
+                have = set(area.get("match", {}).get("sectorIds", []))
+                merged = sorted(have | set(ranch))
+                area.setdefault("match", {})["sectorIds"] = merged
+                break
+        with open(p, "w") as f:
+            json.dump(mm, f, indent=1, ensure_ascii=False)
+            f.write("\n")
+    print(f"music-manifest: {len(ranch)} ranch sectors registered to mons-farm")
 
 def main():
     w = load_world()
@@ -284,6 +315,7 @@ def main():
     carve_collision(w)
     wire_doors(w)
     extend_sector_music()
+    register_ranch_music_area()
     with open(WORLD, "w") as f:
         json.dump(w, f)
     print("world.json written")

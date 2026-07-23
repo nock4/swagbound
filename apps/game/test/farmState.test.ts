@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   DECOR_CATALOG,
   FARM_CATALOG,
@@ -6,6 +6,7 @@ import {
   type FarmBuildingKind,
   type FarmDecorKind
 } from "../src/farmState";
+import { activePerks, discountedPrice, RATING_PERKS } from "../src/farmPerks";
 import { GameFlags } from "../src/gameFlags";
 import { PartyState } from "../src/partyState";
 import {
@@ -120,6 +121,80 @@ describe("FarmState", () => {
 
     expect(farm.removeById(lamp.id)).toBe(true);
     expect(farm.removeById(lamp.id)).toBe(false);
+  });
+
+  it("sells buildings and decor for the correct refunds and recalls crews", () => {
+    const farm = new FarmState();
+    const baseTier = farm.placeBuilding("itemWorks", { x: 0, y: 0 });
+    const upgraded = farm.placeBuilding("itemWorks", { x: 80, y: 0 });
+    const lamp = farm.placeDecor("lamp", { x: 160, y: 0 });
+    farm.assignMon(baseTier.id, "mon:base");
+    farm.assignMon(upgraded.id, "mon:upgraded");
+    farm.upgradeBuilding(upgraded.id);
+    const recallSpy = vi.spyOn(farm, "recallMon");
+
+    expect(farm.sellBuilding(baseTier.id)).toBe(120);
+    expect(recallSpy).toHaveBeenCalledWith(baseTier.id, "mon:base");
+    expect(farm.buildingById(baseTier.id)).toBeUndefined();
+    expect(farm.swagCoins).toBe(120);
+
+    expect(farm.sellBuilding(upgraded.id)).toBe(420);
+    expect(recallSpy).toHaveBeenCalledWith(upgraded.id, "mon:upgraded");
+    expect(farm.buildingById(upgraded.id)).toBeUndefined();
+    expect(farm.swagCoins).toBe(540);
+
+    expect(farm.sellDecor(lamp.id)).toBe(15);
+    expect(farm.decor).not.toContainEqual(expect.objectContaining({ id: lamp.id }));
+    expect(farm.swagCoins).toBe(555);
+    expect(farm.sellBuilding("b:missing")).toBeUndefined();
+    expect(farm.sellDecor("d:missing")).toBeUndefined();
+    expect(farm.swagCoins).toBe(555);
+  });
+
+  it("moves and snaps placed cells and round-trips them through a snapshot", () => {
+    const source = new FarmState();
+    const building = source.placeBuilding("monBarn", { x: 0, y: 0 });
+    const decor = source.placeDecor("well", { x: 0, y: 0 });
+
+    expect(source.moveBuilding(building.id, { x: 13, y: 27 })).toBe(true);
+    expect(source.moveDecor(decor.id, { x: 35, y: 42 })).toBe(true);
+    expect(building.cell).toEqual({ x: 16, y: 24 });
+    expect(decor.cell).toEqual({ x: 32, y: 40 });
+    expect(source.moveBuilding("b:missing", { x: 8, y: 8 })).toBe(false);
+    expect(source.moveDecor("d:missing", { x: 8, y: 8 })).toBe(false);
+
+    const restored = new FarmState();
+    restored.restore(source.snapshot());
+    expect(restored.buildingById(building.id)?.cell).toEqual({ x: 16, y: 24 });
+    expect(restored.decor.find((placed) => placed.id === decor.id)?.cell).toEqual({ x: 32, y: 40 });
+  });
+
+  it("provides monotonic rating perks, discounted prices, and FarmState perks", () => {
+    const ratings = [0, 99, 100, 299, 300, 599, 600, 999, 1000, 2000];
+    const perkFields = ["shopDiscount", "xpBonus", "rareVisitChance"] as const;
+    const perks = ratings.map(activePerks);
+    for (let index = 1; index < perks.length; index += 1) {
+      for (const field of perkFields) {
+        expect(perks[index][field]).toBeGreaterThanOrEqual(perks[index - 1][field]);
+      }
+    }
+    expect(RATING_PERKS.map((tier) => tier.minRating)).toEqual([0, 100, 300, 600, 1000]);
+    expect(activePerks(100)).toEqual({ shopDiscount: 0.05, xpBonus: 0, rareVisitChance: 0 });
+    expect(activePerks(300)).toEqual({ shopDiscount: 0.15, xpBonus: 0.1, rareVisitChance: 0 });
+    expect(activePerks(600).rareVisitChance).toBeGreaterThan(0);
+    expect(activePerks(1000)).toEqual({ shopDiscount: 0.3, xpBonus: 0.5, rareVisitChance: 0.4 });
+    expect(discountedPrice(199, 0)).toBe(199);
+    expect(discountedPrice(199, 100)).toBe(189);
+    expect(discountedPrice(199, 300)).toBe(169);
+    expect(discountedPrice(199, 1000)).toBe(139);
+
+    const farm = new FarmState();
+    farm.placeBuilding("monBarn", { x: 0, y: 0 });
+    farm.placeBuilding("itemWorks", { x: 0, y: 0 });
+    farm.placeBuilding("billboard", { x: 0, y: 0 });
+    expect(farm.swagRating()).toBe(320);
+    expect(farm.perks()).toEqual(activePerks(320));
+    expect(farm.perks()).toEqual({ shopDiscount: 0.15, xpBonus: 0.1, rareVisitChance: 0 });
   });
 
   it("round-trips a deep snapshot and continues stable ids", () => {

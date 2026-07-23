@@ -3,6 +3,7 @@
 // Pure-ish: no Phaser; scenes read/write through this.
 
 import type { FarmSaveSnapshot } from "./saveState";
+import { activePerks, type RatingPerks } from "./farmPerks";
 
 export type FarmBuildingKind =
   | "monBarn"
@@ -265,6 +266,53 @@ export class FarmState {
     return true;
   }
 
+  sellBuilding(id: string): number | undefined {
+    const buildingIndex = this.buildings.findIndex((building) => building.id === id);
+    if (buildingIndex < 0) {
+      return undefined;
+    }
+    const building = this.buildings[buildingIndex];
+    for (const registryId of [...building.assignedMonIds]) {
+      this.recallMon(building.id, registryId);
+    }
+    const totalCost = FARM_CATALOG[building.kind].price
+      .slice(0, building.tier)
+      .reduce((total, price) => total + price, 0);
+    const refund = Math.floor(totalCost * 0.6);
+    this.buildings.splice(buildingIndex, 1);
+    this.addCoins(refund);
+    return refund;
+  }
+
+  sellDecor(id: string): number | undefined {
+    const decorIndex = this.decor.findIndex((placed) => placed.id === id);
+    if (decorIndex < 0) {
+      return undefined;
+    }
+    const refund = Math.floor(DECOR_CATALOG[this.decor[decorIndex].kind].price * 0.6);
+    this.decor.splice(decorIndex, 1);
+    this.addCoins(refund);
+    return refund;
+  }
+
+  moveBuilding(id: string, cell: { x: number; y: number }): boolean {
+    const building = this.buildingById(id);
+    if (!building) {
+      return false;
+    }
+    building.cell = snapCell(cell);
+    return true;
+  }
+
+  moveDecor(id: string, cell: { x: number; y: number }): boolean {
+    const decor = this.decor.find((placed) => placed.id === id);
+    if (!decor) {
+      return false;
+    }
+    decor.cell = snapCell(cell);
+    return true;
+  }
+
   buildingById(id: string): PlacedBuilding | undefined {
     return this.buildings.find((building) => building.id === id);
   }
@@ -322,6 +370,10 @@ export class FarmState {
       + this.decor.reduce((total, placed) => total + DECOR_CATALOG[placed.kind].value, 0);
   }
 
+  perks(): RatingPerks {
+    return activePerks(this.swagRating());
+  }
+
   snapshot(): FarmSaveSnapshot {
     return {
       swagCoins: this.swagCoins,
@@ -349,9 +401,13 @@ export class FarmState {
 }
 
 function snapCell(cell: { x: number; y: number }): { x: number; y: number } {
+  // Defensive: a malformed cell must never store a non-finite coordinate, or a
+  // later snapshot fails validation and bricks the save. Fall back to 0.
+  const sx = Number.isFinite(cell?.x) ? cell.x : 0;
+  const sy = Number.isFinite(cell?.y) ? cell.y : 0;
   return {
-    x: Math.round(cell.x / 8) * 8,
-    y: Math.round(cell.y / 8) * 8
+    x: Math.round(sx / 8) * 8,
+    y: Math.round(sy / 8) * 8
   };
 }
 

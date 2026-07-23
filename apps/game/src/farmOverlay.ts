@@ -13,6 +13,7 @@ import {
   type FarmDecorKind,
   type FarmState
 } from "./farmState";
+import { discountedPrice } from "./farmPerks";
 
 export type FarmOverlayHost = {
   canOpen(): boolean;
@@ -143,7 +144,7 @@ export class FarmOverlay {
       return;
     }
     if (mode.kind === "actions") {
-      const actions = 3;
+      const actions = 4;
       if (code === "ArrowUp") mode.cursor = Math.max(0, mode.cursor - 1);
       else if (code === "ArrowDown") mode.cursor = Math.min(actions - 1, mode.cursor + 1);
       else if (code === "KeyZ" || code === "Enter") {
@@ -155,13 +156,19 @@ export class FarmOverlay {
           this.notice = "Crew recalled.";
           this.jobMode = undefined;
         } else {
-          const entry = FARM_CATALOG[building.kind];
-          const nextPrice = entry.price[building.tier];
-          if (nextPrice === undefined) this.notice = "Already top tier.";
-          else if (!farm.spendCoins(nextPrice)) this.notice = "Not enough Swag Coins.";
-          else {
-            farm.upgradeBuilding(building.id);
-            this.notice = `${entry.name} upgraded to tier ${building.tier}.`;
+          if (mode.cursor === 2) {
+            const entry = FARM_CATALOG[building.kind];
+            const nextPrice = entry.price[building.tier];
+            if (nextPrice === undefined) this.notice = "Already top tier.";
+            else if (!farm.spendCoins(nextPrice)) this.notice = "Not enough Swag Coins.";
+            else {
+              farm.upgradeBuilding(building.id);
+              this.notice = `${entry.name} upgraded to tier ${building.tier}.`;
+            }
+          } else {
+            const name = FARM_CATALOG[building.kind].name;
+            const refund = farm.sellBuilding(building.id);
+            this.notice = refund !== undefined ? `Sold ${name} for ${refund} SC.` : "Could not sell.";
           }
           this.jobMode = undefined;
         }
@@ -183,6 +190,13 @@ export class FarmOverlay {
     }
   }
 
+  private sellRefund(): number {
+    const building = this.host.farm().buildings[this.jobMode?.row ?? -1];
+    if (!building) return 0;
+    const total = FARM_CATALOG[building.kind].price.slice(0, building.tier).reduce((a, b) => a + b, 0);
+    return Math.floor(total * 0.6);
+  }
+
   private availableCrew(): Array<{ registryId: string; name: string; level: number }> {
     const farm = this.host.farm();
     const assigned = new Set(farm.buildings.flatMap((b) => b.assignedMonIds));
@@ -194,7 +208,7 @@ export class FarmOverlay {
     if (this.tab === "shop") {
       const kind = BUILDING_ORDER[this.cursor];
       const entry = FARM_CATALOG[kind];
-      const price = entry.price[0] ?? 0;
+      const price = discountedPrice(entry.price[0] ?? 0, farm.swagRating());
       if (farm.swagCoins < price) {
         this.notice = "Not enough Swag Coins.";
         return;
@@ -205,7 +219,7 @@ export class FarmOverlay {
     }
     if (this.tab === "decor") {
       const kind = DECOR_ORDER[this.cursor];
-      const price = DECOR_CATALOG[kind].price;
+      const price = discountedPrice(DECOR_CATALOG[kind].price, farm.swagRating());
       if (farm.swagCoins < price) {
         this.notice = "Not enough Swag Coins.";
         return;
@@ -225,7 +239,7 @@ export class FarmOverlay {
     const mode = this.jobMode;
     if (!mode) return "";
     if (mode.kind === "actions") {
-      const items = ["Assign a mon", "Recall crew", "Upgrade"];
+      const items = ["Assign a mon", "Recall crew", "Upgrade", `Sell (refund ${this.sellRefund()})`];
       return `<div style="margin-top:5px;border-top:1px solid #444;padding-top:4px">` +
         items.map((label, i) =>
           `<div style="padding:2px 6px;font-size:12px;${i === mode.cursor ? "background:#33333d;color:#f2efe6" : "color:#a9a390"}">${label}</div>`
@@ -268,7 +282,7 @@ export class FarmOverlay {
         const sel = i === this.cursor;
         return `<div style="padding:5px 8px;${sel ? "background:#26262e;outline:1px solid #f2efe6" : ""}">
           <b style="color:#f2efe6">${e.name}</b>
-          <span style="float:right;color:#e0c060">${e.price[0]} SC</span>
+          <span style="float:right;color:#e0c060">${discountedPrice(e.price[0], farm.swagRating())} SC</span>
           <div style="color:#a9a390;font-size:12px">${e.desc}</div></div>`;
       }).join("");
     } else if (this.tab === "decor") {
@@ -277,7 +291,7 @@ export class FarmOverlay {
         const sel = i === this.cursor;
         return `<div style="padding:4px 8px;${sel ? "background:#26262e;outline:1px solid #f2efe6" : ""}">
           <b style="color:#f2efe6">${e.name}</b>
-          <span style="float:right;color:#e0c060">${e.price} SC</span></div>`;
+          <span style="float:right;color:#e0c060">${discountedPrice(e.price, farm.swagRating())} SC</span></div>`;
       }).join("");
     } else if (this.tab === "jobs") {
       body = farm.buildings.length === 0
