@@ -8,6 +8,15 @@ export interface MonsSfx {
   fusionPoof(): void;
   petChirp(): void;
   altarHum(): void;
+  placeThunk(): void;
+  buildRaise(): void;
+  sellRefund(): void;
+  productionReady(): void;
+  coinPayout(count?: number): void;
+  gachaRattle(): void;
+  gachaDrop(): void;
+  ratingUp(): void;
+  chirpVariant(index: number): void;
 }
 
 export type MonsSfxOptions = {
@@ -25,6 +34,15 @@ export class NoopMonsSfx implements MonsSfx {
   fusionPoof(): void {}
   petChirp(): void {}
   altarHum(): void {}
+  placeThunk(): void {}
+  buildRaise(): void {}
+  sellRefund(): void {}
+  productionReady(): void {}
+  coinPayout(): void {}
+  gachaRattle(): void {}
+  gachaDrop(): void {}
+  ratingUp(): void {}
+  chirpVariant(): void {}
 }
 
 export class WebAudioMonsSfx implements MonsSfx {
@@ -144,6 +162,199 @@ export class WebAudioMonsSfx implements MonsSfx {
         toHz: 165.5,
         gain: 0.032,
         attack: 0.3
+      });
+    });
+  }
+
+  placeThunk(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.noiseBurst(context, { start, duration: 0.12, frequencyHz: 120, sweepToHz: 90, gain: 0.034 });
+      this.tone(context, {
+        type: "triangle",
+        start: start + 0.012,
+        duration: 0.16,
+        fromHz: 180,
+        toHz: 120,
+        gain: 0.052
+      });
+    });
+  }
+
+  buildRaise(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.noiseBurst(context, { start, duration: 0.25, frequencyHz: 260, sweepToHz: 900, gain: 0.03 });
+      this.tone(context, {
+        type: "sine",
+        start: start + 0.02,
+        duration: 0.23,
+        fromHz: 200,
+        toHz: 600,
+        gain: 0.034
+      });
+    });
+  }
+
+  sellRefund(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      [987.77, 783.99].forEach((note, index) => {
+        this.tone(context, {
+          type: "triangle",
+          start: start + index * 0.085,
+          duration: 0.1,
+          fromHz: note,
+          toHz: note * 0.78,
+          gain: index === 0 ? 0.046 : 0.042
+        });
+      });
+    });
+  }
+
+  productionReady(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, {
+        type: "triangle",
+        start,
+        duration: 0.15,
+        fromHz: 523.25,
+        toHz: 526,
+        gain: 0.045
+      });
+      this.tone(context, {
+        type: "triangle",
+        start: start + 0.1,
+        duration: 0.21,
+        fromHz: 783.99,
+        toHz: 788,
+        gain: 0.055
+      });
+      this.tone(context, {
+        type: "sine",
+        start: start + 0.15,
+        duration: 0.13,
+        fromHz: 1567.98,
+        toHz: 1580,
+        gain: 0.03
+      });
+    });
+  }
+
+  coinPayout(count?: number): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      const requestedCount = count ?? 3;
+      const blipCount = Math.max(1, Math.min(6, Math.floor(Number.isFinite(requestedCount) ? requestedCount : 3)));
+      for (let index = 0; index < blipCount; index += 1) {
+        const note = 659.25 * semitone(index * 2);
+        this.tone(context, {
+          type: "triangle",
+          start: start + index * 0.052,
+          duration: 0.085,
+          fromHz: note,
+          toHz: note * 1.08,
+          gain: 0.044
+        });
+      }
+    });
+  }
+
+  gachaRattle(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      [1500, 1050, 1750, 1250].forEach((frequencyHz, index) => {
+        this.noiseBurst(context, {
+          start: start + index * 0.04,
+          duration: 0.032,
+          frequencyHz,
+          sweepToHz: frequencyHz * 0.82,
+          gain: 0.03 + (index % 2) * 0.004
+        });
+      });
+    });
+  }
+
+  gachaDrop(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, {
+        type: "triangle",
+        start,
+        duration: 0.14,
+        fromHz: 493.88,
+        toHz: 196,
+        gain: 0.04
+      });
+      this.noiseBurst(context, {
+        start: start + 0.105,
+        duration: 0.07,
+        frequencyHz: 1800,
+        sweepToHz: 1000,
+        gain: 0.034
+      });
+      this.tone(context, {
+        type: "sine",
+        start: start + 0.115,
+        duration: 0.1,
+        fromHz: 987.77,
+        toHz: 1318.51,
+        gain: 0.042
+      });
+    });
+  }
+
+  ratingUp(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      [523.25, 659.25, 783.99, 1046.5].forEach((note, index) => {
+        this.tone(context, {
+          type: index === 2 ? "sine" : "triangle",
+          start: start + index * 0.09,
+          duration: index === 3 ? 0.22 : 0.13,
+          fromHz: note,
+          toHz: note * 1.008,
+          gain: index === 3 ? 0.056 : 0.042
+        });
+      });
+      this.tone(context, {
+        type: "sine",
+        start: start + 0.32,
+        duration: 0.16,
+        fromHz: 1567.98,
+        toHz: 2093,
+        gain: 0.03
+      });
+    });
+  }
+
+  chirpVariant(index: number): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      const variants = [
+        { firstType: "triangle", secondType: "sine", pitches: [587.33, 659.25, 698.46, 783.99] },
+        { firstType: "sine", secondType: "triangle", pitches: [698.46, 783.99, 880, 987.77] },
+        { firstType: "triangle", secondType: "triangle", pitches: [523.25, 587.33, 783.99, 880] },
+        { firstType: "sine", secondType: "triangle", pitches: [783.99, 739.99, 880, 1046.5] }
+      ] as const;
+      const variantIndex = Math.max(0, Math.min(3, Math.floor(Number.isFinite(index) ? index : 0)));
+      const variant = variants[variantIndex];
+      this.tone(context, {
+        type: variant.firstType,
+        start,
+        duration: 0.052 + variantIndex * 0.004,
+        fromHz: variant.pitches[0],
+        toHz: variant.pitches[1],
+        gain: 0.044
+      });
+      this.tone(context, {
+        type: variant.secondType,
+        start: start + 0.036 + variantIndex * 0.003,
+        duration: 0.056 + variantIndex * 0.004,
+        fromHz: variant.pitches[2],
+        toHz: variant.pitches[3],
+        gain: 0.038
       });
     });
   }

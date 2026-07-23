@@ -24,7 +24,16 @@ import { MonsState } from "./monsState";
 import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
 import { FarmOverlay } from "./farmOverlay";
 import { NEEDS_CREW, resolveProductionCycle, stepsForCycle } from "./farmProduction";
+
+/** Optional ranch juice SFX cues (added to MonsSfx by the audio module). */
+type RanchSfxCues = {
+  buildRaise?(): void; placeThunk?(): void; sellRefund?(): void;
+  productionReady?(): void; coinPayout?(count?: number): void;
+  gachaRattle?(): void; gachaDrop?(): void; ratingUp?(): void;
+  chirpVariant?(index: number): void;
+};
 import { pickVisitor, shouldVisitorAppear, type VisitorEntry } from "./ranchVisitors";
+import { buildingStateLines, farmhandLines } from "./ranchDialogue";
 
 /** Texture key for a placed ranch structure (kind + tier picks the sheet). */
 function ranchStructureTextureKey(kind: string, tier: number): string {
@@ -1149,6 +1158,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private farmState_?: FarmState;
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
+  private pendingRaise_ = new Set<string>();
   private ranchGauges_?: Phaser.GameObjects.Graphics;
   private ranchVisitor_?: { entry: VisitorEntry; sprite: Phaser.GameObjects.Image; x: number; y: number };
   private ranchVisitorSteps_ = 0;
@@ -9678,6 +9688,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /** Play a mons SFX cue, resuming the audio context first (safe if suspended). */
+  /** Ranch juice cues live on MonsSfx once the audio module ships them; this
+   * bridge tolerates their absence so the animations run standalone. */
+  private playRanchSfx(cue: (sfx: RanchSfxCues) => void): void {
+    this.playMonsSfx((sfx) => cue(sfx as unknown as RanchSfxCues));
+  }
+
   private playMonsSfx(cue: (sfx: MonsSfx) => void): void {
     try {
       this.monsSfx_.resume();
@@ -11390,6 +11406,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
         sprite = this.add.image(p.cell.x, p.cell.y, key).setOrigin(0.5, 1);
         this.ranchStructureSprites_.set(id, sprite);
+        if (this.pendingRaise_.has(id)) {
+          this.pendingRaise_.delete(id);
+          sprite.setPosition(p.cell.x, p.cell.y);
+          sprite.setDepth(p.cell.y);
+          this.playBuildingRaise(sprite);
+        }
       } else if (sprite.texture.key !== key) {
         if (this.textures.exists(key)) {
           sprite.setTexture(key);
@@ -11442,6 +11464,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (result?.kind === "item") {
         this.grantStoryTriggerItems([result.itemId]);
         const item = this.data_.items?.items.find((i) => i.id === result.itemId);
+        this.playProductionPop(building.cell.x, building.cell.y - FARM_CATALOG[building.kind].footprint.h, result.itemId);
         this.showRanchNotice(`${name}: ${item?.name ?? "something"} is ready.`);
       } else if (result?.kind === "training") {
         const mons = this.monsRuntime();
@@ -11565,6 +11588,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (visitor && Math.hypot(px - visitor.x, py - visitor.y) <= 40) {
       lockPlayer(this.playerState, this.playerFrames);
       farm.addCoins(visitor.entry.tipCoins);
+      this.playCoinBurst(visitor.x, visitor.y - 20, visitor.entry.tipCoins);
       this.recentVisitorIds_ = [visitor.entry.id, ...this.recentVisitorIds_].slice(0, 4);
       say([visitor.entry.line, `${visitor.entry.name} leaves ${visitor.entry.tipCoins} Swag Coins and wanders off.`]);
       visitor.sprite.destroy();
@@ -11603,6 +11627,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const cost = this.data_.items?.items.find((i) => i.id === itemId)?.cost ?? 10;
       const payout = cost * 3 * count + 40;
       farm.addCoins(payout);
+      this.playCoinBurst(near.cell.x, near.cell.y - FARM_CATALOG[near.kind].footprint.h, payout);
       near.jobRecipeId = undefined;
       say([`Delivered. ${payout} Swag Coins slide out of a slot that was not there before.`]);
       this.saveGame(false);
@@ -11616,6 +11641,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const roll = Math.random();
       if (roll < 0.15) {
         farm.addCoins(120);
+        this.playCoinBurst(near.cell.x, near.cell.y - FARM_CATALOG[near.kind].footprint.h, 120);
         say(["The shrine rumbles. A jackpot of 120 Swag Coins pours out. The heart on top looks smug."]);
       } else if (roll < 0.3) {
         this.grantStoryTriggerItems([126]);
@@ -11635,18 +11661,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const threshold = stepsForCycle(near);
     if (threshold !== undefined) {
-      const entry = FARM_CATALOG[near.kind];
-      if (near.assignedMonIds.length === 0) {
-        say([`${entry.name}, tier ${near.tier}. Nobody works here yet. The JOBS desk (F) takes applications.`]);
-      } else {
-        const pct = Math.round((near.progressSteps / threshold) * 100);
-        const crew = near.assignedMonIds
-          .map((id) => (this.data_.mons ? monById(this.data_.mons.registry, id)?.name : undefined) ?? "a mon")
-          .join(", ");
-        say([`${entry.name}, tier ${near.tier}. ${crew} on shift. Progress: ${pct}%. You can hear productivity.`]);
-      }
+      const crewNames = near.assignedMonIds
+        .map((id) => (this.data_.mons ? monById(this.data_.mons.registry, id)?.name : undefined) ?? "a mon");
+      const state: "idle" | "working" | "ready" =
+        crewNames.length === 0 ? "idle" : near.progressSteps >= threshold ? "ready" : "working";
+      const lines = buildingStateLines(near.kind, state, crewNames, () => Math.random());
+      say(lines.length ? lines : [`${FARM_CATALOG[near.kind].name}: tier ${near.tier}.`]);
       return true;
     }
+    // Non-producing buildings: state-aware idle flavor when available.
+    const idle = buildingStateLines(near.kind, "idle", [], () => Math.random());
+    if (idle.length) { say(idle); return true; }
     unlockPlayer(this.playerState);
     return false;
   }
@@ -11767,7 +11792,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         if (p.decor) {
           this.farmRuntime().placeDecor(p.kind as never, { x: p.x, y: p.y });
         } else {
-          this.farmRuntime().placeBuilding(p.kind as never, { x: p.x, y: p.y });
+          const placed = this.farmRuntime().placeBuilding(p.kind as never, { x: p.x, y: p.y });
+          this.pendingRaise_.add(placed.id);
         }
         this.playMenuSfx("menuConfirm");
         this.cancelStructurePlacement();
@@ -11778,6 +11804,88 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.playMenuSfx("menuCancel");
       this.cancelStructurePlacement();
     }
+  }
+
+  /**
+   * Juice textures: tiny baked sprites for coins/dust/sparks. Baked via
+   * generateTexture (the CANVAS renderer cannot tint a live Shape, but a baked
+   * texture renders fine). Idempotent.
+   */
+  private ensureJuiceTextures(): void {
+    if (this.textures.exists("ranch-coin")) return;
+    const g = this.add.graphics();
+    // coin: gold disc with a lighter core
+    g.fillStyle(0xe6bd54, 1).fillCircle(5, 5, 5);
+    g.fillStyle(0xfff0b0, 1).fillCircle(4, 4, 2);
+    g.generateTexture("ranch-coin", 10, 10);
+    g.clear();
+    // dust: soft tan puff
+    g.fillStyle(0xcdb38a, 1).fillCircle(7, 7, 7);
+    g.generateTexture("ranch-dust", 14, 14);
+    g.clear();
+    // spark: bright cross
+    g.fillStyle(0xfff6d8, 1);
+    g.fillRect(3, 0, 2, 8).fillRect(0, 3, 8, 2);
+    g.generateTexture("ranch-spark", 8, 8);
+    g.destroy();
+  }
+
+  /** Building placed just now: squash-and-rise with a dust puff. */
+  private playBuildingRaise(sprite: Phaser.GameObjects.Image): void {
+    this.ensureJuiceTextures();
+    const baseY = sprite.y;
+    sprite.setScale(1.18, 0.35);
+    sprite.y = baseY + 6;
+    this.tweens.add({
+      targets: sprite, scaleX: 1, scaleY: 1, y: baseY,
+      duration: 260, ease: "Back.out"
+    });
+    for (let i = 0; i < 6; i++) {
+      const dust = this.add.image(sprite.x, baseY, "ranch-dust").setDepth(baseY + 1).setScale(0.5);
+      const dir = (i / 6) * Math.PI * 2;
+      this.tweens.add({
+        targets: dust,
+        x: sprite.x + Math.cos(dir) * 22, y: baseY - 4 + Math.sin(dir) * 8,
+        alpha: 0, scale: 0.9, duration: 340, ease: "Quad.out",
+        onComplete: () => dust.destroy()
+      });
+    }
+    this.playRanchSfx((sfx) => sfx.buildRaise?.());
+    this.time.delayedCall(160, () => this.playRanchSfx((sfx) => sfx.placeThunk?.()));
+  }
+
+  /** A "ready!" burst pops over a building that just finished producing. */
+  private playProductionPop(x: number, y: number, _itemId: number): void {
+    this.ensureJuiceTextures();
+    const icon = this.add.image(x, y - 6, "ranch-spark").setOrigin(0.5, 1).setDepth(WILD_MON_GLYPH_DEPTH).setScale(0.2);
+    this.tweens.add({ targets: icon, scale: 2, duration: 200, ease: "Back.out" });
+    this.tweens.add({ targets: icon, y: y - 34, alpha: 0, delay: 420, duration: 460, ease: "Quad.in", onComplete: () => icon.destroy() });
+    for (let i = 0; i < 4; i++) {
+      const dir = (i / 4) * Math.PI * 2;
+      const sp = this.add.image(x, y - 12, "ranch-spark").setDepth(WILD_MON_GLYPH_DEPTH + 1);
+      this.tweens.add({
+        targets: sp, x: x + Math.cos(dir) * 16, y: y - 12 + Math.sin(dir) * 12,
+        alpha: 0, scale: 0.3, delay: 120, duration: 380, onComplete: () => sp.destroy()
+      });
+    }
+    this.playRanchSfx((sfx) => sfx.productionReady?.());
+  }
+
+  /** A fountain of Swag Coins arcs up from (x,y). */
+  private playCoinBurst(x: number, y: number, amount: number): void {
+    this.ensureJuiceTextures();
+    const n = Math.max(3, Math.min(9, Math.round(amount / 20) + 3));
+    for (let i = 0; i < n; i++) {
+      const coin = this.add.image(x, y - 8, "ranch-coin").setDepth(WILD_MON_GLYPH_DEPTH);
+      const spread = (i / (n - 1) - 0.5) * 60;
+      const rise = 26 + Math.random() * 18;
+      this.tweens.add({ targets: coin, x: x + spread, y: y - 8 - rise, duration: 300, ease: "Quad.out", delay: i * 24,
+        onComplete: () => {
+          this.tweens.add({ targets: coin, y: y + 6, alpha: 0, duration: 320, ease: "Quad.in", onComplete: () => coin.destroy() });
+        }
+      });
+    }
+    this.playRanchSfx((sfx) => sfx.coinPayout?.(n));
   }
 
   /** Load ranch art on demand; fall back to the placeholder sheet when the
