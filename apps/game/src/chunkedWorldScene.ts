@@ -1109,6 +1109,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
   private pendingRanchDoorWarp_?: { destination: EventWarpDestination; options: DoorWarpOptions };
+  /** World-rect solids for player-placed ranch structures (see blocked()). */
+  private runtimeSolidRects_: Array<{ x: number; y: number; w: number; h: number }> = [];
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
@@ -4441,6 +4443,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (this.barrierBlocks(x, y)) {
       return true;
+    }
+    // Player-placed ranch structures: world-rect solids fed from farm state
+    // (buildings are runtime actors, so their footprints live here, not in the
+    // baked collision grid).
+    for (const r of this.runtimeSolidRects_) {
+      if (x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h) {
+        return true;
+      }
     }
     if ((options.includeNpcs ?? true) && this.presentInteractableBlocks(x, y, options.escapeOverlapAt)) {
       return true;

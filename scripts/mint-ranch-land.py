@@ -143,7 +143,19 @@ def paint(w):
             elif d < 1.07 and hash01(wx, wy) < 0.3:
                 px[wx, wy - OY] = OLIVE
 
-    # 3. (pond deferred to decor phase)
+    # 3. gate corridor: a packed-dirt path through the north wall so arrival
+    #    reads as a passage, not a void (the black above is the door mouth)
+    for wy in range(R["y0"] - 60, R["y0"] + WALL):
+        for wx in range(2792, 2856):
+            if wy < R["y0"] - 20 and not (2804 < wx < 2844):
+                continue                      # narrow to a door mouth at the top
+            dp = dirt.getpixel((wx % 32, wy % 32))
+            px[wx, wy - OY] = (dp[0], dp[1], dp[2], 255)
+    # corridor edge lip
+    for wy in range(R["y0"] - 60, R["y0"] + WALL):
+        for wx in (2792, 2793, 2854, 2855):
+            if wy >= R["y0"] - 20 and hash01(wx, wy) < 0.6:
+                px[wx, wy - OY] = DARK
 
     # 4. forest wall: dense staggered rows, painted top-to-bottom so lower
     #    canopies overlap upper trunks (EB forest look)
@@ -230,12 +242,35 @@ def wire_doors(w):
         ]))
     print("doors: barn->ranch + ranch gate->barn wired")
 
+RANCH_SONG = "eaglescliffe"   # the farm's established cue
+
+def extend_sector_music():
+    p = f"{ROOT}/sector-music.json"
+    try:
+        with open(p) as f:
+            m = json.load(f, object_pairs_hook=collections.OrderedDict)
+    except FileNotFoundError:
+        print("sector-music: generated copy missing, skipped")
+        return
+    target_rows = (NEW_HEIGHT_TILES * 32) // 128
+    add = target_rows - m["rows"]
+    if add <= 0:
+        print("sector-music: already extended")
+        return
+    m["rows"] = target_rows
+    m["song"].extend([RANCH_SONG] * (add * m["cols"]))
+    m["indoor"].extend([0] * (add * m["cols"]))
+    with open(p, "w") as f:
+        json.dump(m, f)
+    print(f"sector-music: extended to {target_rows} rows ({RANCH_SONG})")
+
 def main():
     w = load_world()
     minted = mint(w)
     paint(w)
     carve_collision(w)
     wire_doors(w)
+    extend_sector_music()
     with open(WORLD, "w") as f:
         json.dump(w, f)
     print("world.json written")
