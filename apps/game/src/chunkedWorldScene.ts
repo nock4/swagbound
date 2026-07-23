@@ -1791,6 +1791,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.drawRanchGauges();
     this.stepRanchAmbient(delta);
     this.checkRatingMilestone();
+    this.maybePlayRanchWelcome();
     this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -4829,12 +4830,45 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.closeDialogue();
     if (pending && enter) {
       this.applyDoorWarp(pending.destination, pending.options);
-      if (!this.gameFlags.has("ranch:starter-grant")) {
-        this.gameFlags.set("ranch:starter-grant");
-        this.farmRuntime().addCoins(300);
-        this.showRanchNotice("The FARMHAND left 300 Swag Coins in an envelope. It says GO NUTS.");
-      }
+      // The welcome cutscene fires post-arrival (maybePlayRanchWelcome), so it
+      // runs on the ranch itself, not against the barn.
     }
+    this.publish();
+  }
+
+  /**
+   * First-ever ranch arrival: the FARMHAND hands over the deed. A multi-page
+   * beat + the 300-coin grant with a coin burst. Fires once, on ranch land.
+   */
+  private maybePlayRanchWelcome(): void {
+    if (this.gameFlags.has("ranch:starter-grant")) return;
+    if (this.playerState.y < RANCH_LAND_MIN_Y) return;
+    if (this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive() || !this.dialogue.canOpen()) return;
+    this.gameFlags.set("ranch:starter-grant");
+    lockPlayer(this.playerState, this.playerFrames);
+    this.startOverriddenScriptedDialogue(
+      buildInlineDialoguePages([
+        "FARMHAND: There you are. Mind the dirt, it is load-bearing.",
+        "FARMHAND: This is all yours now. The barn, the meadow, the quiet that comes with owning quiet.",
+        "FARMHAND: Build something. Put your Mons to work. I left you a little to start with.",
+        "The FARMHAND presses 300 Swag Coins into your hand and steps back to watch."
+      ]),
+      () => {
+        this.farmRuntime().addCoins(300);
+        this.playCoinBurst(this.playerState.x, this.playerState.y - 18, 300);
+        this.afterDialogueClosed();
+      }
+    );
+    this.publish();
+  }
+
+  /** One-shot milestone beats: first building placed, first item produced. */
+  private ranchMilestoneBeat(flag: string, pages: string[]): void {
+    if (this.gameFlags.has(flag)) return;
+    if (this.dialogue.open || this.eventSequence?.running || !this.dialogue.canOpen()) return;
+    this.gameFlags.set(flag);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.startOverriddenScriptedDialogue(buildInlineDialoguePages(pages), () => this.afterDialogueClosed());
     this.publish();
   }
 
@@ -9750,6 +9784,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.farmMonsSignature = signature;
       this.spawnFarmMons(roster, activeIndex);
     }
+    // Mon move-in: the first time a Mon is home on the ranch, a quiet beat.
+    if (roster.length > 0 && this.playerState.y >= RANCH_LAND_MIN_Y) {
+      this.ranchMilestoneBeat("ranch:first-movein", [
+        "One of your Mons hops off toward the barn, looks back at you once, and settles into the hay.",
+        "It lives here now. So do you, a little."
+      ]);
+    }
     for (const runtime of this.farmMons.values()) {
       runtime.petCooldownMs = Math.max(0, runtime.petCooldownMs - deltaMs);
       if (this.monTraining_?.farmKey !== runtime.key) {
@@ -11472,6 +11513,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         const item = this.data_.items?.items.find((i) => i.id === result.itemId);
         this.playProductionPop(building.cell.x, building.cell.y - FARM_CATALOG[building.kind].footprint.h, result.itemId);
         this.showRanchNotice(`${name}: ${item?.name ?? "something"} is ready.`);
+        this.ranchMilestoneBeat("ranch:first-harvest", [
+          `FARMHAND: Your Mon MADE that. Out of nothing but time and hay.`,
+          `FARMHAND: Keep a crew working and the ranch pays you back while you are off being a hero.`
+        ]);
       } else if (result?.kind === "training") {
         const mons = this.monsRuntime();
         if (mons) {
@@ -11593,6 +11638,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const visitor = this.ranchVisitor_;
     if (visitor && Math.hypot(px - visitor.x, py - visitor.y) <= 40) {
       lockPlayer(this.playerState, this.playerFrames);
+      // Rival-Buck's build-off: on a return visit to a well-rated ranch, he
+      // stops tipping and starts competing. Beat the bar he names for a purse.
+      const rating = farm.swagRating();
+      if (visitor.entry.id === "rival-buck" && this.gameFlags.has("ranch:rival-met") && rating >= 300) {
+        const won = rating >= 500;
+        const purse = won ? 250 : 0;
+        if (won) { farm.addCoins(purse); this.playCoinBurst(visitor.x, visitor.y - 20, purse); }
+        say(won
+          ? ["Buck: Rating over five hundred? Fine. FINE. You win the build-off.",
+             `Buck slaps ${purse} Swag Coins on a fencepost and pretends he is happy for you.`]
+          : ["Buck: My ranch would clear a rating of five hundred in its sleep.",
+             "Buck: Get yours there and I will make it worth your while. Probably."]);
+        this.recentVisitorIds_ = [visitor.entry.id, ...this.recentVisitorIds_].slice(0, 4);
+        visitor.sprite.destroy();
+        this.ranchVisitor_ = undefined;
+        this.saveGame(false);
+        return true;
+      }
+      if (visitor.entry.id === "rival-buck") this.gameFlags.set("ranch:rival-met");
       farm.addCoins(visitor.entry.tipCoins);
       this.playCoinBurst(visitor.x, visitor.y - 20, visitor.entry.tipCoins);
       this.recentVisitorIds_ = [visitor.entry.id, ...this.recentVisitorIds_].slice(0, 4);
@@ -11801,6 +11865,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         } else {
           const placed = this.farmRuntime().placeBuilding(p.kind as never, { x: p.x, y: p.y });
           this.pendingRaise_.add(placed.id);
+          this.time.delayedCall(700, () => this.ranchMilestoneBeat("ranch:first-building", [
+            "FARMHAND: Well now. A building. On your farm.",
+            "FARMHAND: That is the difference between a field and a farm. You just crossed it."
+          ]));
         }
         this.playMenuSfx("menuConfirm");
         this.cancelStructurePlacement();
