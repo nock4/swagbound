@@ -1159,6 +1159,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
   private pendingRaise_ = new Set<string>();
+  private ambientPuffMs_ = 0;
+  private ambientLeafMs_ = 1200;
+  private lastRatingTier_ = 0;
+  private ratingPrimed_ = false;
   private ranchGauges_?: Phaser.GameObjects.Graphics;
   private ranchVisitor_?: { entry: VisitorEntry; sprite: Phaser.GameObjects.Image; x: number; y: number };
   private ranchVisitorSteps_ = 0;
@@ -1785,6 +1789,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncRanchBuildings();
     this.stepStructurePlacement(delta);
     this.drawRanchGauges();
+    this.stepRanchAmbient(delta);
+    this.checkRatingMilestone();
     this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -11638,6 +11644,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         say(["The shrine wants 50 Swag Coins. It does not do credit."]);
         return true;
       }
+      this.playGachaCapsule(near.cell.x, near.cell.y - FARM_CATALOG[near.kind].footprint.h);
       const roll = Math.random();
       if (roll < 0.15) {
         farm.addCoins(120);
@@ -11827,7 +11834,94 @@ export class ChunkedWorldScene extends Phaser.Scene {
     g.fillStyle(0xfff6d8, 1);
     g.fillRect(3, 0, 2, 8).fillRect(0, 3, 8, 2);
     g.generateTexture("ranch-spark", 8, 8);
+    g.clear();
+    // smoke: soft grey blob
+    g.fillStyle(0xb8b0a4, 1).fillCircle(6, 6, 6);
+    g.generateTexture("ranch-smoke", 12, 12);
+    g.clear();
+    // steam: soft near-white blob
+    g.fillStyle(0xe8eef2, 1).fillCircle(6, 6, 6);
+    g.generateTexture("ranch-steam", 12, 12);
+    g.clear();
+    // leaf: tiny green flake
+    g.fillStyle(0x6a9a4a, 1).fillRect(0, 1, 5, 3).fillRect(1, 0, 3, 5);
+    g.generateTexture("ranch-leaf", 6, 6);
     g.destroy();
+  }
+
+  /**
+   * Ambient ranch life: chimney smoke / bath steam over working buildings, and
+   * an occasional leaf drifting across the lot. Throttled; ranch-only.
+   */
+  private stepRanchAmbient(deltaMs: number): void {
+    if (this.playerState.y < RANCH_LAND_MIN_Y || !this.farmState_) {
+      return;
+    }
+    this.ensureJuiceTextures();
+    this.ambientPuffMs_ -= deltaMs;
+    if (this.ambientPuffMs_ <= 0) {
+      this.ambientPuffMs_ = 620;
+      for (const b of this.farmState_.buildings) {
+        const threshold = stepsForCycle(b);
+        if (threshold === undefined || (NEEDS_CREW.has(b.kind) && b.assignedMonIds.length === 0)) continue;
+        const sprite = this.ranchStructureSprites_.get(b.id);
+        if (!sprite) continue;
+        const steam = b.kind === "monBath";
+        const tex = steam ? "ranch-steam" : "ranch-smoke";
+        const topY = b.cell.y - sprite.displayHeight + (steam ? 10 : 2);
+        const ox = steam ? 0 : sprite.displayWidth * 0.28;
+        const puff = this.add.image(b.cell.x + ox, topY, tex).setDepth(topY - 40).setScale(0.4).setAlpha(0.75);
+        this.tweens.add({
+          targets: puff, y: topY - 26, x: puff.x + (steam ? 0 : 6), alpha: 0, scale: 0.9,
+          duration: 1400, ease: "Sine.out", onComplete: () => puff.destroy()
+        });
+      }
+    }
+    this.ambientLeafMs_ -= deltaMs;
+    if (this.ambientLeafMs_ <= 0) {
+      this.ambientLeafMs_ = 2600 + Math.random() * 2600;
+      const cam = this.cameras.main;
+      const startX = cam.worldView.x + Math.random() * cam.worldView.width;
+      const startY = cam.worldView.y - 8;
+      const leaf = this.add.image(startX, startY, "ranch-leaf").setDepth(WILD_MON_GLYPH_DEPTH).setAlpha(0.85);
+      this.tweens.add({
+        targets: leaf, x: startX + 40 + Math.random() * 40, y: startY + cam.worldView.height * 0.7,
+        angle: 220, alpha: 0, duration: 4200 + Math.random() * 1600, ease: "Sine.inOut",
+        onComplete: () => leaf.destroy()
+      });
+    }
+  }
+
+  /** Sweep of sparkles + a congratulations beat when the Swag rating crosses a
+   * perk tier (100 / 300 / 600 / 1000). */
+  private checkRatingMilestone(): void {
+    const farm = this.farmState_;
+    if (!farm) return;
+    const tiers = [100, 300, 600, 1000];
+    const rating = farm.swagRating();
+    const reached = tiers.filter((t) => rating >= t).length;
+    // Prime silently on the first check so a loaded save does not flash on entry.
+    if (!this.ratingPrimed_) {
+      this.ratingPrimed_ = true;
+      this.lastRatingTier_ = reached;
+      return;
+    }
+    if (reached > this.lastRatingTier_) {
+      this.lastRatingTier_ = reached;
+      if (this.playerState.y < RANCH_LAND_MIN_Y) return;
+      this.ensureJuiceTextures();
+      const cam = this.cameras.main;
+      for (let i = 0; i < 16; i++) {
+        const x = cam.worldView.x + Math.random() * cam.worldView.width;
+        const y = cam.worldView.y + Math.random() * cam.worldView.height;
+        const sp = this.add.image(x, y + 20, "ranch-spark").setDepth(WILD_MON_GLYPH_DEPTH).setScale(0.4);
+        this.tweens.add({ targets: sp, y, alpha: 0, scale: 1.1, delay: i * 30, duration: 620, onComplete: () => sp.destroy() });
+      }
+      this.playRanchSfx((sfx) => sfx.ratingUp?.());
+      this.showRanchNotice(`Swag rating ${tiers[reached - 1]}! The FARMHAND tips an invisible hat.`);
+    } else if (reached < this.lastRatingTier_) {
+      this.lastRatingTier_ = reached;
+    }
   }
 
   /** Building placed just now: squash-and-rise with a dust puff. */
@@ -11886,6 +11980,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
       });
     }
     this.playRanchSfx((sfx) => sfx.coinPayout?.(n));
+  }
+
+  /** Gacha shrine: a capsule rattles, drops, and pops before the prize text. */
+  private playGachaCapsule(x: number, y: number): void {
+    this.ensureJuiceTextures();
+    this.playRanchSfx((sfx) => sfx.gachaRattle?.());
+    const capsule = this.add.image(x, y - 2, "ranch-coin").setDepth(WILD_MON_GLYPH_DEPTH).setScale(1.4);
+    // rattle: quick left-right jitter
+    this.tweens.add({ targets: capsule, x: x + 3, duration: 60, yoyo: true, repeat: 4, ease: "Sine.inOut",
+      onComplete: () => {
+        this.playRanchSfx((sfx) => sfx.gachaDrop?.());
+        this.tweens.add({ targets: capsule, y: y + 14, scale: 1.7, duration: 200, ease: "Quad.in",
+          onComplete: () => {
+            for (let i = 0; i < 5; i++) {
+              const dir = (i / 5) * Math.PI * 2;
+              const sp = this.add.image(x, y + 14, "ranch-spark").setDepth(WILD_MON_GLYPH_DEPTH + 1);
+              this.tweens.add({ targets: sp, x: x + Math.cos(dir) * 14, y: y + 14 + Math.sin(dir) * 12, alpha: 0, duration: 300, onComplete: () => sp.destroy() });
+            }
+            capsule.destroy();
+          }
+        });
+      }
+    });
   }
 
   /** Load ranch art on demand; fall back to the placeholder sheet when the
