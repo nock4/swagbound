@@ -2502,6 +2502,83 @@
    "w": 144,
    "h": 74,
    "note": "Mons Farm E: barn full visual footprint solid (shifted +22)"
+  },
+  {
+   "x": 2332,
+   "y": 7226,
+   "w": 32,
+   "h": 38,
+   "note": "Mons Farm E tree guard: NW hedge tree full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2364,
+   "y": 7256,
+   "w": 30,
+   "h": 34,
+   "note": "Mons Farm E tree guard: west tree (witch patrol) full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2400,
+   "y": 7286,
+   "w": 32,
+   "h": 36,
+   "note": "Mons Farm E tree guard: mat west-edge tree full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2384,
+   "y": 7358,
+   "w": 32,
+   "h": 26,
+   "note": "Mons Farm E tree guard: southwest tree full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2434,
+   "y": 7256,
+   "w": 28,
+   "h": 36,
+   "note": "Mons Farm E tree guard: small tree NW of yard full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2461,
+   "y": 7226,
+   "w": 34,
+   "h": 42,
+   "note": "Mons Farm E tree guard: north row tree 1 full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2496,
+   "y": 7228,
+   "w": 32,
+   "h": 40,
+   "note": "Mons Farm E tree guard: north row tree 2 full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2529,
+   "y": 7231,
+   "w": 32,
+   "h": 38,
+   "note": "Mons Farm E tree guard: north row tree 3 full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2589,
+   "y": 7236,
+   "w": 30,
+   "h": 32,
+   "note": "Mons Farm E tree guard: north row tree 4 full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2648,
+   "y": 7199,
+   "w": 34,
+   "h": 34,
+   "note": "Mons Farm E tree guard: NE big tree full footprint (sparse fg canopy, keep walkers off)"
+  },
+  {
+   "x": 2652,
+   "y": 7266,
+   "w": 48,
+   "h": 30,
+   "note": "Mons Farm E tree guard: east cliff trees full footprint (sparse fg canopy, keep walkers off)"
   }
  ]
 }
