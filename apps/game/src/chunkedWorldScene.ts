@@ -4801,6 +4801,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.closeDialogue();
     if (pending && enter) {
       this.applyDoorWarp(pending.destination, pending.options);
+      if (!this.gameFlags.has("ranch:starter-grant")) {
+        this.gameFlags.set("ranch:starter-grant");
+        this.farmRuntime().addCoins(300);
+        this.showRanchNotice("The FARMHAND left 300 Swag Coins in an envelope. It says GO NUTS.");
+      }
     }
     this.publish();
   }
@@ -5367,6 +5372,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
       if (this.trainingPickerEl_) {
+        return;
+      }
+      // Placed ranch buildings answer Z before classic NPC interaction.
+      if (this.tryRanchBuildingInteraction()) {
         return;
       }
       const advanceTarget = this.interactionTarget();
@@ -11448,6 +11457,108 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.recruitNoticeText = text;
     this.recruitNoticeUntilMs = Date.now() + 3200;
     this.publish();
+  }
+
+  /** Billboard request pool: everyday goods the board asks the ranch to ship. */
+  private static readonly BILLBOARD_POOL = [88, 90, 103, 106, 101] as const;
+  private static readonly GACHA_POOL = [88, 90, 101, 106, 123] as const;
+
+  /**
+   * Z on a placed ranch building. Billboard runs shipping requests (request
+   * persists in the building's jobRecipeId as "req:<itemId>:<count>"),
+   * the Gacha Shrine eats 50 SC for a roll, working buildings report status.
+   */
+  private tryRanchBuildingInteraction(): boolean {
+    const farm = this.farmState_;
+    if (!farm || this.playerState.y < RANCH_LAND_MIN_Y || !this.dialogue.canOpen()) {
+      return false;
+    }
+    const px = this.playerState.x;
+    const py = this.playerState.y;
+    const near = farm.buildings.find((b) => {
+      const fp = FARM_CATALOG[b.kind].footprint;
+      return px >= b.cell.x - fp.w / 2 - 20 && px <= b.cell.x + fp.w / 2 + 20 &&
+        py >= b.cell.y - fp.h - 20 && py <= b.cell.y + 28;
+    });
+    if (!near) return false;
+    const say = (pages: string[]) =>
+      this.startOverriddenScriptedDialogue(buildInlineDialoguePages(pages), () => this.afterDialogueClosed());
+    lockPlayer(this.playerState, this.playerFrames);
+    const itemName = (id: number) => this.data_.items?.items.find((i) => i.id === id)?.name ?? "something";
+    if (near.kind === "billboard") {
+      if (!near.jobRecipeId?.startsWith("req:")) {
+        const pick = ChunkedWorldScene.BILLBOARD_POOL[
+          (farm.buildings.length * 7 + farm.swagCoins + farm.decor.length) % ChunkedWorldScene.BILLBOARD_POOL.length];
+        const count = 1 + ((farm.swagCoins + farm.buildings.length) % 2);
+        near.jobRecipeId = `req:${pick}:${count}`;
+        say([`The board wants ${itemName(pick)} x${count}. Payment on delivery. The handwriting is excellent.`]);
+        return true;
+      }
+      const [, idRaw, countRaw] = near.jobRecipeId.split(":");
+      const itemId = Number(idRaw);
+      const count = Number(countRaw);
+      const holders: Array<{ char: number; slot: number }> = [];
+      for (const member of this.partyState.party()) {
+        this.partyState.inventory(member).forEach((id, slot) => {
+          if (id === itemId && holders.length < count) holders.push({ char: member, slot });
+        });
+      }
+      if (holders.length < count) {
+        say([`Still waiting on ${itemName(itemId)} x${count}. The board taps its foot, somehow.`]);
+        return true;
+      }
+      for (const h of holders.reverse()) {
+        this.partyState.dropItem(h.char, h.slot, itemId);
+      }
+      const cost = this.data_.items?.items.find((i) => i.id === itemId)?.cost ?? 10;
+      const payout = cost * 3 * count + 40;
+      farm.addCoins(payout);
+      near.jobRecipeId = undefined;
+      say([`Delivered. ${payout} Swag Coins slide out of a slot that was not there before.`]);
+      this.saveGame(false);
+      return true;
+    }
+    if (near.kind === "gachaShrine") {
+      if (!farm.spendCoins(50)) {
+        say(["The shrine wants 50 Swag Coins. It does not do credit."]);
+        return true;
+      }
+      const roll = Math.random();
+      if (roll < 0.15) {
+        farm.addCoins(120);
+        say(["The shrine rumbles. A jackpot of 120 Swag Coins pours out. The heart on top looks smug."]);
+      } else if (roll < 0.3) {
+        this.grantStoryTriggerItems([126]);
+        say([`A capsule drops: ${itemName(126)}. This is the good stuff.`]);
+      } else {
+        const id = ChunkedWorldScene.GACHA_POOL[Math.floor(roll * 100) % ChunkedWorldScene.GACHA_POOL.length];
+        this.grantStoryTriggerItems([id]);
+        say([`A capsule drops: ${itemName(id)}. The shrine hums a little tune.`]);
+      }
+      this.saveGame(false);
+      return true;
+    }
+    if (near.kind === "monBarn") {
+      const home = this.monsRuntime()?.count() ?? 0;
+      say([`The barn smells like hay and static. ${home} mons call this place home.`]);
+      return true;
+    }
+    const threshold = stepsForCycle(near);
+    if (threshold !== undefined) {
+      const entry = FARM_CATALOG[near.kind];
+      if (near.assignedMonIds.length === 0) {
+        say([`${entry.name}, tier ${near.tier}. Nobody works here yet. The JOBS desk (F) takes applications.`]);
+      } else {
+        const pct = Math.round((near.progressSteps / threshold) * 100);
+        const crew = near.assignedMonIds
+          .map((id) => (this.data_.mons ? monById(this.data_.mons.registry, id)?.name : undefined) ?? "a mon")
+          .join(", ");
+        say([`${entry.name}, tier ${near.tier}. ${crew} on shift. Progress: ${pct}%. You can hear productivity.`]);
+      }
+      return true;
+    }
+    unlockPlayer(this.playerState);
+    return false;
   }
 
   /** In-world progress gauges over working buildings (EB bar proportions). */
