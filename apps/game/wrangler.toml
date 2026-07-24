@@ -1,0 +1,7 @@
+name = "swagbound"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-05-01"
+
+[[kv_namespaces]]
+binding = "BUGS"
+id = "e2fa63adf3694f4090d5c4a9195f83e3"

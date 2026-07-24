@@ -21,6 +21,7 @@ import type { DrifellaSourceCheck } from "@eb/schemas";
 import { registerWindowFlavorControls } from "./windowSettings";
 import { mountMusicAuditioner } from "./musicAuditioner";
 import "./style.css";
+import { initBugReporter } from "./bugReporter";
 
 const MONO = "Menlo, Consolas, monospace";
 const DEFAULT_SAVE_SLOT = 0;
@@ -496,6 +497,9 @@ const game = new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 });
+// In-game playtester bug reporter (press N). Ships in production.
+initBugReporter();
+
 if (import.meta.env.DEV) {
   // Forensics handle for headless QA harnesses (texture/scene inspection).
   (globalThis as Record<string, unknown>).__game = game;
