@@ -1616,8 +1616,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
         return ok;
       },
-      previewFusion: (a, b) => this.monsRuntime()?.previewFusion(a, b),
-      fuse: (a, b, picks) => {
+      previewFusion: (a, b, sacrifice) => this.monsRuntime()?.previewFusion(a, b, sacrifice),
+      fuse: (a, b, picks, sacrifice) => {
         const roster = this.monsRuntime()?.list();
         const parentIds: [string, string] = [
           roster?.[a]?.registryId ?? "",
@@ -1626,6 +1626,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         // Fusion accidents follow the SMT full-moon rule: always possible, but
         // the chance doubles at night (mapped onto the ranch's day/night tint).
         const accidentOpts = {
+          sacrificeIndex: sacrifice,
           accidentRng: () => Math.random(),
           accidentChance: this.worldNightTintRequired() ? 0.16 : 0.07
         };

@@ -19,8 +19,8 @@ export interface MonsOverlayHost {
    *  (name already substituted), or undefined if the index is empty. */
   pet(index: number): { bond: number; line: string } | undefined;
   release(index: number): boolean;
-  previewFusion(a: number, b: number): FusionPreview | undefined;
-  fuse(a: number, b: number, picks: string[]): OwnedMon | undefined;
+  previewFusion(a: number, b: number, sacrifice?: number): FusionPreview | undefined;
+  fuse(a: number, b: number, picks: string[], sacrifice?: number): OwnedMon | undefined;
   abilities(): MonAbilities | undefined;
   atFusionAltar(): boolean;
   canOpen(): boolean;
@@ -41,7 +41,7 @@ export function isMonsOverlayKey(code: string): boolean {
 type OverlayMode =
   | { kind: "list"; confirmRelease?: boolean }
   | { kind: "fuse-pick"; first?: number }
-  | { kind: "fuse-preview"; a: number; b: number; preview: FusionPreview; picks: string[]; pickCursor: number };
+  | { kind: "fuse-preview"; a: number; b: number; preview: FusionPreview; picks: string[]; pickCursor: number; sacrifice?: number };
 
 export class MonsOverlay {
   private static current: MonsOverlay | undefined;
@@ -117,6 +117,21 @@ export class MonsOverlay {
   private handleKey(code: string): void {
     const count = this.host.roster().length;
     const mode = this.mode;
+    // S in fuse-preview cycles a sacrifice Mon (none -> each eligible -> none),
+    // re-previewing to show the sacrifice bonus (SMT triple fusion).
+    if (code === "KeyS" && mode.kind === "fuse-preview") {
+      const eligible: (number | undefined)[] = [undefined];
+      for (let i = 0; i < count; i++) if (i !== mode.a && i !== mode.b) eligible.push(i);
+      const cur = eligible.indexOf(mode.sacrifice);
+      const next = eligible[(cur + 1) % eligible.length];
+      const preview = this.host.previewFusion(mode.a, mode.b, next);
+      if (preview?.ok) {
+        this.mode = { ...mode, sacrifice: next, preview, pickCursor: 0, picks: [] };
+        this.notice = next === undefined ? "Sacrifice cleared." : `${this.nameAt(next)} will be given to the altar.`;
+      }
+      this.render();
+      return;
+    }
     if (code === "Escape" || code === "KeyX" || isMonsOverlayKey(code)) {
       if (mode.kind === "fuse-preview") {
         this.mode = { kind: "fuse-pick", first: mode.a };
@@ -248,7 +263,7 @@ export class MonsOverlay {
     }
     const nameA = this.nameAt(mode.a);
     const nameB = this.nameAt(mode.b);
-    const fused = this.host.fuse(mode.a, mode.b, mode.picks);
+    const fused = this.host.fuse(mode.a, mode.b, mode.picks, mode.sacrifice);
     if (fused) {
       const entry = this.host.entryFor(fused);
       this.notice = `${nameA} and ${nameB} lean together... ${entry ? monDisplayName(entry) : "Something new"} steps out.`;
@@ -378,12 +393,21 @@ export class MonsOverlay {
             return `<div style="opacity:.8;font-size:12px">HP ${s.maxHp}  OFF ${s.offense}  DEF ${s.defense}${downgrade ? ` <span style="color:#ff8a8a">(weaker than a parent)</span>` : ""}</div>`;
           })()
         : "";
+      const sacName = mode.sacrifice !== undefined ? this.nameAt(mode.sacrifice) : undefined;
+      const bonus = preview.sacrificeBonus;
+      const sacLine = sacName
+        ? `<div style="margin-top:4px;color:#c8e6a0">Sacrifice: ${escapeHtml(sacName)}` +
+          (bonus ? ` (+${bonus.bonusLevels} Lv${bonus.bonusSkill ? ", +a move" : ""})` : "") +
+          ` &middot; S to change</div>`
+        : `<div style="margin-top:4px;opacity:.7">S: add a sacrifice (SMT triple fusion)</div>`;
+      const accidentLine = preview.accident
+        ? `<div style="margin-top:2px;color:#ffcf6a">! A fusion accident is taking shape...</div>` : "";
       body = `<div style="margin-top:8px;border-top:1px solid #555;padding-top:6px">` +
-        `<div>${escapeHtml(this.nameAt(mode.a))} + ${escapeHtml(this.nameAt(mode.b))}</div>` +
+        `<div>${escapeHtml(this.nameAt(mode.a))} + ${escapeHtml(this.nameAt(mode.b))}${sacName ? ` + ${escapeHtml(sacName)}` : ""}</div>` +
         `<div>&gt; ${preview.secretResult ? "?????" : escapeHtml(resultName)} (Lv${preview.projectedLevel ?? "?"}${result ? ` ${escapeHtml(result.race)}` : ""})</div>` +
-        statLine +
+        statLine + sacLine + accidentLine +
         `<div style="margin-top:4px;opacity:.85">Carry up to two moves (Z toggles):</div>${pickRows}` +
-        `<div style="margin-top:4px">${commitCur}<b>FUSE</b> (both mons are spent)</div></div>`;
+        `<div style="margin-top:4px">${commitCur}<b>FUSE</b> (all chosen mons are spent)</div></div>`;
     }
     const header = mode.kind === "list"
       ? (mode.confirmRelease ? `Release ${escapeHtml(this.nameAt(this.cursor))} for good? Z = yes, X = no`
