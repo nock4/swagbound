@@ -31,7 +31,7 @@ const POI = [
   { name: "postwick", x: 2324, y: 7428 }
 ];
 const findings = [];
-let mulberry = 0x9e3779b9;
+let mulberry = (Number(process.argv[4]) || 0x9e3779b9) >>> 0;
 const rng = () => { mulberry |= 0; mulberry = (mulberry + 0x6d2b79f5) | 0; let t = Math.imul(mulberry ^ (mulberry >>> 15), 1 | mulberry); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 const pick = (arr) => arr[Math.floor(rng() * arr.length)];
 
@@ -190,11 +190,34 @@ async function main() {
       await pg.evaluate(() => {
         const sc = globalThis.__game?.scene?.scenes?.find((s) => s.farmMons !== undefined);
         if (!sc || !sc.farmState_) return;
-        const r = Math.random();
+        const ms = sc.monsState_; const r = Math.random();
         try {
-          if (r < 0.5) globalThis.__farmPlace?.(["itemWorks", "monBath", "trainingYard", "billboard"][Math.floor(Math.random() * 4)], 2600 + Math.floor(Math.random() * 400), 11000 + Math.floor(Math.random() * 200));
-          else if (sc.farmState_.buildings.length) sc.farmState_.sellBuilding(sc.farmState_.buildings[0].id);
-        } catch { /* the harness records the crash via pageerror */ }
+          if (r < 0.30) {
+            globalThis.__farmPlace?.(["itemWorks", "monBath", "trainingYard", "billboard", "snackKitchen", "gachaShrine"][Math.floor(Math.random() * 6)], 2600 + Math.floor(Math.random() * 400), 11000 + Math.floor(Math.random() * 200));
+          } else if (r < 0.45 && sc.farmState_.buildings.length) {
+            const b = sc.farmState_.buildings[Math.floor(Math.random() * sc.farmState_.buildings.length)];
+            (Math.random() < 0.5 ? sc.farmState_.sellBuilding(b.id) : sc.farmState_.upgradeBuilding(b.id));
+          } else if (r < 0.72 && ms && ms.count() >= 2) {
+            // FUSION stress: random parents + maybe sacrifice + maybe accident
+            const n = ms.count(); const a = Math.floor(Math.random() * n); let b = Math.floor(Math.random() * n); if (b === a) b = (b + 1) % n;
+            const sac = n >= 3 && Math.random() < 0.5 ? [...Array(n).keys()].find((i) => i !== a && i !== b) : undefined;
+            const opts = Math.random() < 0.5 ? { sacrificeIndex: sac, accidentRng: () => Math.random(), accidentChance: 0.4 } : { sacrificeIndex: sac };
+            const p = ms.previewFusion(a, b, sac);
+            if (p?.ok) ms.fuse(a, b, (p.inheritable ?? []).slice(0, 2), opts);
+          } else if (r < 0.86 && sc.compendium_ && sc.compendium_.count() > 0) {
+            // COMPENDIUM resummon
+            const ids = sc.compendium_.list().map((e) => e.registryId);
+            const id = ids[Math.floor(Math.random() * ids.length)];
+            const e = sc.compendium_.get(id); const cost = sc.compendium_.resummonCost(e);
+            if (sc.farmState_.spendCoins(cost)) { const f = sc.compendium_.resummon(id); if (f) ms.adopt(f); }
+          } else if (ms && ms.count() > 0) {
+            // MOVE CARD teach onto a random mon
+            const iw = sc.farmState_.placeBuilding("itemWorks", { x: 2700, y: 11080 });
+            sc.farmState_.assignMon(iw.id, ms.list()[0].registryId); iw.jobRecipeId = "crew"; iw.progressSteps = 999;
+            sc.resolveRanchProduction();
+          }
+          sc.persistMonRoster?.();
+        } catch (e) { /* recorded via pageerror */ }
       });
       await pg.waitForTimeout(200);
     }
