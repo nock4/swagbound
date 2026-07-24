@@ -328,7 +328,7 @@ function cloneMonsSnapshot(snapshot: MonsSaveSnapshot): MonsSaveSnapshot {
   };
 }
 
-function validateFarmSnapshot(value: unknown): FarmSaveSnapshot | null {
+export function validateFarmSnapshot(value: unknown): FarmSaveSnapshot | null {
   if (!isRecord(value) || !Array.isArray(value.buildings) || !Array.isArray(value.decor)) {
     return null;
   }
