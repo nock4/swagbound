@@ -266,6 +266,16 @@ export function answerNegotiation(state: MonNegotiationState, optionIndex: numbe
 
 // --- fusion ------------------------------------------------------------------
 
+export interface FusionMaterial {
+  entry: MonsRegistryEntry;
+  owned: OwnedMon;
+}
+
+export interface SacrificeBonus {
+  bonusLevels: number;
+  bonusSkill?: string;
+}
+
 export interface FusionPreview {
   ok: boolean;
   reason?: "secret-parent" | "no-candidate" | "same-mon";
@@ -274,15 +284,19 @@ export interface FusionPreview {
   projectedLevel?: number;
   inheritable?: string[];
   secretResult?: MonsRegistryEntry;
+  sacrifice?: FusionMaterial;
+  sacrificeBonus?: SacrificeBonus;
+  accident?: boolean;
 }
 
 export function resolveFusion(
-  a: { entry: MonsRegistryEntry; owned: OwnedMon },
-  b: { entry: MonsRegistryEntry; owned: OwnedMon },
+  a: FusionMaterial,
+  b: FusionMaterial,
   registry: MonsRegistry,
   fusion: MonFusion,
   abilities: MonAbilities,
-  ownedIds: Set<string>
+  ownedIds: Set<string>,
+  sacrifice?: FusionMaterial
 ): FusionPreview {
   if (a.entry.id === b.entry.id && a.owned === b.owned) {
     return { ok: false, reason: "same-mon" };
@@ -290,6 +304,11 @@ export function resolveFusion(
   if (a.entry.race === "Secret" || b.entry.race === "Secret") {
     return { ok: false, reason: "secret-parent" };
   }
+  const materialIds = new Set([
+    a.entry.id,
+    b.entry.id,
+    ...(sacrifice ? [sacrifice.entry.id] : [])
+  ]);
   // Secret recipe check first: exact race pair + both parents at/above minTier.
   const pair = new Set([a.entry.race, b.entry.race]);
   for (const recipe of fusion.secretRecipes) {
@@ -297,15 +316,17 @@ export function resolveFusion(
     const tiersOk = a.entry.tier >= recipe.requires.minTier && b.entry.tier >= recipe.requires.minTier;
     if (tiersOk && want.size === pair.size && [...want].every((r) => pair.has(r))) {
       const secret = registry.mons.find((m) => m.id === recipe.resultId);
-      if (secret && !ownedIds.has(secret.id)) {
-        return {
-          ok: true,
-          resultRace: secret.race as MonRace,
-          result: secret,
-          secretResult: secret,
-          projectedLevel: Math.max(secret.baseLevel, avgLevel(a, b)),
-          inheritable: inheritableAbilities(a, b, abilities)
-        };
+      if (secret && !ownedIds.has(secret.id) && !materialIds.has(secret.id)) {
+        return buildFusionPreview(
+          a,
+          b,
+          secret,
+          secret.race as MonRace,
+          Math.max(secret.baseLevel, avgLevel(a, b)),
+          abilities,
+          sacrifice,
+          secret
+        );
       }
     }
   }
@@ -321,48 +342,217 @@ export function resolveFusion(
     // same-race fusion: tier-up reroll within the race
     const candidates = registry.mons
       .filter((m) => m.race === raceA && !m.secretRare && m.tier <= tierCap && !ownedIds.has(m.id))
-      .filter((m) => m.id !== a.entry.id && m.id !== b.entry.id)
+      .filter((m) => !materialIds.has(m.id))
       .sort((x, y) => (y.tier - x.tier) || (x.baseLevel - y.baseLevel));
     const result = candidates.find((m) => m.baseLevel >= targetLevel) ?? candidates[candidates.length - 1];
     if (!result) {
       return { ok: false, reason: "no-candidate" };
     }
-    return {
-      ok: true, resultRace: "SAME", result,
-      projectedLevel: Math.max(result.baseLevel, targetLevel),
-      inheritable: inheritableAbilities(a, b, abilities)
-    };
+    return buildFusionPreview(
+      a,
+      b,
+      result,
+      "SAME",
+      Math.max(result.baseLevel, targetLevel),
+      abilities,
+      sacrifice
+    );
   }
   // SMT rule: lowest baseLevel of the result race >= avg+1 (not owned, not a parent).
   const candidates = registry.mons
     .filter((m) => m.race === cell && !m.secretRare && m.tier <= tierCap && !ownedIds.has(m.id))
-    .filter((m) => m.id !== a.entry.id && m.id !== b.entry.id)
+    .filter((m) => !materialIds.has(m.id))
     .sort((x, y) => x.baseLevel - y.baseLevel);
   const result = candidates.find((m) => m.baseLevel >= targetLevel) ?? candidates[candidates.length - 1];
   if (!result) {
     return { ok: false, reason: "no-candidate" };
   }
-  return {
-    ok: true, resultRace: cell, result,
-    projectedLevel: Math.max(result.baseLevel, targetLevel),
-    inheritable: inheritableAbilities(a, b, abilities)
-  };
+  return buildFusionPreview(
+    a,
+    b,
+    result,
+    cell,
+    Math.max(result.baseLevel, targetLevel),
+    abilities,
+    sacrifice
+  );
 }
 
 function avgLevel(a: { owned: OwnedMon }, b: { owned: OwnedMon }): number {
   return Math.floor((a.owned.level + b.owned.level) / 2);
 }
 
-function inheritableAbilities(
-  a: { entry: MonsRegistryEntry; owned: OwnedMon },
-  b: { entry: MonsRegistryEntry; owned: OwnedMon },
+/**
+ * Returns the unique parent abilities that the result can inherit.
+ * Elementless abilities are universal; elemental abilities must match the
+ * result mon's element.
+ */
+export function inheritableAbilities(
+  a: FusionMaterial,
+  b: FusionMaterial,
+  result: MonsRegistryEntry,
   abilities: MonAbilities
 ): string[] {
   const union = new Set([
     ...monKnownAbilities(a.entry, abilities, a.owned.level, a.owned.inherited),
     ...monKnownAbilities(b.entry, abilities, b.owned.level, b.owned.inherited)
   ]);
-  return [...union];
+  return [...union].filter((abilityId) => abilityFitsResult(abilityId, result, abilities));
+}
+
+function abilityFitsResult(
+  abilityId: string,
+  result: MonsRegistryEntry,
+  abilities: MonAbilities
+): boolean {
+  const element = abilities.abilities[abilityId]?.element;
+  return element === undefined || element === result.element;
+}
+
+function sacrificeBonusFor(
+  sacrifice: FusionMaterial,
+  result: MonsRegistryEntry,
+  abilities: MonAbilities
+): SacrificeBonus {
+  const bonusLevels = Math.min(5, Math.max(1, Math.round(sacrifice.owned.level / 5)));
+  const eligible = monKnownAbilities(
+    sacrifice.entry,
+    abilities,
+    sacrifice.owned.level,
+    sacrifice.owned.inherited
+  ).filter((abilityId) => abilityFitsResult(abilityId, result, abilities));
+  let bonusSkill: string | undefined;
+  let highestUnlockLevel = -1;
+  for (const abilityId of eligible) {
+    const unlockLevel = abilityUnlockLevel(abilityId, abilities);
+    if (unlockLevel > highestUnlockLevel) {
+      bonusSkill = abilityId;
+      highestUnlockLevel = unlockLevel;
+    }
+  }
+  return {
+    bonusLevels,
+    ...(bonusSkill ? { bonusSkill } : {})
+  };
+}
+
+// Abilities do not carry an explicit tier. Their learnset unlock level is the
+// progression rank used to choose the sacrifice's highest-tier known ability.
+function abilityUnlockLevel(abilityId: string, abilities: MonAbilities): number {
+  let highest = Object.values(abilities.materialSplash).includes(abilityId)
+    ? MATERIAL_SPLASH_UNLOCK_LEVEL
+    : 0;
+  for (const kit of Object.values(abilities.raceKits)) {
+    for (const ref of kit) {
+      if (ref.abilityId === abilityId) {
+        highest = Math.max(highest, ref.unlockLevel);
+      }
+    }
+  }
+  return highest;
+}
+
+function buildFusionPreview(
+  a: FusionMaterial,
+  b: FusionMaterial,
+  result: MonsRegistryEntry,
+  resultRace: MonRace | "SAME",
+  projectedLevel: number,
+  abilities: MonAbilities,
+  sacrifice?: FusionMaterial,
+  secretResult?: MonsRegistryEntry
+): FusionPreview {
+  const sacrificeBonus = sacrifice
+    ? sacrificeBonusFor(sacrifice, result, abilities)
+    : undefined;
+  return {
+    ok: true,
+    resultRace,
+    result,
+    projectedLevel: projectedLevel + (sacrificeBonus?.bonusLevels ?? 0),
+    inheritable: inheritableAbilities(a, b, result, abilities),
+    ...(secretResult ? { secretResult } : {}),
+    ...(sacrifice && sacrificeBonus ? { sacrifice, sacrificeBonus } : {})
+  };
+}
+
+export const DEFAULT_FUSION_ACCIDENT_CHANCE = 1 / 16;
+
+export function resolveFusionWithAccident(
+  a: FusionMaterial,
+  b: FusionMaterial,
+  registry: MonsRegistry,
+  fusion: MonFusion,
+  abilities: MonAbilities,
+  ownedIds: Set<string>,
+  sacrifice?: FusionMaterial,
+  rng: () => number = Math.random,
+  accidentChance = DEFAULT_FUSION_ACCIDENT_CHANCE
+): FusionPreview {
+  const preview = resolveFusion(a, b, registry, fusion, abilities, ownedIds, sacrifice);
+  if (
+    !preview.ok ||
+    !preview.result ||
+    preview.projectedLevel === undefined ||
+    rng() >= Math.min(1, Math.max(0, accidentChance))
+  ) {
+    return preview;
+  }
+
+  const excludedIds = new Set([
+    ...ownedIds,
+    a.entry.id,
+    b.entry.id,
+    preview.result.id,
+    ...(sacrifice ? [sacrifice.entry.id] : [])
+  ]);
+  const oneTierHigher = registry.mons.filter((mon) =>
+    mon.race === preview.result!.race &&
+    mon.tier === preview.result!.tier + 1 &&
+    !mon.secretRare &&
+    !excludedIds.has(mon.id)
+  );
+  const fallback = registry.mons.filter((mon) =>
+    mon.baseLevel > preview.result!.baseLevel &&
+    !mon.secretRare &&
+    !excludedIds.has(mon.id)
+  );
+  const candidates = oneTierHigher.length > 0 ? oneTierHigher : fallback;
+  if (candidates.length === 0) {
+    return preview;
+  }
+
+  const accidentResult = candidates[randomIndex(candidates.length, rng)];
+  const sacrificeLevels = preview.sacrificeBonus?.bonusLevels ?? 0;
+  const baseProjectedLevel = preview.projectedLevel - sacrificeLevels;
+  const accidentPreview = buildFusionPreview(
+    a,
+    b,
+    accidentResult,
+    accidentResult.race as MonRace,
+    Math.max(accidentResult.baseLevel, baseProjectedLevel),
+    abilities,
+    sacrifice
+  );
+  return {
+    ...accidentPreview,
+    accident: true,
+    inheritable: shuffled(accidentPreview.inheritable ?? [], rng)
+  };
+}
+
+function randomIndex(length: number, rng: () => number): number {
+  const roll = Math.min(1 - Number.EPSILON, Math.max(0, rng()));
+  return Math.floor(roll * length);
+}
+
+function shuffled(values: string[], rng: () => number): string[] {
+  const result = [...values];
+  for (let index = result.length - 1; index > 0; index--) {
+    const swapWith = randomIndex(index + 1, rng);
+    [result[index], result[swapWith]] = [result[swapWith], result[index]];
+  }
+  return result;
 }
 
 export function executeFusion(
@@ -373,6 +563,10 @@ export function executeFusion(
     return undefined;
   }
   const inherited = picks.filter((p) => preview.inheritable?.includes(p)).slice(0, 2);
+  const bonusSkill = preview.sacrificeBonus?.bonusSkill;
+  if (bonusSkill && !inherited.includes(bonusSkill)) {
+    inherited.push(bonusSkill);
+  }
   return {
     owned: {
       registryId: preview.result.id,

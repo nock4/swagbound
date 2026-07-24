@@ -19,9 +19,9 @@ import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
-import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion, type OwnedMon } from "./monsModel";
+import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, monStatsAtLevel, negotiationForgiveness, type MonNegotiationQuestion, type OwnedMon, monKnownAbilities} from "./monsModel";
 import { MonsState } from "./monsState";
-import { DECOR_CATALOG, FARM_CATALOG, FarmState } from "./farmState";
+import { DECOR_CATALOG, FARM_CATALOG, FarmState, type FarmBuildingKind} from "./farmState";
 import { FarmOverlay } from "./farmOverlay";
 import { NEEDS_CREW, resolveProductionCycle, stepsForCycle } from "./farmProduction";
 
@@ -34,6 +34,9 @@ type RanchSfxCues = {
 };
 import { pickVisitor, shouldVisitorAppear, type VisitorEntry } from "./ranchVisitors";
 import { buildingStateLines, farmhandLines } from "./ranchDialogue";
+import { Compendium } from "./compendium";
+import { ITEM_WORKS_CARD_OUTPUT, canTeach, moveCardById, teachMoveCard } from "./moveCards";
+import { CompendiumOverlay, type CompendiumRow } from "./compendiumOverlay";
 
 /** Texture key for a placed ranch structure (kind + tier picks the sheet). */
 function ranchStructureTextureKey(kind: string, tier: number): string {
@@ -1156,6 +1159,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /** World-rect solids for player-placed ranch structures (see blocked()). */
   private runtimeSolidRects_: Array<{ x: number; y: number; w: number; h: number }> = [];
   private farmState_?: FarmState;
+  private compendium_?: Compendium;
+  private compendiumOverlay?: CompendiumOverlay;
   private ranchStructureSprites_ = new Map<string, Phaser.GameObjects.Image>();
   private ranchTextureLoads_ = new Set<string>();
   private pendingRaise_ = new Set<string>();
@@ -1524,6 +1529,49 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
 
     // Mons roster overlay (O): manage the companion roster once the farm is met.
+    this.compendiumOverlay = new CompendiumOverlay({
+      canOpen: () =>
+        this.isPlayerControllable() && !this.bikeActive && this.playerState.y >= RANCH_LAND_MIN_Y,
+      swagCoins: () => this.farmRuntime().swagCoins,
+      rows: (): CompendiumRow[] => {
+        const comp = this.compendiumRuntime();
+        const reg = this.data_.mons?.registry;
+        const ownedIds = new Set((this.monsRuntime()?.list() ?? []).map((m) => m.registryId));
+        return comp.list().map((e) => {
+          const entry = reg ? monById(reg, e.registryId) : undefined;
+          return {
+            registryId: e.registryId,
+            name: entry?.name ?? e.registryId,
+            race: entry?.race ?? "?",
+            element: entry?.element ?? "?",
+            level: e.level,
+            moves: e.inherited,
+            timesOwned: e.timesOwned,
+            cost: comp.resummonCost(e),
+            lineage: undefined,
+            spriteUrl: entry ? `/generated/${entry.sprites.battle}` : undefined,
+            owned: ownedIds.has(e.registryId)
+          };
+        });
+      },
+      resummon: (registryId: string) => {
+        const comp = this.compendiumRuntime();
+        const mons = this.monsRuntime();
+        const e = comp.get(registryId);
+        if (!e || !mons) return { ok: false, reason: "Not recorded." };
+        const cost = comp.resummonCost(e);
+        if (!this.farmRuntime().spendCoins(cost)) return { ok: false, reason: "Not enough Swag Coins." };
+        const fresh = comp.resummon(registryId);
+        if (!fresh) { this.farmRuntime().addCoins(cost); return { ok: false, reason: "Re-summon failed." }; }
+        mons.adopt(fresh);
+        this.persistMonRoster();
+        this.playCoinBurst(this.playerState.x, this.playerState.y - 18, 0);
+        this.playMonsSfx((sfx) => sfx.catchSuccess());
+        return { ok: true };
+      },
+      onClose: () => this.updatePrompt()
+    });
+
     this.farmOverlay = new FarmOverlay({
       canOpen: () =>
         this.isPlayerControllable() &&
@@ -1575,10 +1623,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
           roster?.[a]?.registryId ?? "",
           roster?.[b]?.registryId ?? ""
         ];
-        const fused = this.monsRuntime()?.fuse(a, b, picks);
+        // Fusion accidents follow the SMT full-moon rule: always possible, but
+        // the chance doubles at night (mapped onto the ranch's day/night tint).
+        const accidentOpts = {
+          accidentRng: () => Math.random(),
+          accidentChance: this.worldNightTintRequired() ? 0.16 : 0.07
+        };
+        const fused = this.monsRuntime()?.fuse(a, b, picks, accidentOpts);
         if (fused) {
           const firstEver = !this.gameFlags.has("mons:first-fusion");
           this.gameFlags.set("mons:first-fusion");
+          this.compendiumRuntime().register(fused);
           this.persistMonRoster();
           // The visible ceremony is deferred to overlay close (the DOM overlay
           // covers the world while the player is still fusing).
@@ -6634,7 +6689,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       intake: getFilingIntakeFromRegistry(this.registry),
       savedAt,
       ...(monsRuntime ? { mons: monsRuntime } : {}),
-      farmState: this.farmRuntime()
+      farmState: this.farmRuntime(),
+      compendium: this.compendiumRuntime()
     });
     const blob = serializeSaveState(save);
     const saved = blob ? this.saveSlots?.saveToSlot(this.saveSlot, blob) ?? false : false;
@@ -6662,7 +6718,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       flags: this.gameFlags,
       partyState: this.partyState,
       ...(monsRuntimeForRestore ? { mons: monsRuntimeForRestore } : {}),
-      farmState: this.farmRuntime()
+      farmState: this.farmRuntime(),
+      compendium: this.compendiumRuntime()
     });
     if (!player) {
       return undefined;
@@ -11397,6 +11454,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /** Persist a structural roster change (catch/fuse/release/companion) so it
    *  survives a tab close without waiting for a manual save or town crossing. */
   private persistMonRoster(): void {
+    this.registerRosterInCompendium();
     if (this.saveSlots && this.isPlayerControllable()) {
       this.saveGame(false);
     }
@@ -11417,6 +11475,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.farmState_ = new FarmState();
     }
     return this.farmState_;
+  }
+
+  private compendiumRuntime(): Compendium {
+    if (!this.compendium_) {
+      this.compendium_ = new Compendium();
+    }
+    return this.compendium_;
+  }
+
+  /** Record the whole roster into the Compendium (idempotent; keeps the
+   * highest level ever seen). Called on every roster-changing save. */
+  private registerRosterInCompendium(): void {
+    const mons = this.monsRuntime();
+    if (!mons) return;
+    const comp = this.compendiumRuntime();
+    for (const mon of mons.list()) comp.register(mon);
   }
 
   /**
@@ -11508,6 +11582,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
         .map((e) => String(e));
       const result = resolveProductionCycle(building, crewElements);
       const name = FARM_CATALOG[building.kind].name;
+      // Item Works occasionally crafts a SMT-style move card and teaches it to
+      // an eligible crew Mon instead of a plain item (the skill-card loop).
+      if (result?.kind === "item" && building.kind === "itemWorks" && Math.random() < 0.28
+          && this.tryCraftMoveCard(building)) {
+        continue;
+      }
       if (result?.kind === "item") {
         this.grantStoryTriggerItems([result.itemId]);
         const item = this.data_.items?.items.find((i) => i.id === result.itemId);
@@ -11545,6 +11625,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.recruitNoticeText = text;
     this.recruitNoticeUntilMs = Date.now() + 3200;
     this.publish();
+  }
+
+  /**
+   * The Item Works crafts a move card and teaches it to the first crew Mon (or
+   * any roster Mon) that does not already know the move. Returns false if no
+   * card could be placed (caller falls back to a normal item).
+   */
+  private tryCraftMoveCard(building: { assignedMonIds: string[]; cell: { x: number; y: number }; kind: FarmBuildingKind }): boolean {
+    const mons = this.monsRuntime();
+    const data = this.data_.mons;
+    if (!mons || !data) return false;
+    const cardId = ITEM_WORKS_CARD_OUTPUT[Math.floor(Math.random() * ITEM_WORKS_CARD_OUTPUT.length)];
+    const card = moveCardById(cardId);
+    if (!card) return false;
+    const roster = mons.list();
+    const order = [
+      ...building.assignedMonIds.map((id) => roster.findIndex((m) => m.registryId === id)),
+      ...roster.map((_, i) => i)
+    ].filter((i) => i >= 0);
+    for (const index of order) {
+      const mon = roster[index];
+      const entry = mons.entryFor(mon);
+      if (!entry) continue;
+      const known = monKnownAbilities(entry, data.abilities, mon.level, mon.inherited);
+      if (canTeach(mon, card, known).ok) {
+        teachMoveCard(mon, card); // pure helper (validates); write-back below
+        mons.teachInherited(index, card.abilityId);
+        this.persistMonRoster();
+        this.playProductionPop(building.cell.x, building.cell.y - FARM_CATALOG[building.kind].footprint.h, 0);
+        this.showRanchNotice(`Item Works crafted ${card.name} and taught it to ${entry.name}.`);
+        return true;
+      }
+    }
+    return false;
   }
 
   /** Per-visitor overworld sprite (48x48 townsperson art). */

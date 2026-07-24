@@ -18,6 +18,7 @@ import {
   type PlacedBuilding,
   type PlacedDecor
 } from "./farmState";
+import { validateCompendiumSnapshot, type CompendiumSaveSnapshot } from "./compendium";
 
 // v3 adds the optional `farmState` snapshot (Mons Ranch economy). v1 and v2
 // blobs are accepted and MIGRATED forward with newly introduced state empty.
@@ -70,6 +71,7 @@ export type SaveState = {
   player: SavePlayerSnapshot;
   mons?: MonsSaveSnapshot;
   farmState?: FarmSaveSnapshot;
+  compendium?: CompendiumSaveSnapshot;
 };
 
 export type SaveStateSources = {
@@ -89,6 +91,9 @@ export type SaveStateSources = {
   farmState?: {
     snapshot(): FarmSaveSnapshot;
   };
+  compendium?: {
+    snapshot(): CompendiumSaveSnapshot;
+  };
 };
 
 export type SaveStateSinks = {
@@ -105,6 +110,9 @@ export type SaveStateSinks = {
   };
   farmState?: {
     restore(snapshot: FarmSaveSnapshot | undefined): void;
+  };
+  compendium?: {
+    restore(snapshot: CompendiumSaveSnapshot | undefined): void;
   };
 };
 
@@ -134,7 +142,8 @@ export function captureSaveState(sources: SaveStateSources): SaveState {
     party: clonePartyStateSnapshot(sources.partyState.snapshot()),
     player: clonePlayerSnapshot(sources.player),
     ...(sources.mons ? { mons: cloneMonsSnapshot(sources.mons.snapshot()) } : {}),
-    ...(sources.farmState ? { farmState: cloneFarmSnapshot(sources.farmState.snapshot()) } : {})
+    ...(sources.farmState ? { farmState: cloneFarmSnapshot(sources.farmState.snapshot()) } : {}),
+    ...(sources.compendium ? { compendium: sources.compendium.snapshot() } : {})
   };
   const validated = validateSaveState(save);
   if (!validated) {
@@ -158,6 +167,7 @@ export function applySaveState(save: unknown, sinks: SaveStateSinks): SavePlayer
   sinks.partyState.restore(validated.party);
   sinks.mons?.restore(validated.mons);
   sinks.farmState?.restore(validated.farmState);
+  sinks.compendium?.restore(validated.compendium);
   return clonePlayerSnapshot(validated.player);
 }
 
@@ -233,6 +243,12 @@ export function validateSaveState(value: unknown): SaveState | null {
   if (version === SAVE_STATE_SCHEMA_VERSION && value.farmState !== undefined && !farmState) {
     return null;
   }
+  const compendium = version === SAVE_STATE_SCHEMA_VERSION
+    ? (value.compendium === undefined ? undefined : validateCompendiumSnapshot(value.compendium))
+    : undefined;
+  if (version === SAVE_STATE_SCHEMA_VERSION && value.compendium !== undefined && !compendium) {
+    return null;
+  }
   return {
     schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     ...(typeof value.savedAt === "string" ? { savedAt: value.savedAt } : {}),
@@ -241,7 +257,8 @@ export function validateSaveState(value: unknown): SaveState | null {
     party,
     player,
     ...(mons ? { mons } : {}),
-    ...(farmState ? { farmState } : {})
+    ...(farmState ? { farmState } : {}),
+    ...(compendium ? { compendium } : {})
   };
 }
 

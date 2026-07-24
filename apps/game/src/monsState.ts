@@ -11,8 +11,7 @@ import {
   resolveFusion,
   type FusionPreview,
   type MonXpGain,
-  type OwnedMon
-} from "./monsModel";
+  type OwnedMon, resolveFusionWithAccident} from "./monsModel";
 import type { MonsSaveSnapshot } from "./saveState";
 import type { MonFusion } from "@eb/schemas";
 
@@ -64,6 +63,24 @@ export class MonsState {
       return false;
     }
     this.activeIndex = index;
+    return true;
+  }
+
+  /** Add a pre-built OwnedMon to the roster (Compendium re-summon). */
+  adopt(mon: OwnedMon): OwnedMon {
+    const owned: OwnedMon = { ...mon, inherited: [...mon.inherited] };
+    this.roster.push(owned);
+    return owned;
+  }
+
+  /** Teach a roster Mon an inherited ability (move card). No-op if unknown
+   * index or the ability is already inherited. Returns success. */
+  teachInherited(index: number, abilityId: string): boolean {
+    const mon = this.roster[index];
+    if (!mon || mon.inherited.includes(abilityId)) {
+      return false;
+    }
+    this.roster[index] = { ...mon, inherited: [...mon.inherited, abilityId] };
     return true;
   }
 
@@ -122,7 +139,7 @@ export class MonsState {
     return bond;
   }
 
-  previewFusion(indexA: number, indexB: number): FusionPreview | undefined {
+  previewFusion(indexA: number, indexB: number, sacrificeIndex?: number): FusionPreview | undefined {
     if (indexA === indexB) {
       return { ok: false, reason: "same-mon" };
     }
@@ -133,6 +150,12 @@ export class MonsState {
     if (!a || !b || !entryA || !entryB) {
       return undefined;
     }
+    let sacrifice: { entry: MonsRegistryEntry; owned: OwnedMon } | undefined;
+    if (sacrificeIndex !== undefined && sacrificeIndex !== indexA && sacrificeIndex !== indexB) {
+      const sac = this.roster[sacrificeIndex];
+      const sacEntry = sac ? this.entryFor(sac) : undefined;
+      if (sac && sacEntry) sacrifice = { entry: sacEntry, owned: sac };
+    }
     const ownedIds = new Set(this.roster.map((m) => m.registryId));
     return resolveFusion(
       { entry: entryA, owned: a },
@@ -140,29 +163,61 @@ export class MonsState {
       this.registry,
       this.fusion,
       this.abilities,
-      ownedIds
+      ownedIds,
+      sacrifice
     );
   }
 
-  fuse(indexA: number, indexB: number, picks: string[]): OwnedMon | undefined {
-    const preview = this.previewFusion(indexA, indexB);
+  fuse(
+    indexA: number,
+    indexB: number,
+    picks: string[],
+    options: { sacrificeIndex?: number; accidentRng?: () => number; accidentChance?: number } = {}
+  ): OwnedMon | undefined {
+    let preview = this.previewFusion(indexA, indexB, options.sacrificeIndex);
     if (!preview?.ok) {
       return undefined;
+    }
+    // Fusion accident (gated by the caller: altar tier / moon). Re-roll the
+    // preview through the accident path when an rng is supplied.
+    if (options.accidentRng) {
+      const a0 = this.roster[indexA];
+      const b0 = this.roster[indexB];
+      const entryA = a0 ? this.entryFor(a0) : undefined;
+      const entryB = b0 ? this.entryFor(b0) : undefined;
+      let sacrifice: { entry: MonsRegistryEntry; owned: OwnedMon } | undefined;
+      if (options.sacrificeIndex !== undefined) {
+        const sac = this.roster[options.sacrificeIndex];
+        const sacEntry = sac ? this.entryFor(sac) : undefined;
+        if (sac && sacEntry) sacrifice = { entry: sacEntry, owned: sac };
+      }
+      if (entryA && entryB && a0 && b0) {
+        const ownedIds = new Set(this.roster.map((m) => m.registryId));
+        const accidentPreview = resolveFusionWithAccident(
+          { entry: entryA, owned: a0 },
+          { entry: entryB, owned: b0 },
+          this.registry, this.fusion, this.abilities, ownedIds,
+          sacrifice, options.accidentRng, options.accidentChance
+        );
+        if (accidentPreview?.ok) preview = accidentPreview;
+      }
     }
     const result = executeFusion(preview, picks);
     if (!result) {
       return undefined;
     }
+    // Remove the sacrifice mon too, highest index first.
+    const removals = [indexA, indexB, options.sacrificeIndex]
+      .filter((i): i is number => i !== undefined)
+      .sort((x, y) => y - x);
     const a = this.roster[indexA];
     const b = this.roster[indexB];
     const fused: OwnedMon = {
       ...result.owned,
       lineage: { parents: [a.registryId, b.registryId] }
     };
-    // remove higher index first so the lower index stays valid
-    const [hi, lo] = indexA > indexB ? [indexA, indexB] : [indexB, indexA];
-    this.roster.splice(hi, 1);
-    this.roster.splice(lo, 1);
+    // Remove parents (and sacrifice) highest-index first so lower indices stay valid.
+    for (const i of removals) this.roster.splice(i, 1);
     this.roster.push(fused);
     this.activeIndex = undefined;
     return fused;
